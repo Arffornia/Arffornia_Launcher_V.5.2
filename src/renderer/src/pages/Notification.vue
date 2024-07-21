@@ -1,7 +1,7 @@
 <template>
   <div class="notification-content">
-    <h2>Home page</h2>
-    <p>This is the home page content.</p>
+    <h2>Notification</h2>
+    <p>This is the notification page content.</p>
   </div>
 </template>
 

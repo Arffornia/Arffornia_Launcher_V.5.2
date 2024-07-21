@@ -1,7 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import MainLayout from '../components/MainLayout.vue';
 import Home from '../pages/Home.vue';
-import About from '../pages/About.vue';
+import Settings from '../pages/Settings.vue';
+import Profile from '../pages/Profile.vue';
+import Highlight from '../pages/Highlight.vue';
+import Notification from '../pages/Notification.vue';
+
+
+
 
 const routes = [
   {
@@ -13,8 +19,20 @@ const routes = [
         component: Home
       },
       {
-        path: 'about',
-        component: About
+        path: 'settings',
+        component: Settings
+      },
+      {
+        path: 'profile',
+        component: Profile
+      },
+      {
+        path: 'notification',
+        component: Notification
+      },
+      {
+        path: 'highlight',
+        component: Highlight
       }
     ]
   }
