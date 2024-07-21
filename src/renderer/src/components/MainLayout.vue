@@ -41,40 +41,49 @@
 .main-layout {
   display: flex;
   height: 100vh;
+  background-image: url("@res/img/bg/mainBG.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
 }
 
 nav {
+  margin: 0 10px;
   width: 80px;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 10px;
   box-sizing: border-box;
-  background-color: #2c2f33;
 }
 
-nav a {
-  margin: 10px 0;
+nav a{
   padding: 5px;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 15px;
+  gap: 5px;
+  border-radius: 10px;
   transition: background-color 0.3s;
 }
 
 .top-nav-link {
-  margin-top: 5%;
+  margin-top: 10%;
 }
 
 .bottom-nav-link {
-  margin-bottom: 5%;
+  margin-bottom: 10%;
 }
 
 .middle-nav-link {
   margin-top: auto;
   margin-bottom: auto;
+  border-radius: 15px;
+  border: solid 10px #09070a;
+  background-color: #09070a;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
+
 
 .nav-link {
   background-color: #261d31;
@@ -102,16 +111,11 @@ nav .nav-link:hover img {
 
 .v-separator {
   width: 3px;
-  height: 80%;
+  height: 75%;
   border-radius: 30px;
   background-color: #fff;
   margin-top: auto;
   margin-bottom: auto;
 }
 
-router-view {
-  flex-grow: 1;
-  padding: 10px;
-  box-sizing: border-box;
-}
 </style>
