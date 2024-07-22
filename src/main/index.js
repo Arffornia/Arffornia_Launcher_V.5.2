@@ -6,8 +6,8 @@ import icon from '../../resources/img/Crafting_Table.png?asset'
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 900,
-    height: 670,
+    width: 1100,
+    height: 720,
     show: false,
     icon: icon,
     autoHideMenuBar: true,

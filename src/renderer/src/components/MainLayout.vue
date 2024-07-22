@@ -45,6 +45,8 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
+  font-family: Montserrat, sans-serif;
+  overflow: hidden;
 }
 
 nav {
