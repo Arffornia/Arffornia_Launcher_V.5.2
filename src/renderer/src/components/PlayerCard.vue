@@ -13,6 +13,8 @@
         </div>
       </div>
 
+      <div class="v-red-separator"></div>
+
       <div class="skinViewer-overlay">
         <canvas class="skin_viewer" data-username="The_Gost_sniper"></canvas>
       </div>
@@ -44,6 +46,14 @@
     box-shadow: rgba(17, 17, 26, 0.7) 0px 4px 16px, rgba(17, 17, 26, 0.35) 0px 8px 32px;
   }
 
+  .v-red-separator {
+    width: 300px;
+    height: 100%;
+    background-color: #e63946;
+    clip-path: polygon(30% 0%, 100% 0%, 70% 100%, 0% 100%);
+    box-shadow: rgba(121, 10, 34, 0.7) 0px 4px 16px, rgba(253, 2, 18, 0.35) 0px 8px 32px;
+  }
+
   .player-card-container {
     width: 100%;
     height: 100%;
@@ -52,7 +62,7 @@
     margin-right: auto;
     justify-content: center;
     align-items: center;
-    gap: 30%;
+    gap: 11%;
   }
 
   .skinViewer-overlay {
