@@ -2,7 +2,7 @@
   <div class="player-card-content">
     <div class="player-card-container">
       <div class="player-info">
-        <div class="username">{{ username }}</div>
+        <div class="username">{{ playerProfile ? playerProfile.name : 'Loading...' }}</div>
         <div class="player-details">
           <div class="day-streak">
             {{ dayStreak }}
@@ -16,27 +16,38 @@
       <div class="v-red-separator"></div>
 
       <div class="skinViewer-overlay">
-        <canvas class="skin_viewer" data-username="The_Gost_sniper"></canvas>
+        <canvas class="skin_viewer" data-username="The_Gost_sniper" data-control="true"></canvas>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-  import { onMounted } from 'vue';
+  import { ref, onMounted } from 'vue';
   import { initializeSkinViewers } from '../js/skinviewer.js';
+  import { fetchPlayerProfile } from '../js/arfforniaApi.js';
 
-  onMounted(() => {
+  const playerProfile = ref(null);
+  const error = ref(null);
+
+  onMounted(async () => {
     initializeSkinViewers();
+    try {
+      playerProfile.value = await fetchPlayerProfile("The_Gost_sniper");
+    } catch (err) {
+      error.value = err.message;
+      console.error("Failed to fetch player profile:", err);
+    }
   });
 
   defineProps(['username'])
 
-  const dayStreak = 32;
+  const dayStreak = 32
 </script>
 
 <style scoped>
   .player-card-content {
+    margin: 5%;
     margin-left: auto;
     margin-right: auto;
     width: 80%;
@@ -46,7 +57,13 @@
     box-shadow: rgba(17, 17, 26, 0.7) 0px 4px 16px, rgba(17, 17, 26, 0.35) 0px 8px 32px;
   }
 
+  .player-info {
+    margin-left: 10%;
+  }
+
   .v-red-separator {
+    margin-left: auto;
+    margin-right: auto;
     width: 300px;
     height: 100%;
     background-color: #e63946;
@@ -58,18 +75,17 @@
     width: 100%;
     height: 100%;
     display: flex;
-    margin-left: auto;
-    margin-right: auto;
-    justify-content: center;
     align-items: center;
-    gap: 11%;
   }
 
   .skinViewer-overlay {
+    margin-left: auto;
+    margin-right: 10%;
     background: linear-gradient(90deg, #4776E6, #8E54E9);
     border: solid 2px #23003e;
     box-shadow: rgba(17, 17, 26, 0.7) 0px 4px 16px, rgba(17, 17, 26, 0.35) 0px 8px 32px;
     border-radius: 30px;
+    transform: scale(1.2);
   }
 
 

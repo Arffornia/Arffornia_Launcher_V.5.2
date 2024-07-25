@@ -1,8 +1,5 @@
 <template>
   <div class="profile-content">
-    <h2>Welcome to the profile page</h2>
-    <p>This is the profile page content.</p>
-
     <PlayerCard username="The_Gost_sniper"/>
   </div>
 </template>
