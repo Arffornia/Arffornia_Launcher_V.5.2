@@ -5,45 +5,54 @@
         <div class="username">{{ playerProfile ? playerProfile.name : 'Loading...' }}</div>
         <div class="player-details">
           <div class="day-streak">
-            {{ dayStreak }}
-            <img id="streak-img" src="@res/img/icon/fire/fires.png" alt="">
+            {{ playerProfile ? playerProfile.day_streak : '0' }}
+            <img :src="streakImgSrc" id="streak-img" alt="Streak Image">
           </div>
           <span class="v-separator"></span>
-          <div class="player-grade">VIP</div>
+          <div class="player-grade">
+            {{ playerProfile ? playerProfile.grade : 'Loading...' }}
+          </div>
         </div>
       </div>
 
       <div class="v-red-separator"></div>
 
       <div class="skinViewer-overlay">
-        <canvas class="skin_viewer" data-username="The_Gost_sniper" data-control="true"></canvas>
+        <canvas class="skin_viewer" :data-username="username" data-control="true"></canvas>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-  import { ref, onMounted } from 'vue';
-  import { initializeSkinViewers } from '../js/skinviewer.js';
-  import { fetchPlayerProfile } from '../js/arfforniaApi.js';
+import { ref, computed, onMounted } from 'vue';
+import { initializeSkinViewers } from '../js/skinviewer.js';
+import { fetchPlayerProfile } from '../js/arfforniaApi.js';
 
-  const playerProfile = ref(null);
-  const error = ref(null);
+import firesImg from '@res/img/icon/fire/fires.png';
+import noFiresImg from '@res/img/icon/fire/no-fires.png';
 
-  onMounted(async () => {
-    initializeSkinViewers();
-    try {
-      playerProfile.value = await fetchPlayerProfile("The_Gost_sniper");
-    } catch (err) {
-      error.value = err.message;
-      console.error("Failed to fetch player profile:", err);
-    }
-  });
+const props = defineProps(['username']);
 
-  defineProps(['username'])
+const playerProfile = ref(null);
+const error = ref(null);
 
-  const dayStreak = 32
+const streakImgSrc = computed(() => {
+  return playerProfile.value && playerProfile.value.day_streak === 0 ? noFiresImg : firesImg;
+});
+
+onMounted(async () => {
+  initializeSkinViewers();
+  try {
+    playerProfile.value = await fetchPlayerProfile(props.username);
+  } catch (err) {
+    error.value = err.message;
+    console.error("Failed to fetch player profile:", err);
+  }
+});
+
 </script>
+
 
 <style scoped>
   .player-card-content {
