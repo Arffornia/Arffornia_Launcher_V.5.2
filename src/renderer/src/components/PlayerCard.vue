@@ -2,7 +2,7 @@
   <div class="player-card-content">
     <div class="player-card-container">
       <div class="player-info">
-        <div class="username">{{ playerProfile ? playerProfile.name : 'Loading...' }}</div>
+        <div class="username">{{ $props.username }}</div>
         <div class="player-details">
           <div class="day-streak">
             {{ playerProfile ? playerProfile.day_streak : '0' }}

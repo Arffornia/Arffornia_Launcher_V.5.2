@@ -1,6 +1,6 @@
 <template>
   <div class="profile-content">
-    <PlayerCard username="Thysma_28"/>
+    <PlayerCard username="The_Gost_sniper"/>
   </div>
 </template>
 
