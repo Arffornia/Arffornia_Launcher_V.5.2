@@ -14,3 +14,16 @@ export async function fetchPlayerProfile(pseudo) {
     }
   }
 };
+
+export async function fetchBestPlayersByVote(size) {
+  try {
+    const response = await axios.get(`${ENDPOINT}best_player_vote/${size}`);
+    return response.data;
+  } catch (err) {
+    if (err.response && err.response.data) {
+      throw new Error(err.response.data.error || 'An error occurred while fetching best players by vote.');
+    } else {
+      throw new Error('An error occurred while fetching best players by vote.');
+    }
+  }
+};
