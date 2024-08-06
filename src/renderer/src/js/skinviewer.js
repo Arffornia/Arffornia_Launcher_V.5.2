@@ -22,6 +22,8 @@ export async function initializeSkinViewers() {
   Array.from(elements).forEach(async element => {
     var username = element.getAttribute('data-username');
     var isControl = element.getAttribute('data-control');
+    var overrideWidth = parseInt(element.getAttribute('data-width'), 10);
+    var overrideHeight = parseInt(element.getAttribute('data-height'), 10);
 
     const isValidUsername = await checkMinecraftUsername(username);
     if (!isValidUsername) {
@@ -30,8 +32,8 @@ export async function initializeSkinViewers() {
 
     const viewer = new skinview3d.SkinViewer({
       canvas: element,
-      width: 200,
-      height: 300,
+      width: overrideWidth || 200,
+      height: overrideHeight || 300,
       skin: `https://mineskin.eu/skin/${username}`,
       enableControls: true
     });
