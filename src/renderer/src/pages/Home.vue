@@ -14,7 +14,7 @@
             <div class="shape">
               <div class="textContainer">
                 <div class="rank">#2</div>
-                <div class="score">{{ bestPlayers ? `${bestPlayers[1]?.vote_count} ${scoreboardUnit}` : '...' }}</div>
+                <div class="score">{{ bestPlayers ? `${bestPlayers[1]?.value} ${scoreboardUnit}` : '...' }}</div>
               </div>
             </div>
           </div>
@@ -31,7 +31,7 @@
             <div class="shape">
               <div class="textContainer">
                 <div class="rank">#1</div>
-                <div class="score">{{ bestPlayers ? `${bestPlayers[0]?.vote_count} ${scoreboardUnit}` : '...' }}</div>
+                <div class="score">{{ bestPlayers ? `${bestPlayers[0]?.value} ${scoreboardUnit}` : '...' }}</div>
               </div>
             </div>
           </div>
@@ -48,7 +48,7 @@
             <div class="shape">
               <div class="textContainer">
                 <div class="rank">#3</div>
-                <div class="score">{{ bestPlayers ? `${bestPlayers[2]?.vote_count} ${scoreboardUnit}` : '...' }}</div>
+                <div class="score">{{ bestPlayers ? `${bestPlayers[2]?.value} ${scoreboardUnit}` : '...' }}</div>
               </div>
             </div>
           </div>
@@ -65,9 +65,12 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { initializeSkinViewers } from '../js/skinviewer.js';
-import { fetchBestPlayersByVote } from '../js/arfforniaApi.js';
+import { fetchBestPlayersByVote, fetchBestPlayersByPoint } from '../js/arfforniaApi.js';
 
 const bestPlayers = ref(null);
+const bestPlayersByVote = ref(null);
+const bestPlayersByPoint = ref(null);
+
 const error = ref(null);
 const scoreboardUnit = ref("votes");
 const scoreboardTitle = ref("Best voters");
@@ -75,7 +78,9 @@ const scoreboardTitle = ref("Best voters");
 onMounted(async () => {
   initializeSkinViewers();
   try {
-    bestPlayers.value = await fetchBestPlayersByVote(3);
+    bestPlayersByVote.value = await fetchBestPlayersByVote(3);
+    bestPlayersByPoint.value = await fetchBestPlayersByPoint(3);
+    bestPlayers.value = bestPlayersByPoint.value;
   } catch (err) {
     error.value = err.message;
     console.error("Failed to fetch best players:", err);
@@ -83,12 +88,16 @@ onMounted(async () => {
 });
 
 function scoreboardTitleSwitcher(event) {
-  if(scoreboardTitle == "Best voters") {
-    scoreboardTitle = "Best Players";
-    scoreboardUnit = "points";
+  if (scoreboardTitle.value === "Best voters") {
+    scoreboardTitle.value = "Best Players";
+    scoreboardUnit.value = "points";
+
+    bestPlayers.value = bestPlayersByPoint.value;
   } else {
-    scoreboardTitle = "Best voters";
-    scoreboardUnit = "votes";
+    scoreboardTitle.value = "Best voters";
+    scoreboardUnit.value = "votes";
+
+    bestPlayers.value = bestPlayersByVote.value;
   }
 }
 </script>

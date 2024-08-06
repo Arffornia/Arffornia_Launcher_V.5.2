@@ -27,3 +27,16 @@ export async function fetchBestPlayersByVote(size) {
     }
   }
 };
+
+export async function fetchBestPlayersByPoint(size) {
+  try {
+    const response = await axios.get(`${ENDPOINT}best_player_point/${size}`);
+    return response.data;
+  } catch (err) {
+    if (err.response && err.response.data) {
+      throw new Error(err.response.data.error || 'An error occurred while fetching best players by point.');
+    } else {
+      throw new Error('An error occurred while fetching best players by point.');
+    }
+  }
+};
