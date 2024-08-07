@@ -76,11 +76,15 @@ const scoreboardUnit = ref("votes");
 const scoreboardTitle = ref("Best voters");
 
 onMounted(async () => {
-  initializeSkinViewers();
   try {
     bestPlayersByVote.value = await fetchBestPlayersByVote(3);
     bestPlayersByPoint.value = await fetchBestPlayersByPoint(3);
     bestPlayers.value = bestPlayersByPoint.value;
+
+    // wait a bit, to allow the canvas to load
+    setTimeout(() => {
+      initializeSkinViewers();
+    }, 100);
   } catch (err) {
     error.value = err.message;
     console.error("Failed to fetch best players:", err);
@@ -89,7 +93,7 @@ onMounted(async () => {
 
 function scoreboardTitleSwitcher(event) {
   if (scoreboardTitle.value === "Best voters") {
-    scoreboardTitle.value = "Best Players";
+    scoreboardTitle.value = "Best players";
     scoreboardUnit.value = "points";
 
     bestPlayers.value = bestPlayersByPoint.value;
@@ -99,6 +103,8 @@ function scoreboardTitleSwitcher(event) {
 
     bestPlayers.value = bestPlayersByVote.value;
   }
+
+  initializeSkinViewers();
 }
 </script>
 
@@ -152,7 +158,7 @@ function scoreboardTitleSwitcher(event) {
   }
 
   .p2 .shape {
-    padding-top: 35%;
+    padding-top: 37%;
   }
 
   .p1 .shape {
@@ -160,7 +166,7 @@ function scoreboardTitleSwitcher(event) {
   }
 
   .p3 .shape {
-    padding-top: 20%;
+    padding-top: 25%;
   }
 
   .podium .player-skin {
