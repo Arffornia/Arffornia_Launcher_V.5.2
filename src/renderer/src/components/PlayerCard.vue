@@ -35,7 +35,6 @@ import noFiresImg from '@res/img/icon/fire/no-fires.png';
 const props = defineProps(['username']);
 
 const playerProfile = ref(null);
-const error = ref(null);
 
 const streakImgSrc = computed(() => {
   return playerProfile.value && playerProfile.value.day_streak === 0 ? noFiresImg : firesImg;
@@ -46,7 +45,6 @@ onMounted(async () => {
   try {
     playerProfile.value = await fetchPlayerProfile(props.username);
   } catch (err) {
-    error.value = err.message;
     console.error("Failed to fetch player profile:", err);
   }
 });

@@ -58,6 +58,7 @@
           </button>
         </div>
       </div>
+      <ServerStatue/>
   </div>
 </template>
 
@@ -65,6 +66,8 @@
 import { ref, onMounted } from 'vue';
 import { initializeSkinViewers } from '../js/skinviewer.js';
 import { fetchBestPlayersByVote, fetchBestPlayersByPoint } from '../js/arfforniaApi.js';
+
+import ServerStatue from '../components/ServerStatue.vue';
 
 const bestPlayers = ref(null);
 const bestPlayersByVote = ref(null);
@@ -114,7 +117,7 @@ function refreshSkinViewers() {
 
 <style scoped>
   .podium {
-    transform: scale(0.7);
+    transform: scale(0.6);
     transform-origin: top left;
   }
 
