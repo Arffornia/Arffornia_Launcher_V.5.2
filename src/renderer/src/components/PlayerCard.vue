@@ -37,7 +37,7 @@ const props = defineProps(['username']);
 const playerProfile = ref(null);
 
 const streakImgSrc = computed(() => {
-  return playerProfile.value && playerProfile.value.day_streak === 0 ? noFiresImg : firesImg;
+  return playerProfile.value && playerProfile.value.day_streak !== 0 ? firesImg : noFiresImg;
 });
 
 onMounted(async () => {
