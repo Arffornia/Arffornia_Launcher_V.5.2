@@ -23,8 +23,9 @@ const routes = [
         component: Settings
       },
       {
-        path: 'profile',
-        component: Profile
+        path: 'profile/:username?',
+        component: Profile,
+        props: true
       },
       {
         path: 'notification',

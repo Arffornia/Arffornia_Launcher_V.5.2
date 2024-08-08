@@ -6,9 +6,9 @@
             <p class="playerName">{{ bestPlayers ? bestPlayers[1]?.name : 'Chargement...' }}</p>
 
             <div class="player-skin">
-              <a :href="bestPlayers ? `/profile/${bestPlayers[1]?.name}` : '#'" title="Show profile">
+              <router-link class="nav-link" :to="bestPlayers ? `/profile/${bestPlayers[1]?.name}` : '#'" title="Show profile" exact>
                 <canvas class="skin_viewer" :data-username="bestPlayers ? bestPlayers[1]?.name : 'MHF_Steve'"></canvas>
-              </a>
+              </router-link>
             </div>
 
             <div class="shape">
@@ -21,11 +21,10 @@
 
           <div class="p1">
             <p class="playerName">{{ bestPlayers ? bestPlayers[0]?.name : 'Chargement...' }}</p>
-
             <div class="player-skin">
-              <a :href="bestPlayers ? `/profile/${bestPlayers[0]?.name}` : '#'" title="Show profile">
+              <router-link class="nav-link" :to="bestPlayers ? `/profile/${bestPlayers[0]?.name}` : '#'" title="Show profile" exact>
                 <canvas class="skin_viewer" :data-username="bestPlayers ? bestPlayers[0]?.name : 'MHF_Steve'"></canvas>
-              </a>
+              </router-link>
             </div>
 
             <div class="shape">
@@ -40,20 +39,20 @@
             <p class="playerName">{{ bestPlayers ? bestPlayers[2]?.name : 'Chargement...' }}</p>
 
             <div class="player-skin">
-              <a :href="bestPlayers ? `/profile/${bestPlayers[2]?.name}` : '#'" title="Show profile">
+              <router-link class="nav-link" :to="bestPlayers ? `/profile/${bestPlayers[2]?.name}` : '#'" title="Show profile" exact>
                 <canvas class="skin_viewer" :data-username="bestPlayers ? bestPlayers[2]?.name : 'MHF_Steve'"></canvas>
-              </a>
+              </router-link>
             </div>
 
-            <div class="shape">
-              <div class="textContainer">
-                <div class="rank">#3</div>
-                <div class="score">{{ bestPlayers ? `${bestPlayers[2]?.value} ${scoreboardUnit}` : '...' }}</div>
+              <div class="shape">
+                <div class="textContainer">
+                  <div class="rank">#3</div>
+                  <div class="score">{{ bestPlayers ? `${bestPlayers[2]?.value} ${scoreboardUnit}` : '...' }}</div>
+                </div>
               </div>
-            </div>
           </div>
         </div>
-        <div class="title" @click="scoreboardTitleSwitcher">
+        <div class="title" :title="`Switch to ${scoreboardUnit}`" @click="scoreboardTitleSwitcher">
           <button class="titleBtn">
             <p>{{ scoreboardTitle }}</p>
           </button>
@@ -81,10 +80,7 @@ onMounted(async () => {
     bestPlayersByPoint.value = await fetchBestPlayersByPoint(3);
     bestPlayers.value = bestPlayersByPoint.value;
 
-    // wait a bit, to allow the canvas to load
-    setTimeout(() => {
-      initializeSkinViewers();
-    }, 100);
+    refreshSkinViewers();
   } catch (err) {
     error.value = err.message;
     console.error("Failed to fetch best players:", err);
@@ -104,7 +100,14 @@ function scoreboardTitleSwitcher(event) {
     bestPlayers.value = bestPlayersByVote.value;
   }
 
-  initializeSkinViewers();
+  refreshSkinViewers();
+}
+
+function refreshSkinViewers() {
+  // wait a bit, to allow the canvas to load
+  setTimeout(() => {
+    initializeSkinViewers();
+  }, 100);
 }
 </script>
 
@@ -131,8 +134,12 @@ function scoreboardTitleSwitcher(event) {
     background-color: #2C3239;
     border: solid 3px #ff7300;
     border-radius: 10px;
-
   }
+
+  .podium .title:hover, .podium .titleBtn:hover {
+    cursor: pointer;
+  }
+
 
   .podium .titleBtn {
     background-color: #00000000;
