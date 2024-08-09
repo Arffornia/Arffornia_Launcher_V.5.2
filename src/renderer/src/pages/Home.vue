@@ -1,23 +1,23 @@
 <template>
   <div class="notification-content">
-      <Podium/>
-
-      <input @click="playBtnEvent" class="mediumPlayBtn" type="button" value="Jouer">
-
-      <ServerStatue/>
+    <Podium/>
+    <input @click="playBtnEvent" class="mediumPlayBtn" type="button" value="Jouer">
+    <ServerStatue/>
   </div>
 </template>
 
 <script setup>
-
 import Podium from '../components/Podium.vue';
 import ServerStatue from '../components/ServerStatue.vue';
-import { launchMC } from '../js/MinecraftManager';
 
-function playBtnEvent(event) {
-  launchMC();
+function playBtnEvent() {
+  // Utilisez l'API exposée pour lancer Minecraft
+  window.api.launchMC().then(() => {
+    console.log('Minecraft launch command sent.');
+  }).catch(err => {
+    console.error('Failed to launch Minecraft:', err);
+  });
 }
-
 </script>
 
 
