@@ -21,6 +21,8 @@
     "@electron-toolkit/preload": "^3.0.1",
     "@electron-toolkit/utils": "^3.0.0",
     "axios": "^1.7.2",
+    "minecraft-launcher-core": "^3.18.1",
+    "msmc": "^5.0.5",
     "skinview3d": "^3.0.1",
     "vue-router": "^4.4.0"
   },
