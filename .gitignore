@@ -4,4 +4,6 @@ package-lock.json
 .vscode/
 out/
 dist/
+
 .minecraft/
+.Arffornia_V.5.2
