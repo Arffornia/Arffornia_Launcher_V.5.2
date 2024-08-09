@@ -19,6 +19,9 @@ export async function launchMC() {
       max: '8G',
       min: '3G',
     },
+    overrides: {
+      detached: false,
+    }
   };
 
   console.log('Starting!');
