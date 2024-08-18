@@ -2,6 +2,7 @@ import { Client } from 'minecraft-launcher-core';
 import { Auth } from 'msmc';
 import { downloadNeoforge } from './neoforgeDownloader';
 import path from 'path';
+import { NexusMods } from '@the_gost_sniper/nexus_mods'
 
 export async function launchMC() {
   const launcher = new Client();
@@ -37,6 +38,14 @@ export async function launchMC() {
       detached: false,
     }
   };
+
+  const modDir = path.join(gameDir, "mods");
+  const nexusMods = new NexusMods(modDir);
+
+  const jsonModListUrl = "https://arffornia.ddns.net/files/NexusModList.json";
+  await nexusMods.loadModsFromJsonUrl(jsonModListUrl);
+
+  await nexusMods.updateMods(true, true);
 
   console.log('Starting Minecraft with options:', opts);
   launcher.launch(opts);

@@ -20,10 +20,12 @@
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.1",
     "@electron-toolkit/utils": "^3.0.0",
+    "@the_gost_sniper/nexus_mods": "^1.0.4",
     "axios": "^1.7.2",
     "minecraft-launcher-core": "^3.18.1",
     "msmc": "^5.0.5",
     "skinview3d": "^3.0.1",
+    "tomate-mods": "github:doublekekse/tomate-mods",
     "vue-router": "^4.4.0"
   },
   "devDependencies": {
