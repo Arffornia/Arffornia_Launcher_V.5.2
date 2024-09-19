@@ -2,12 +2,12 @@ import { Client } from 'minecraft-launcher-core';
 import { Auth } from 'msmc';
 import { downloadNeoforge } from './neoforgeDownloader';
 import path from 'path';
-import { NexusMods } from '@the_gost_sniper/nexus_mods'
+import { NexusMods } from '@arffornia/nexus_mods'
 
 export async function launchMC() {
   const launcher = new Client();
   const authManager = new Auth('select_account');
-  const xboxManager = await authManager.launch('raw');
+  const xboxManager = await authManager.launch('electron');
   const token = await xboxManager.getMinecraft();
 
   const gameDir = './.Arffornia_V.5.2';
@@ -42,7 +42,7 @@ export async function launchMC() {
   const modDir = path.join(gameDir, "mods");
   const nexusMods = new NexusMods(modDir);
 
-  const jsonModListUrl = "https://arffornia.ddns.net/files/NexusModList.json";
+  const jsonModListUrl = "https://arffornia.ddns.net/files/ArfforniaV.5ModList.json";
   await nexusMods.loadModsFromJsonUrl(jsonModListUrl);
 
   await nexusMods.updateMods(true, true);
