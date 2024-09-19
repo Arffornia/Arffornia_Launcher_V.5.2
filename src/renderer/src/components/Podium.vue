@@ -121,7 +121,7 @@ function refreshSkinViewers() {
     margin-top: 1.5%;
     text-align: center;
     color: #fff;
-    background-color: #2C3239;
+    background-color: #160020d1;
     border: solid 3px #ff7300;
     border-radius: 10px;
   }
@@ -147,7 +147,7 @@ function refreshSkinViewers() {
   }
 
   .podium .shape {
-    background-color: #2C3239;
+    background-color: #160020d1;
     border-radius: 10px;
     border: solid 3px #ff7300;
     position: relative;
