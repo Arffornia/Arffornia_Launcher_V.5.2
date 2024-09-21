@@ -4,7 +4,10 @@ import { electronAPI } from '@electron-toolkit/preload'
 // Custom APIs for renderer
 const api = {
   launchMC: () => ipcRenderer.invoke('launch-mc'),
+
+  //Other handler:
   getTotalRAM: () => ipcRenderer.invoke('get-total-ram'),
+  openLocalGameFile: () => ipcRenderer.invoke('open-local-game-file'),
 
   // Nexus Saver
   saverSave: (key, value) => ipcRenderer.invoke('saver-save', key, value),

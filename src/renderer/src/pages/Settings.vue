@@ -38,7 +38,7 @@
 
               <div class="content">
                 Launcher install location:
-                <input @click="localFileBtnEvent" class="mediumBtn" type="button" value="Open">
+                <input @click="openLocalGameFileEvent" class="mediumBtn" type="button" value="Open">
               </div>
 
               <div class="content">
@@ -77,6 +77,10 @@
   const onRamChangeEvent = () => {
     window.api.saverSave("allocatedRam", selectedRAM.value);
   };
+
+  function openLocalGameFileEvent() {
+    window.api.openLocalGameFile();
+  }
 </script>
 
 <style scoped>
