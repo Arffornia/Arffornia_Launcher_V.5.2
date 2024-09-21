@@ -13,10 +13,10 @@
               Allocated Ram:
               <div class="container">
                 <div class="select">
-                  <select>
-                    <option value="1">1Go</option>
-                    <option value="2">2Go</option>
-                    <option value="3">3Go</option>
+                  <select id="ram-select" v-if="ramOptions.length" v-model="selectedRAM" @change="onRamChangeEvent">
+                    <option v-for="ram in ramOptions" :key="ram" :value="ram">
+                      {{ ram }}Go
+                    </option>
                   </select>
                 </div>
               </div>
@@ -55,6 +55,28 @@
 </template>
 
 <script setup>
+  import { ref, onMounted } from 'vue';
+
+  const totalRAM = ref(0);
+  const ramOptions = ref([]);
+  const selectedRAM = ref(5);
+
+  onMounted(async () => {
+    const savedSelectedRam = await window.api.saverLoad("allocatedRam");
+    if (savedSelectedRam !== '') {
+      selectedRAM.value = savedSelectedRam;
+    }
+
+    totalRAM.value = await window.api.getTotalRAM();
+
+    for(let i = 1; i <= totalRAM.value; i++) {
+      ramOptions.value.push(i);
+    }
+  });
+
+  const onRamChangeEvent = () => {
+    window.api.saverSave("allocatedRam", selectedRAM.value);
+  };
 </script>
 
 <style scoped>

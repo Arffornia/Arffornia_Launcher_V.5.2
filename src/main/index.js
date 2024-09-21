@@ -2,8 +2,10 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/img/Crafting_Table.png?asset'
+import os from 'os';
 
 import { launchMC } from './minecraftManager'
+import { registerNexusSaverHandlers } from './ipcHandlers/nexusSaverHandler';
 
 function createWindow() {
   // Create the browser window.
@@ -55,8 +57,15 @@ app.whenReady().then(() => {
   // IPC test
   ipcMain.on('ping', () => console.log('pong'))
 
+  // Register handlers:
+  registerNexusSaverHandlers();
+
   ipcMain.handle('launch-mc', async () => {
     await launchMC();
+  });
+
+  ipcMain.handle('get-total-ram', () => {
+    return Math.floor(os.totalmem() / 1024 / 1024 / 1024);
   });
 
   createWindow()

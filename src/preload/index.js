@@ -3,7 +3,12 @@ import { electronAPI } from '@electron-toolkit/preload'
 
 // Custom APIs for renderer
 const api = {
-  launchMC: () => ipcRenderer.invoke('launch-mc')
+  launchMC: () => ipcRenderer.invoke('launch-mc'),
+  getTotalRAM: () => ipcRenderer.invoke('get-total-ram'),
+
+  // Nexus Saver
+  saverSave: (key, value) => ipcRenderer.invoke('saver-save', key, value),
+  saverLoad: (key) => ipcRenderer.invoke('saver-load', key),
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to
