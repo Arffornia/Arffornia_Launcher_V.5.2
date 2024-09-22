@@ -3,13 +3,16 @@ import { electronAPI } from '@electron-toolkit/preload'
 
 // Custom APIs for renderer
 const api = {
+  // Game Manager handlers:
   launchMC: () => ipcRenderer.invoke('launch-mc'),
+  loginMS: () => ipcRenderer.invoke('login-ms'),
+  logoutMS: () => ipcRenderer.invoke('logout-ms'),
 
-  //Other handler:
+  //Other handlers:
   getTotalRAM: () => ipcRenderer.invoke('get-total-ram'),
   openLocalGameFile: () => ipcRenderer.invoke('open-local-game-file'),
 
-  // Nexus Saver
+  // Nexus Savers
   saverSave: (key, value) => ipcRenderer.invoke('saver-save', key, value),
   saverLoad: (key) => ipcRenderer.invoke('saver-load', key),
 }

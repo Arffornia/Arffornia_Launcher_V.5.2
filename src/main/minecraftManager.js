@@ -8,6 +8,9 @@ export async function launchMC() {
   const launcher = new Client();
   const authManager = new Auth('select_account');
   const xboxManager = await authManager.launch('electron');
+
+  console.log("Refresh Token: " + xboxManager.save());
+
   const token = await xboxManager.getMinecraft();
 
   const gameDir = './.Arffornia_V.5.2';

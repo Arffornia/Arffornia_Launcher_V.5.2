@@ -24,7 +24,7 @@
 
             <div class="content">
               Logout from your Minecraft Account:
-              <input @click="logoutBtnEvent" class="mediumBtn" type="button" value="Logout">
+              <input @click="logoutMSEvent" class="mediumBtn" type="button" value="Logout">
             </div>
 
           </div>
@@ -80,6 +80,10 @@
 
   function openLocalGameFileEvent() {
     window.api.openLocalGameFile();
+  }
+
+  function logoutMSEvent() {
+    window.api.logoutMS();
   }
 </script>
 

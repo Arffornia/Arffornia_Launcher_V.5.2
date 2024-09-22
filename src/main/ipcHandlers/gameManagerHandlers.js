@@ -8,4 +8,13 @@ export function registerGameManagerHandlers() {
   ipcMain.handle('launch-mc', async () => {
     await launchMC();
   });
+
+  ipcMain.handle('login-ms', async () => {
+    // TODO
+  });
+
+  ipcMain.handle('logout-ms', async () => {
+    // TODO
+  });
+
 }
