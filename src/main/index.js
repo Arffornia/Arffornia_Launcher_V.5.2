@@ -6,6 +6,7 @@ import icon from '../../resources/img/Crafting_Table.png?asset'
 import { registerNexusSaverHandlers } from './ipcHandlers/nexusSaverHandler';
 import { registerOtherHandlers } from './ipcHandlers/otherHandlers';
 import { registerGameManagerHandlers } from './ipcHandlers/gameManagerHandlers';
+import { registerUserManagerHandlers } from './ipcHandlers/userManagerHandler';
 
 function createWindow() {
   // Create the browser window.
@@ -58,6 +59,7 @@ app.whenReady().then(() => {
   ipcMain.on('ping', () => console.log('pong'))
 
   // Register handlers:
+  registerUserManagerHandlers();
   registerGameManagerHandlers();
   registerNexusSaverHandlers();
   registerOtherHandlers();

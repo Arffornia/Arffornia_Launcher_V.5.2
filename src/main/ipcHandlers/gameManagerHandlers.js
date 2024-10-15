@@ -11,7 +11,7 @@ export function registerGameManagerHandlers() {
   });
 
   ipcMain.handle('login-ms', async () => {
-    await launchMSAuth();
+    return await launchMSAuth(true) != null;
   });
 
   ipcMain.handle('logout-ms', () => {

@@ -3,6 +3,10 @@ import { electronAPI } from '@electron-toolkit/preload'
 
 // Custom APIs for renderer
 const api = {
+  // User Manager handler:
+  isAuth: () => ipcRenderer.invoke('is-auth'),
+  getUserName: () => ipcRenderer.invoke('get-user-name'),
+
   // Game Manager handlers:
   launchMC: () => ipcRenderer.invoke('launch-mc'),
   loginMS: () => ipcRenderer.invoke('login-ms'),

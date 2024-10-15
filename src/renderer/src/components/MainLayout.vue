@@ -1,29 +1,35 @@
 <template>
   <div class="main-layout">
     <nav>
+      <!-- Profile btn management section -->
       <div class="top-nav-link">
-        <router-link class="nav-link" to="/profile" exact>
-          <img src="@res/img/TheGostMcHead.png" alt="Profile">
+        <router-link v-if="isAuth" class="nav-link" to="/profile" exact>
+          <img :src="profileImg" alt="Profile">
         </router-link>
+
+        <a v-else class="nav-link" @click.prevent="launchMSAuth">
+          <img :src="profileImg" alt="Login">
+        </a>
       </div>
+      <!-- End profile btn management section -->
 
       <div class="middle-nav-link">
         <router-link class="nav-link" to="/" exact>
-          <img src="@res/img/Crafting_Table.png" alt="Home">
+          <img src="@res/img/Crafting_Table.png" alt="Home" />
         </router-link>
 
         <router-link class="nav-link" to="/highlight" exact>
-          <img src="@res/img/icon/photo/photo.png" alt="Highlight">
+          <img src="@res/img/icon/photo/photo.png" alt="Highlight" />
         </router-link>
 
         <router-link class="nav-link" to="/notification" exact>
-          <img src="@res/img/icon/bell/bell.png" alt="Notification">
+          <img src="@res/img/icon/bell/bell.png" alt="Notification" />
         </router-link>
       </div>
 
       <div class="bottom-nav-link">
         <router-link class="nav-link" to="/settings" exact>
-          <img src="@res/img/icon/settings/labour-day.png" alt="Settings">
+          <img src="@res/img/icon/settings/labour-day.png" alt="Settings" />
         </router-link>
       </div>
     </nav>
@@ -35,6 +41,28 @@
 </template>
 
 <script setup>
+import { ref, computed, onMounted } from 'vue';
+
+const defaultProfileImage = '/src/assets/img/steve_head.png';
+const profileHeadImage = '/src/assets/img/TheGostMcHead.png';
+
+const isAuth = ref(false);
+const profileImg = ref(defaultProfileImage);
+
+const launchMSAuth = async () => {
+  try {
+    const authSuccess = await window.api.loginMS();
+
+    if (authSuccess) {
+      isAuth.value = true;
+      profileImg.value = profileHeadImage;
+    } else {
+    }
+  } catch (error) {
+    console.error('Error to auth user !', error);
+  }
+};
+
 </script>
 
 <style scoped>
