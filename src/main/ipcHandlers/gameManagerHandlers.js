@@ -1,6 +1,7 @@
 import { ipcMain } from "electron";
 
 import { launchMC } from "../minecraftManager";
+import { logoutMSAuth, launchMSAuth } from "../msAuthManager";
 
 export function registerGameManagerHandlers() {
 
@@ -10,11 +11,11 @@ export function registerGameManagerHandlers() {
   });
 
   ipcMain.handle('login-ms', async () => {
-    // TODO
+    await launchMSAuth();
   });
 
-  ipcMain.handle('logout-ms', async () => {
-    // TODO
+  ipcMain.handle('logout-ms', () => {
+    logoutMSAuth();
   });
 
 }

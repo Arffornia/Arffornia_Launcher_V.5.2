@@ -8,7 +8,7 @@ import { launchMSAuth } from './msAuthManager';
 
 export async function launchMC() {
   // Is MS auth ?
-  const authToken = launchMSAuth();
+  const authToken = launchMSAuth(true);
 
   // Init vars:
   const launcher = new Client();

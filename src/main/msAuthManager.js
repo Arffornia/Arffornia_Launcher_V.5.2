@@ -1,6 +1,7 @@
 import { saver, saverKeys } from './ipcHandlers/nexusSaverHandler';
 
 import { Auth } from 'msmc';
+import currentUser from './user';
 
 export async function launchMSAuth(reAsk = false) {
   // Init vars:
@@ -29,7 +30,14 @@ export async function launchMSAuth(reAsk = false) {
   // Get token for mc auth
   const token = await xboxManager.getMinecraft();
 
-  console.log("token name: " + token.mclc().name);
+  currentUser.setName(token.mclc().name);
+  currentUser.setIsAuth(true);
 
   return token.mclc();
+}
+
+export function logoutMSAuth()
+{
+  currentUser.setIsAuth(false);
+  saver.delete(saverKeys.REFRESH_TOKEN);
 }
