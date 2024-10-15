@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const ENDPOINT = 'http://localhost/api/';
+import { launcherSettings } from '../../../main/launcherSettings';
+
+const ENDPOINT = launcherSettings.SERVER_ENDPOINT + 'api/';
 
 export async function fetchPlayerProfile(pseudo) {
   try {

@@ -1,13 +1,15 @@
 import { Client } from 'minecraft-launcher-core';
-import { Auth } from 'msmc';
 import { downloadNeoforge } from './neoforgeDownloader';
 import path from 'path';
 import { NexusMods } from '@arffornia/nexus_mods'
 
-import { saver, saverKeys } from './ipcHandlers/nexusSaverHandler';
 import { launcherSettings } from './launcherSettings';
+import { launchMSAuth } from './msAuthManager';
 
 export async function launchMC() {
+  // Is MS auth ?
+  const authToken = launchMSAuth();
+
   // Init vars:
   const launcher = new Client();
 
@@ -19,7 +21,7 @@ export async function launchMC() {
 
   let opts = {
     clientPackage: null,
-    authorization: token.mclc(),
+    authorization: authToken,
     root: launcherSettings.GAME_DIR,
     version: {
       number: launcherSettings.GAME_VERSION,

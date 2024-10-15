@@ -2,7 +2,7 @@ import { ipcMain } from "electron";
 import { NexusSaver } from "@arffornia/nexus_saver";
 
 export const saverKeys = {
-  REFRESH_TOKEN: "refresh-token",
+  REFRESH_TOKEN: "refresh-token"
 }
 
 export const saver = new NexusSaver('./.Arffornia_V.5.2');
