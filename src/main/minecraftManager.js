@@ -8,31 +8,14 @@ import { saver, saverKeys } from './ipcHandlers/nexusSaverHandler';
 import { launcherSettings } from './launcherSettings';
 
 export async function launchMC() {
-  const refreshToken = await saver.load(saverKeys.REFRESH_TOKEN);
-
-  const authManager = new Auth('select_account');
+  // Init vars:
   const launcher = new Client();
-  var xboxManager = null;
 
-  if (refreshToken != null && refreshToken != "") {
-    // Auth from the refresh token
-    xboxManager = await authManager.refresh(refreshToken);
-  } else {
-    // Auth from MS credentials
-    xboxManager = await authManager.launch('electron');
-  }
-
-  // Save the new refresh token:
-  saver.save(saverKeys, xboxManager.save());
-
-  const token = await xboxManager.getMinecraft();
   const neoforgeInstallerPath = await downloadNeoforge(
     launcherSettings.GAME_DIR,
     launcherSettings.MOD_LOADER_VERSION,
     false
   );
-
-  // console.log('NeoForge installer path:', neoforgeInstallerPath);
 
   let opts = {
     clientPackage: null,
