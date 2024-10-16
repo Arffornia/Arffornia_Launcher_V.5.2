@@ -7,6 +7,7 @@ import { registerNexusSaverHandlers } from './ipcHandlers/nexusSaverHandler';
 import { registerOtherHandlers } from './ipcHandlers/otherHandlers';
 import { registerGameManagerHandlers } from './ipcHandlers/gameManagerHandlers';
 import { registerUserManagerHandlers } from './ipcHandlers/userManagerHandler';
+import { registerUtilsManagerHandlers } from './ipcHandlers/utilsManagerHandler';
 
 function createWindow() {
   // Create the browser window.
@@ -63,6 +64,7 @@ app.whenReady().then(() => {
   registerGameManagerHandlers();
   registerNexusSaverHandlers();
   registerOtherHandlers();
+  registerUtilsManagerHandlers();
 
   createWindow()
 

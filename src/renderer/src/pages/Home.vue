@@ -2,13 +2,11 @@
   <div class="notification-content">
     <Podium/>
     <input @click="playBtnEvent" class="mediumPlayBtn" type="button" value="Jouer">
-    <ServerStatue/>
   </div>
 </template>
 
 <script setup>
 import Podium from '../components/Podium.vue';
-import ServerStatue from '../components/ServerStatue.vue';
 import { useUserStore } from '../stores/userStore';
 
 const userStore = useUserStore();

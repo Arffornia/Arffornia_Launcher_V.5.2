@@ -42,7 +42,7 @@ onMounted(async () => {
   }
 
   .server-icon {
-    height: 50px;
+    height: 40px;
   }
 
   .statue-info {

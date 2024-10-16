@@ -20,6 +20,9 @@ const api = {
   // Nexus Savers
   saverSave: (key, value) => ipcRenderer.invoke('saver-save', key, value),
   saverLoad: (key) => ipcRenderer.invoke('saver-load', key),
+
+  openDiscord: () => ipcRenderer.invoke('open-discord'),
+  openWebsite: () => ipcRenderer.invoke('open-website'),
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

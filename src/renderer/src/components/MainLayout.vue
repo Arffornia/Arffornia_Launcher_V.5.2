@@ -37,14 +37,29 @@
     <span class="v-separator"></span>
 
     <router-view></router-view>
+
+    <div class="info-bar">
+      <img class="info-btn" @click="openWebsite" src="@res/img/icon/internet/internet.png" alt="Arffornia Website" title="Arffornia Website">
+      <img class="info-btn" @click="openDiscord" src="@res/img/icon/discord/discord.png" alt="Discord" title="Discord">
+      <ServerStatue/>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { useUserStore } from '../stores/userStore';
 import { onMounted } from 'vue';
+import ServerStatue from '../components/ServerStatue.vue';
 
 const userStore = useUserStore();
+
+function openDiscord() {
+  window.api.openDiscord();
+}
+
+function openWebsite() {
+  window.api.openWebsite();
+}
 
 onMounted(() => {
   userStore.loginNoReAsk();
@@ -62,6 +77,25 @@ onMounted(() => {
   background-position: center center;
   font-family: Montserrat, sans-serif;
   overflow: hidden;
+}
+
+.info-bar {
+  position: absolute;
+  top: 3%;
+  right: 3%;
+  border: solid 3px #ff7300;
+  background-color: #09070a;
+  border-radius: 15px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+
+  padding: 0 20px;
+}
+
+.info-btn {
+  width: 30px;
+  height: 30%;
 }
 
 nav {
