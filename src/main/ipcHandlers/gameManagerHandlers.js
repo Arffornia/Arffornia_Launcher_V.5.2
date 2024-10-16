@@ -14,6 +14,10 @@ export function registerGameManagerHandlers() {
     return await launchMSAuth(true) != null;
   });
 
+  ipcMain.handle('login-ms-no-re-ask', async () => {
+    return await launchMSAuth() != null;
+  });
+
   ipcMain.handle('logout-ms', () => {
     logoutMSAuth();
   });

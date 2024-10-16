@@ -9,9 +9,20 @@
 <script setup>
 import Podium from '../components/Podium.vue';
 import ServerStatue from '../components/ServerStatue.vue';
+import { useUserStore } from '../stores/userStore';
 
-function playBtnEvent() {
-  // Utilisez l'API exposée pour lancer Minecraft
+const userStore = useUserStore();
+
+async function playBtnEvent() {
+  if (!userStore.isAuth)
+  {
+    await userStore.login();
+    if (!userStore.isAuth)
+    {
+      return;
+    }
+  }
+
   window.api.launchMC().then(() => {
     console.log('Minecraft launch command sent.');
   }).catch(err => {

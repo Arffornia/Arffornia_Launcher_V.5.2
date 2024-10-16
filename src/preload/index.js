@@ -10,6 +10,7 @@ const api = {
   // Game Manager handlers:
   launchMC: () => ipcRenderer.invoke('launch-mc'),
   loginMS: () => ipcRenderer.invoke('login-ms'),
+  loginMSNoReAsk: () => ipcRenderer.invoke('login-ms-no-re-ask'),
   logoutMS: () => ipcRenderer.invoke('logout-ms'),
 
   //Other handlers:

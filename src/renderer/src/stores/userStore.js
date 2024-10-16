@@ -8,18 +8,38 @@ export const useUserStore = defineStore('user', {
   }),
 
   actions: {
-    login() {
-      this.isAuth = true;
-      this.profileImg = this.profileHeadImage;
+    async login() {
+      if (!this.isAuth) {
+        try {
+          const authSuccess = await window.api.loginMS();
+
+          if (authSuccess) {
+            this.isAuth = true;
+            this.profileImg = this.profileHeadImage;
+            console.log('Success to auth.');
+          } else {
+            console.error('Failed to auth.');
+          }
+        } catch (error) {
+          console.error('Error during MS auth:', error);
+        }
+      }
     },
+
     logout() {
       this.isAuth = false;
       this.profileImg = '/src/assets/img/steve_head.png';
     },
-    checkAuth() {
-      this.isAuth = window.api.isAuth();
-      if (this.isAuth) {
-        this.profileImg = this.profileHeadImage;
+
+    async loginNoReAsk() {
+      if (!this.isAuth) {
+        const authSuccess = await window.api.loginMSNoReAsk();
+
+        if (authSuccess) {
+          this.isAuth = true;
+          this.profileImg = this.profileHeadImage;
+          console.log('Success to re auth.');
+        }
       }
     }
   }

@@ -7,7 +7,7 @@
           <img :src="userStore.profileImg" alt="Profile">
         </router-link>
 
-        <a v-else class="nav-link" @click.prevent="launchMSAuth">
+        <a v-else class="nav-link" @click.prevent="userStore.login">
           <img :src="userStore.profileImg" alt="Login">
         </a>
       </div>
@@ -46,20 +46,8 @@ import { onMounted } from 'vue';
 
 const userStore = useUserStore();
 
-const launchMSAuth = async () => {
-  try {
-    const authSuccess = await window.api.loginMS();
-    if (authSuccess) {
-      console.log("Auth success");
-      userStore.login();
-    }
-  } catch (error) {
-    console.error('Erreur lors de l\'authentification:', error);
-  }
-};
-
 onMounted(() => {
-  userStore.checkAuth();
+  userStore.loginNoReAsk();
 });
 
 </script>
