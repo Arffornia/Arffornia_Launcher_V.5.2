@@ -25,6 +25,7 @@
     "axios": "^1.7.2",
     "minecraft-launcher-core": "^3.18.1",
     "msmc": "^5.0.5",
+    "pinia": "^2.2.4",
     "skinview3d": "^3.0.1",
     "tomate-mods": "github:doublekekse/tomate-mods",
     "vue-router": "^4.4.0"

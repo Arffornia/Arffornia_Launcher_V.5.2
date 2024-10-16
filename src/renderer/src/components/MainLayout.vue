@@ -3,12 +3,12 @@
     <nav>
       <!-- Profile btn management section -->
       <div class="top-nav-link">
-        <router-link v-if="isAuth" class="nav-link" to="/profile" exact>
-          <img :src="profileImg" alt="Profile">
+        <router-link v-if="userStore.isAuth" class="nav-link" to="/profile" exact>
+          <img :src="userStore.profileImg" alt="Profile">
         </router-link>
 
         <a v-else class="nav-link" @click.prevent="launchMSAuth">
-          <img :src="profileImg" alt="Login">
+          <img :src="userStore.profileImg" alt="Login">
         </a>
       </div>
       <!-- End profile btn management section -->
@@ -41,27 +41,26 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { useUserStore } from '../stores/userStore';
+import { onMounted } from 'vue';
 
-const defaultProfileImage = '/src/assets/img/steve_head.png';
-const profileHeadImage = '/src/assets/img/TheGostMcHead.png';
-
-const isAuth = ref(false);
-const profileImg = ref(defaultProfileImage);
+const userStore = useUserStore();
 
 const launchMSAuth = async () => {
   try {
     const authSuccess = await window.api.loginMS();
-
     if (authSuccess) {
-      isAuth.value = true;
-      profileImg.value = profileHeadImage;
-    } else {
+      console.log("Auth success");
+      userStore.login();
     }
   } catch (error) {
-    console.error('Error to auth user !', error);
+    console.error('Erreur lors de l\'authentification:', error);
   }
 };
+
+onMounted(() => {
+  userStore.checkAuth();
+});
 
 </script>
 

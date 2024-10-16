@@ -56,10 +56,13 @@
 
 <script setup>
   import { ref, onMounted } from 'vue';
+  import { useUserStore } from '../stores/userStore';
 
   const totalRAM = ref(0);
   const ramOptions = ref([]);
   const selectedRAM = ref(5);
+
+  const userStore = useUserStore();
 
   onMounted(async () => {
     const savedSelectedRam = await window.api.saverLoad("allocatedRam");
@@ -84,6 +87,7 @@
 
   function logoutMSEvent() {
     window.api.logoutMS();
+    userStore.logout();
   }
 </script>
 
