@@ -1,5 +1,6 @@
 <template>
   <div class="notification-content">
+    <img class="isoimg" src="@res/img/iso/testiso1ps.png" alt="">
     <Podium/>
     <input @click="playBtnEvent" class="mediumPlayBtn" type="button" value="Jouer">
   </div>
@@ -36,6 +37,13 @@ async function playBtnEvent() {
 <style scoped>
  .notification-content {
 
+ }
+
+ .isoimg {
+  top: 20%;
+  left: 20%;
+  position: absolute;
+  width: 1000px;
  }
 
  .mediumPlayBtn{
