@@ -3,10 +3,13 @@
     <Podium/>
     <input @click="playBtnEvent" class="mediumPlayBtn" type="button" value="Jouer">
   </div>
+
+  <TopBar/>
 </template>
 
 <script setup>
 import Podium from '../components/Podium.vue';
+import TopBar from '../components/TopBar.vue';
 import { useUserStore } from '../stores/userStore';
 
 const userStore = useUserStore();
