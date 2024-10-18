@@ -1,8 +1,21 @@
 <template>
-  <div class="notification-content">
-    <img class="isoimg" src="@res/img/iso/testiso1ps.png" alt="">
-    <Podium/>
-    <input @click="playBtnEvent" class="mediumPlayBtn" type="button" value="Jouer">
+  <div class="scroll-container">
+    <div class="home-content">
+      <!-- <img class="isoimg" src="@res/img/iso/testiso1ps.png" alt=""> -->
+       <div class="podium-container">
+          <Podium/>
+       </div>
+
+      <div class="playBox">
+        <p id="title">ARFFORNIA</p>
+        <div class="description">
+          <p class="description-content">+ 330 Mods</p>
+          <p class="description-content">+ 25 Paliers de progression</p>
+
+        </div>
+        <input @click="playBtnEvent" class="mediumPlayBtn" type="button" value="Jouer">
+      </div>
+    </div>
   </div>
 
   <TopBar/>
@@ -35,15 +48,63 @@ async function playBtnEvent() {
 
 
 <style scoped>
- .notification-content {
+.scroll-container {
+  height: 100vh;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  position: relative;
+}
 
- }
-
- .isoimg {
+.isoimg {
   top: 20%;
   left: 20%;
   position: absolute;
   width: 1000px;
+ }
+
+#title {
+  color: white;
+  font-size: 400%;
+  font-weight: 800;
+  margin: 0;
+}
+
+.playBox {
+  background-color: #00000034;
+  backdrop-filter: blur(4px);
+  position: absolute;
+  top: 36%;
+  left: 5%;
+  border: solid 3px #ff7300;
+  border-radius: 15px;
+  max-width: fit-content;
+
+  padding: 30px;
+}
+
+.playBox .description {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  padding: 5px 0px 5px 5px;
+  margin: 10px 0px;
+
+  border-left: 4px solid #ff7300;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+
+.playBox .description-content {
+  color: #fff;
+  margin: 0;
+  font-size: 110%;
+  font-weight: 400;
+}
+
+ .podium-container {
+  transform: translate(60%, 13%);
  }
 
  .mediumPlayBtn{

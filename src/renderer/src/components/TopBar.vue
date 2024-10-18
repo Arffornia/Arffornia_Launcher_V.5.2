@@ -22,6 +22,9 @@ function openWebsite() {
 <style scoped>
 
 .info-bar {
+  transform: scale(0.73);
+  transform-origin: top right;
+
   position: absolute;
   top: 3%;
   right: 3%;
@@ -38,6 +41,10 @@ function openWebsite() {
 .info-btn {
   width: 30px;
   height: 30%;
+}
+
+.info-btn:hover {
+  cursor: pointer;
 }
 
 </style>

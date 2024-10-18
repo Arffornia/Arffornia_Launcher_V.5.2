@@ -104,7 +104,7 @@ function refreshSkinViewers() {
 
 <style scoped>
   .podium {
-    transform: scale(0.6);
+    transform: scale(0.4);
     transform-origin: top left;
   }
 
