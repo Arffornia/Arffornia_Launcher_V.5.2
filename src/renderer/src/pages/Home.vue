@@ -72,12 +72,12 @@ async function playBtnEvent() {
 }
 
 .playBox {
-  background-color: #00000034;
+  background: linear-gradient(135deg, rgba(33, 33, 33, 0.737) 0%, rgba(29, 29, 29, 0.236) 100%);
+  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
   backdrop-filter: blur(4px);
   position: absolute;
   top: 36%;
   left: 5%;
-  border: solid 3px #ff7300;
   border-radius: 15px;
   max-width: fit-content;
 
@@ -97,7 +97,7 @@ async function playBtnEvent() {
 }
 
 .playBox .description-content {
-  color: #fff;
+  color: #ffffffbd;
   margin: 0;
   font-size: 110%;
   font-weight: 400;
