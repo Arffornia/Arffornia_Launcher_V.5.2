@@ -17,16 +17,41 @@
       </div>
       <div class="shop">
         <div class="shop-section">
-          <p class="section-title">Best Sellers: </p>
+          <p class="section-title">Arrivals: </p>
           <div class="items-container">
-            <a v-for="item in items" :key="item.id" @click.prevent="redirect_item_shop(item.img_url)">
+            <a v-for="item in newestItems" :key="item.id" @click.prevent="redirect_item_shop(item.img_url)" class="shop-item" title="See on Website">
               <div class="item-container">
                 <img class="item-icon" :src="item.img_url" :alt="item.name" />
                 <p class="item-title">{{ item.name }}</p>
-                <p class="item-price">{{ item.promo_price > 0 ? item.promo_price : item.real_price }}</p>
+                <p class="item-price">{{item.real_price }}</p>
               </div>
             </a>
-        </div>
+          </div>
+          <p class="section-title">This Week's Deals: </p>
+          <div class="items-container">
+            <a v-for="item in saleItems" :key="item.id" @click.prevent="redirect_item_shop(item.img_url)" class="shop-item" title="See on Website">
+              <div class="item-container">
+                <img class="item-icon" :src="item.img_url" :alt="item.name" />
+                <p class="item-title">{{ item.name }}</p>
+                  <p class="item-price">
+                    <span class="item-price-sale">
+                      {{ item.real_price }}
+                    </span>
+                      {{ item.promo_price }}
+                  </p>
+              </div>
+            </a>
+          </div>
+          <p class="section-title">Best Sellers: </p>
+          <div class="items-container">
+            <a v-for="item in bestSellerItems" :key="item.id" @click.prevent="redirect_item_shop(item.img_url)" class="shop-item" title="See on Website">
+              <div class="item-container">
+                <img class="item-icon" :src="item.img_url" :alt="item.name" />
+                <p class="item-title">{{ item.name }}</p>
+                <p class="item-price">{{ item.real_price }}</p>
+              </div>
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -40,19 +65,27 @@ import { ref, onMounted } from 'vue'
 import Podium from '../components/Podium.vue';
 import TopBar from '../components/TopBar.vue';
 import { useUserStore } from '../stores/userStore';
-import { fetchBestSellers } from '../js/arfforniaApi.js';
+import { fetchBestSellers, fetchNewestItems, fetchSaleItems } from '../js/arfforniaApi.js';
 
 const userStore = useUserStore();
-const items = ref([]);
+const bestSellerItems = ref([]);
+const newestItems = ref([]);
+const saleItems = ref([]);
 
 onMounted(async () => {
   try {
-    const data = await fetchBestSellers(3);
-    items.value = data;
+    const bestSellerData = await fetchBestSellers(3);
+    bestSellerItems.value = bestSellerData;
+
+    const newestData = await fetchNewestItems(3);
+    newestItems.value = newestData;
+
+    const saleData = await fetchSaleItems(3);
+    saleItems.value = saleData;
   } catch (error) {
-    console.error("Error to fetch best seller items :", error.message)
+    console.error("Error fetching items:", error.message);
   }
-})
+});
 
 function redirect_item_shop(url) {
   window.api.openWebsite(url);
@@ -166,6 +199,10 @@ async function playBtnEvent() {
   top: 75%;
 }
 
+.shop-item {
+  cursor: pointer;
+}
+
 .shop-section {
   display: flex;
   flex-direction: column;
@@ -190,6 +227,13 @@ async function playBtnEvent() {
   font-size: 135%;
   font-weight: 730;
   margin: 0;
+
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.section-title:nth-of-type(n+2) {
+  margin-top: 75px;
 }
 
 .item-price {
@@ -198,6 +242,13 @@ async function playBtnEvent() {
   color: #f39c12;
   margin: 0;
 }
+
+.item-price-sale {
+  color: #261d31;
+  text-decoration: line-through;
+  text-decoration-color: #ff0000;
+  text-decoration-thickness: 3px;
+ }
 
 .item-icon {
   max-width: 90px;

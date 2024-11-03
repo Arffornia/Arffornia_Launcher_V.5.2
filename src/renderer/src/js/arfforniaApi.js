@@ -55,3 +55,29 @@ export async function fetchBestSellers(size) {
     }
   }
 };
+
+export async function fetchNewestItems(size) {
+  try {
+    const response = await axios.get(`${ENDPOINT}shop/newest/${size}`);
+    return response.data;
+  } catch (err) {
+    if (err.response && err.response.data) {
+      throw new Error(err.response.data.error || 'An error occurred while fetching newest items.');
+    } else {
+      throw new Error('An error occurred while fetching newest items.');
+    }
+  }
+};
+
+export async function fetchSaleItems(size) {
+  try {
+    const response = await axios.get(`${ENDPOINT}shop/sales/${size}`);
+    return response.data;
+  } catch (err) {
+    if (err.response && err.response.data) {
+      throw new Error(err.response.data.error || 'An error occurred while fetching sale items.');
+    } else {
+      throw new Error('An error occurred while fetching sale items.');
+    }
+  }
+};
