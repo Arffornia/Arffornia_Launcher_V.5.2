@@ -8,8 +8,8 @@ export function registerUtilsManagerHandlers() {
     shell.openExternal("https://discord.gg/CWH6w67");
   });
 
-  ipcMain.handle('open-website', () => {
-    shell.openExternal("https://arffornia.ddns.net");
+  ipcMain.handle('open-website', (event, url) => {
+    shell.openExternal(url);
   });
 }
 

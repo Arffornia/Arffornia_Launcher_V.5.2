@@ -15,6 +15,20 @@
         </div>
         <input @click="playBtnEvent" class="mediumPlayBtn" type="button" value="Jouer">
       </div>
+      <div class="shop">
+        <div class="shop-section">
+          <p class="section-title">Best Sellers: </p>
+          <div class="items-container">
+            <a v-for="item in items" :key="item.id" @click.prevent="redirect_item_shop(item.img_url)">
+              <div class="item-container">
+                <img class="item-icon" :src="item.img_url" :alt="item.name" />
+                <p class="item-title">{{ item.name }}</p>
+                <p class="item-price">{{ item.promo_price > 0 ? item.promo_price : item.real_price }}</p>
+              </div>
+            </a>
+        </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -22,11 +36,27 @@
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue'
 import Podium from '../components/Podium.vue';
 import TopBar from '../components/TopBar.vue';
 import { useUserStore } from '../stores/userStore';
+import { fetchBestSellers } from '../js/arfforniaApi.js';
 
 const userStore = useUserStore();
+const items = ref([]);
+
+onMounted(async () => {
+  try {
+    const data = await fetchBestSellers(3);
+    items.value = data;
+  } catch (error) {
+    console.error("Error to fetch best seller items :", error.message)
+  }
+})
+
+function redirect_item_shop(url) {
+  window.api.openWebsite(url);
+}
 
 async function playBtnEvent() {
   if (!userStore.isAuth)
@@ -76,7 +106,7 @@ async function playBtnEvent() {
   box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
   backdrop-filter: blur(4px);
   position: absolute;
-  top: 36%;
+  top: 31%;
   left: 5%;
   border-radius: 15px;
   max-width: fit-content;
@@ -127,5 +157,69 @@ async function playBtnEvent() {
   font-size: 140%;
   box-shadow: 0px 15px 20px #ff730097;
   transform: translateY(-3px);
+}
+
+.shop {
+  display: flex;
+  padding-left: 5%;
+  position: absolute;
+  top: 75%;
+}
+
+.shop-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.section-title {
+  color: #ffffff;
+  font-size: 200%;
+  font-weight: 700;
+  margin: 0;
+  padding-left: 10px;
+  margin-bottom: 15px;
+
+
+  border-left: 4px solid #ff7300;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+
+.item-title {
+  color: #fff;
+  font-size: 135%;
+  font-weight: 730;
+  margin: 0;
+}
+
+.item-price {
+  font-size: 115%;
+  font-weight: 700;
+  color: #f39c12;
+  margin: 0;
+}
+
+.item-icon {
+  max-width: 90px;
+}
+
+.items-container {
+  display: flex;
+  gap: 25px;
+}
+
+.item-container {
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, rgba(33, 33, 33, 0.737) 0%, rgba(29, 29, 29, 0.236) 100%);
+  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+  backdrop-filter: blur(4px);
+  border-radius: 15px;
+  border: 2px solid #ff7300;
+
+  padding: 15px;
+  text-align: center;
+  align-items: center;
+  width: 130px;
 }
 </style>

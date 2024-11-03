@@ -42,3 +42,16 @@ export async function fetchBestPlayersByPoint(size) {
     }
   }
 };
+
+export async function fetchBestSellers(size) {
+  try {
+    const response = await axios.get(`${ENDPOINT}shop/bestSallers/${size}`);
+    return response.data;
+  } catch (err) {
+    if (err.response && err.response.data) {
+      throw new Error(err.response.data.error || 'An error occurred while fetching best seller.');
+    } else {
+      throw new Error('An error occurred while fetching best seller.');
+    }
+  }
+};

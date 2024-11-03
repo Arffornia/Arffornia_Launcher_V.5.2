@@ -22,7 +22,7 @@ const api = {
   saverLoad: (key) => ipcRenderer.invoke('saver-load', key),
 
   openDiscord: () => ipcRenderer.invoke('open-discord'),
-  openWebsite: () => ipcRenderer.invoke('open-website'),
+  openWebsite: (url) => ipcRenderer.invoke('open-website', url),
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

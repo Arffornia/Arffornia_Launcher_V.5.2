@@ -14,7 +14,7 @@ function openDiscord() {
 }
 
 function openWebsite() {
-  window.api.openWebsite();
+  window.api.openWebsite("https://arffornia.ddns.net");
 }
 
 </script>
