@@ -252,6 +252,11 @@ async function playBtnEvent() {
 
 .item-icon {
   max-width: 90px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.item-container:hover .item-icon {
+  transform: scale(1.1);
 }
 
 .items-container {
