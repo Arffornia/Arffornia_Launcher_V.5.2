@@ -52,7 +52,7 @@
       "package.json"
     ],
     "extraFiles": [
-      "assets/**"
+      "src/assets/**"
     ],
     "directories": {
       "buildResources": "build"

@@ -3,8 +3,7 @@ import { defineStore } from 'pinia';
 export const useUserStore = defineStore('user', {
   state: () => ({
     isAuth: false,
-    profileImg: '/src/assets/img/steve_head.png',
-    profileHeadImage: '/src/assets/img/TheGostMcHead.png',
+    profileImg: new URL('../../../../resources/img/steve_head.png', import.meta.url).href,
   }),
 
   actions: {
@@ -15,7 +14,7 @@ export const useUserStore = defineStore('user', {
 
           if (authSuccess) {
             this.isAuth = true;
-            this.profileImg = this.profileHeadImage;
+            await this.updateProfileImage();
             console.log('Success to auth.');
           } else {
             console.error('Failed to auth.');
@@ -28,7 +27,7 @@ export const useUserStore = defineStore('user', {
 
     logout() {
       this.isAuth = false;
-      this.profileImg = '/src/assets/img/steve_head.png';
+      this.profileImg = new URL('../../../../resources/img/steve_head.png', import.meta.url).href;
     },
 
     async loginNoReAsk() {
@@ -37,10 +36,20 @@ export const useUserStore = defineStore('user', {
 
         if (authSuccess) {
           this.isAuth = true;
-          this.profileImg = this.profileHeadImage;
+          await this.updateProfileImage();
           console.log('Success to re auth.');
         }
       }
-    }
-  }
+    },
+
+    async updateProfileImage() {
+      try {
+        const userName = await window.api.getUserName();
+        this.profileImg = `https://minotar.net/avatar/${userName}/50`;
+      } catch (error) {
+        console.error('Error fetching profile image:', error);
+        this.profileImg = '/src/assets/img/steve_head.png';
+      }
+    },
+  },
 });
