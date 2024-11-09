@@ -41,5 +41,8 @@ onMounted(() => {
   z-index: 99;
   padding-right: 2%;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
 }
 </style>

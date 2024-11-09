@@ -36,7 +36,10 @@
 
     <span class="v-separator"></span>
 
-    <router-view></router-view>
+    <div class="scroll-container">
+      <NotificationContainer/>
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
@@ -89,6 +92,16 @@ nav a{
   border-radius: 10px;
   transition: background-color 0.3s;
 }
+
+.scroll-container {
+  height: 100vh;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  position: relative;
+}
+
 
 .top-nav-link {
   margin-top: 10%;

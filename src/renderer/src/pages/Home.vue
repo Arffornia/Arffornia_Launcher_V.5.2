@@ -1,5 +1,4 @@
 <template>
-  <div class="scroll-container">
     <div class="home-content">
       <!-- <Notification message="Update available !!"/> -->
 
@@ -8,7 +7,6 @@
           <Podium/>
        </div>
 
-       <NotificationContainer/>
 
       <div class="playBox">
         <p id="title">ARFFORNIA</p>
@@ -59,7 +57,6 @@
         </div>
       </div>
     </div>
-  </div>
 
   <TopBar/>
 </template>
@@ -70,7 +67,6 @@ import Podium from '../components/Podium.vue';
 import TopBar from '../components/TopBar.vue';
 import { useUserStore } from '../stores/userStore';
 import { fetchBestSellers, fetchNewestItems, fetchSaleItems } from '../js/arfforniaApi.js';
-import NotificationContainer from '../components/NotificationContainer.vue';
 
 const userStore = useUserStore();
 const bestSellerItems = ref([]);
@@ -116,15 +112,6 @@ async function playBtnEvent() {
 
 
 <style scoped>
-.scroll-container {
-  height: 100vh;
-  width: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
-  scrollbar-width: none;
-  position: relative;
-}
-
 .isoimg {
   top: 20%;
   left: 20%;
