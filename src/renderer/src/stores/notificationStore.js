@@ -5,9 +5,9 @@ export const useNotificationStore = defineStore('notification', {
     notifications: [],
   }),
   actions: {
-    addNotification(message) {
+    addNotification(message, type = "msg") {
       const id = Date.now();
-      this.notifications.push({ id, message });
+      this.notifications.push({ id, message, type });
     },
     removeNotification(id) {
       const index = this.notifications.findIndex((notif) => notif.id === id);

@@ -1,14 +1,20 @@
 <template>
   <div @click="clickEvent" class="notification-content">
     <a @click.stop="closeEvent" class="close-btn">x</a>
-    <img class="image" src="@res/img/icon/update/update_white.png" alt="Close" title="Close"/>
+    <img class="image" :src="imageSrc" alt="Close" title="Close"/>
     <p class="title">{{ props.message }}</p>
   </div>
 </template>
 
 <script setup>
+import { computed } from 'vue';
+
 const props = defineProps({
   message: {
+    type: String,
+    required: true,
+  },
+  type: {
     type: String,
     required: true,
   },
@@ -16,6 +22,15 @@ const props = defineProps({
     type: [String, Number],
     required: true,
   },
+});
+
+const imageMap = {
+  "msg": new URL('../../../../resources/img/icon/mail/email_icon.png', import.meta.url).href,
+  "update": new URL('../../../../resources/img/icon/update/update_white.png', import.meta.url).href,
+};
+
+const imageSrc = computed(() => {
+  return imageMap[props.type] || imageMap["msg"];
 });
 
 const emit = defineEmits();
@@ -45,10 +60,9 @@ function closeEvent() {
 .image {
   margin-top: auto;
   margin-bottom: auto;
-  width: 40px;
   height: 40px;
+  max-width: 80px;
   margin-left: 15px;
-  border-radius: 15px;
 }
 
 .title {

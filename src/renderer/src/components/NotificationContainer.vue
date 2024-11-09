@@ -6,6 +6,7 @@
         :key="notif.id"
         :id="notif.id"
         :message="notif.message"
+        :type="notif.type"
         @close="removeNotification(notif.id)"
       />
     </div>
@@ -20,8 +21,8 @@ import Notification from '../components/Notification.vue';
 const notificationStore = useNotificationStore();
 const notifications = notificationStore.notifications;
 
-function addNotif(message) {
-  notificationStore.addNotification(message);
+function addNotif(message, type) {
+  notificationStore.addNotification(message, type);
 }
 
 function removeNotification(id) {
@@ -29,7 +30,7 @@ function removeNotification(id) {
 }
 
 onMounted(() => {
-  addNotif("Test add notif");
+  addNotif("Test add notif", "update");
 });
 </script>
 
