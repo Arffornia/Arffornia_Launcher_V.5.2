@@ -30,7 +30,7 @@ function removeNotification(id) {
 }
 
 onMounted(() => {
-  addNotif("Test add notif", "update");
+  // addNotif("Test add notif", "update");
 });
 </script>
 
