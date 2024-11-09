@@ -1,29 +1,31 @@
 <template>
   <div class="notification-content">
-    <div ref="notificationsContainer" class="notification-container"></div>
+    <div ref="notificationsContainer" class="notification-container">
+      <Notification
+        v-for="notif in notifications"
+        :key="notif.id"
+        :id="notif.id"
+        :message="notif.message"
+        @close="removeNotification(notif.id)"
+      />
+    </div>
   </div>
 </template>
 
 <script setup>
-import { onMounted, h, render,  ref } from 'vue';
+import { onMounted } from 'vue';
+import { useNotificationStore } from '../stores/notificationStore';
 import Notification from '../components/Notification.vue';
 
-const notificationsContainer = ref(null);
+const notificationStore = useNotificationStore();
+const notifications = notificationStore.notifications;
 
 function addNotif(message) {
-  const notificationNode = document.createElement('div');
-  notificationsContainer.value.appendChild(notificationNode);
+  notificationStore.addNotification(message);
+}
 
-  const closeNotification = () => {
-    notificationsContainer.value.removeChild(notificationNode);
-  };
-
-  const vnode = h(Notification, {
-    message,
-    onClose: closeNotification,
-  });
-
-  render(vnode, notificationNode);
+function removeNotification(id) {
+  notificationStore.removeNotification(id);
 }
 
 onMounted(() => {
@@ -35,7 +37,9 @@ onMounted(() => {
 .notification-container {
   position: absolute;
   top: 15%;
-  right: 2%;
+  right: 0%;
   z-index: 99;
+  padding-right: 2%;
+  overflow: hidden;
 }
 </style>

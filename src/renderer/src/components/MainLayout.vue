@@ -22,7 +22,7 @@
           <img src="@res/img/icon/photo/photo.png" alt="Highlight" />
         </router-link>
 
-        <router-link class="nav-link" to="/notification" exact>
+        <router-link class="nav-link" to="/notification" @click="addNotif" exact>
           <img src="@res/img/icon/bell/bell.png" alt="Notification" />
         </router-link>
       </div>
@@ -37,17 +37,22 @@
     <span class="v-separator"></span>
 
     <router-view></router-view>
-
-    <NotificationContainer/>
   </div>
 </template>
 
 <script setup>
 import { useUserStore } from '../stores/userStore';
+import { useNotificationStore } from '../stores/notificationStore';
 import { onMounted } from 'vue';
 import NotificationContainer from './NotificationContainer.vue';
 
 const userStore = useUserStore();
+const notifStore = useNotificationStore();
+
+function addNotif()
+{
+  notifStore.addNotification("Hello world");
+}
 
 onMounted(() => {
   userStore.loginNoReAsk();
@@ -137,5 +142,4 @@ nav .nav-link:hover img {
   margin-top: auto;
   margin-bottom: auto;
 }
-
 </style>

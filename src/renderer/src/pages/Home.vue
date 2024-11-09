@@ -8,6 +8,8 @@
           <Podium/>
        </div>
 
+       <NotificationContainer/>
+
       <div class="playBox">
         <p id="title">ARFFORNIA</p>
         <div class="description">
@@ -68,6 +70,7 @@ import Podium from '../components/Podium.vue';
 import TopBar from '../components/TopBar.vue';
 import { useUserStore } from '../stores/userStore';
 import { fetchBestSellers, fetchNewestItems, fetchSaleItems } from '../js/arfforniaApi.js';
+import NotificationContainer from '../components/NotificationContainer.vue';
 
 const userStore = useUserStore();
 const bestSellerItems = ref([]);

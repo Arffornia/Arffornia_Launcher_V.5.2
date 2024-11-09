@@ -7,10 +7,13 @@
 </template>
 
 <script setup>
-
 const props = defineProps({
   message: {
     type: String,
+    required: true,
+  },
+  id: {
+    type: [String, Number],
     required: true,
   },
 });
@@ -23,7 +26,7 @@ function clickEvent() {
 
 function closeEvent() {
   console.log('Close the notif !')
-  emit('close');
+  emit('close', props.id);
 }
 </script>
 
@@ -34,10 +37,9 @@ function closeEvent() {
   background-color: #261d31;
   border: 2px solid #ff7300;
   border-radius: 2em 20px 2.5em 0.2in;
-
-  align-content: center;
   display: flex;
   position: relative;
+  animation: slideIn 2s forwards;
 }
 
 .image {
@@ -63,11 +65,19 @@ function closeEvent() {
   top: 0%;
   right: 0%;
   color: #fff;
-
   font-weight: 700;
   border: 2px solid #ff7300;
   border-radius: 45px;
   text-align: center;
   cursor: pointer;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
 }
 </style>
