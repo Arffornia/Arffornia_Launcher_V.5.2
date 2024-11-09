@@ -1,6 +1,8 @@
 <template>
   <div class="scroll-container">
     <div class="home-content">
+      <!-- <Notification message="Update available !!"/> -->
+
       <!-- <img class="isoimg" src="@res/img/iso/testiso1ps.png" alt=""> -->
        <div class="podium-container">
           <Podium/>
@@ -167,7 +169,7 @@ async function playBtnEvent() {
 }
 
  .podium-container {
-  transform: translate(60%, 13%);
+  transform: translate(56%, 32%);
  }
 
  .mediumPlayBtn{

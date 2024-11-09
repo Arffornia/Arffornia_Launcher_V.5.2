@@ -37,12 +37,15 @@
     <span class="v-separator"></span>
 
     <router-view></router-view>
+
+    <NotificationContainer/>
   </div>
 </template>
 
 <script setup>
 import { useUserStore } from '../stores/userStore';
 import { onMounted } from 'vue';
+import NotificationContainer from './NotificationContainer.vue';
 
 const userStore = useUserStore();
 
