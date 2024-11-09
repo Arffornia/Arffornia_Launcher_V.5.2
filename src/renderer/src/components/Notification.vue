@@ -84,6 +84,8 @@ function closeEvent() {
   border-radius: 45px;
   text-align: center;
   cursor: pointer;
+  background-color: #261d31;
+  line-height: 80%;
 }
 
 @keyframes slideIn {

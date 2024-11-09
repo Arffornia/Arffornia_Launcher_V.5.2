@@ -23,6 +23,7 @@
     "@electron-toolkit/preload": "^3.0.1",
     "@electron-toolkit/utils": "^3.0.0",
     "axios": "^1.7.2",
+    "electron-updater": "^6.3.9",
     "minecraft-launcher-core": "^3.18.1",
     "msmc": "^5.0.5",
     "pinia": "^2.2.4",

@@ -23,6 +23,9 @@ const api = {
 
   openDiscord: () => ipcRenderer.invoke('open-discord'),
   openWebsite: (url) => ipcRenderer.invoke('open-website', url),
+
+  onUpdateDownloaded: (callback) => ipcRenderer.on('update-downloaded', callback),
+  removeUpdateDownloadedListener: () => ipcRenderer.removeAllListeners('update-downloaded'),
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

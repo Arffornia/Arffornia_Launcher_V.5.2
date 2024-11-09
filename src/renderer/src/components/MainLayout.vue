@@ -47,11 +47,19 @@
 import { useUserStore } from '../stores/userStore';
 import { onMounted } from 'vue';
 import NotificationContainer from './NotificationContainer.vue';
+import { useNotificationStore } from '../stores/notificationStore';
 
 const userStore = useUserStore();
+const notificationStore = useNotificationStore();
 
 onMounted(() => {
   userStore.loginNoReAsk();
+  window.api.onUpdateDownloaded(() => {
+    notificationStore.addNotification(
+      "Update downloaded. It will be installed at the next start-up.",
+      "update"
+    );
+  });
 });
 
 </script>
