@@ -1,7 +1,7 @@
 {
   "name": "arffornia-launcher-v.5.2",
   "productName": "Arffornia Launcher",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Official launcher of Arffornia",
   "main": "./out/main/index.js",
   "author": "thegostsniperfr",
@@ -56,6 +56,7 @@
       "src/assets/**"
     ],
     "directories": {
+      "output": "dist",
       "buildResources": "build"
     },
     "asar": true,
@@ -68,6 +69,11 @@
       "installerIcon": "resources/img/Crafting_Table.ico",
       "uninstallerIcon": "resources/img/Crafting_Table.ico",
       "shortcutName": "Arffornia Launcher"
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "Arffornia",
+      "repo": "Arffornia_Launcher_V.5.2"
     }
   }
 }
