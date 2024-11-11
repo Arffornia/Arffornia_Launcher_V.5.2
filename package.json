@@ -75,7 +75,8 @@
       {
         "provider": "github",
         "owner": "Arffornia",
-        "repo": "Arffornia_Launcher_V.5.2"
+        "repo": "Arffornia_Launcher_V.5.2",
+        "releaseType": "release"
       }
     ]
   }
