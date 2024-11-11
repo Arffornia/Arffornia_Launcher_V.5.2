@@ -31,5 +31,3 @@ jobs:
             dist/*.dmg
             dist/*.exe
             dist/*.AppImage
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
