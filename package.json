@@ -70,10 +70,12 @@
       "uninstallerIcon": "resources/img/Crafting_Table.ico",
       "shortcutName": "Arffornia Launcher"
     },
-    "publish": {
-      "provider": "github",
-      "owner": "Arffornia",
-      "repo": "Arffornia_Launcher_V.5.2"
-    }
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "Arffornia",
+        "repo": "Arffornia_Launcher_V.5.2"
+      }
+    ]
   }
 }
