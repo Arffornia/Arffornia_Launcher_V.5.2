@@ -1,7 +1,7 @@
 <template>
     <div class="home-content">
 
-      <p>Hello from the new update !</p>
+      <!-- <p>Hello from the new update !</p> -->
       <!-- <Notification message="Update available !!"/> -->
 
       <!-- <img class="isoimg" src="@res/img/iso/testiso1ps.png" alt=""> -->

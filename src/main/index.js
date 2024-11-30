@@ -10,6 +10,9 @@ import { registerGameManagerHandlers } from './ipcHandlers/gameManagerHandlers';
 import { registerUserManagerHandlers } from './ipcHandlers/userManagerHandler';
 import { registerUtilsManagerHandlers } from './ipcHandlers/utilsManagerHandler';
 
+autoUpdater.autoDownload = true;
+autoUpdater.autoInstallOnAppQuit = true;
+
 function createWindow() {
   const mainWindow = new BrowserWindow({
     width: 1100,
