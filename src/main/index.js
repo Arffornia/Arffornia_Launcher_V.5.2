@@ -84,6 +84,9 @@ app.on('window-all-closed', () => {
 
 autoUpdater.on('update-available', () => {
   console.log('New launcher version available, downloading in progress...');
+  if (mainWindow) {
+    mainWindow.webContents.send('update-downloaded', "New launcher version available, downloading in progress...");
+  }
 });
 
 autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {

@@ -1,7 +1,7 @@
 {
   "name": "arffornia-launcher-v.5.2",
   "productName": "Arffornia Launcher",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Official launcher of Arffornia",
   "main": "./out/main/index.js",
   "author": "thegostsniperfr",
