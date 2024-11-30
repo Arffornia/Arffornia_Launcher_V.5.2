@@ -54,7 +54,7 @@ function closeEvent() {
   border-radius: 2em 20px 2.5em 0.2in;
   display: flex;
   position: relative;
-  animation: slideIn 2s forwards;
+  animation: slideIn 1s ease;
 }
 
 .image {
@@ -70,6 +70,9 @@ function closeEvent() {
   margin-bottom: auto;
   color: #fff;
   padding-left: 15px;
+  font-size: 100%;
+  line-height: 130%;
+  white-space: pre-line;
 }
 
 .close-btn {

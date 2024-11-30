@@ -56,7 +56,7 @@ onMounted(() => {
   userStore.loginNoReAsk();
   window.api.onUpdateDownloaded((releaseName) => {
     notificationStore.addNotification(
-      `Update downloaded (version: ${releaseName}). It will be installed at the next start-up.`,
+      `Update downloaded: 1.0.0 !\n It will be installed at the next start-up.`,
       "update"
     );
   });

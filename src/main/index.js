@@ -13,8 +13,10 @@ import { registerUtilsManagerHandlers } from './ipcHandlers/utilsManagerHandler'
 autoUpdater.autoDownload = true;
 autoUpdater.autoInstallOnAppQuit = true;
 
+let mainWindow;
+
 function createWindow() {
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 1100,
     height: 720,
     show: false,
@@ -37,22 +39,13 @@ function createWindow() {
     return { action: 'deny' }
   })
 
-
-  if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-    mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
+  if (is.dev && process.env[ 'ELECTRON_RENDERER_URL' ]) {
+    mainWindow.loadURL(process.env[ 'ELECTRON_RENDERER_URL' ])
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
 
-  // Check for update
-  autoUpdater.checkForUpdatesAndNotify();
-
-  // Simulate update downloaded
-  // setTimeout(() => {
-  //   if (mainWindow) {
-  //     mainWindow.webContents.send('update-downloaded');
-  //   }
-  // }, 5000);
+  autoUpdater.checkForUpdates();
 }
 
 app.whenReady().then(() => {
@@ -74,6 +67,13 @@ app.whenReady().then(() => {
   app.on('activate', function () {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
+
+  // Simulate update downloaded
+  // setTimeout(() => {
+  //   if (mainWindow) {
+  //     mainWindow.webContents.send('update-downloaded');
+  //   }
+  // }, 3000);
 })
 
 app.on('window-all-closed', () => {
@@ -84,16 +84,12 @@ app.on('window-all-closed', () => {
 
 autoUpdater.on('update-available', () => {
   console.log('New launcher version available, downloading in progress...');
-  if (mainWindow) {
-    mainWindow.webContents.send('update-downloaded', "New launcher version available, downloading in progress...");
-  }
 });
 
-autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
-  console.log(`Update downloaded: ${releaseName}`);
+autoUpdater.on('update-downloaded', (info) => {
+  const versionInfo = info.version || 'No version available';
+  console.log(`Update downloaded: ${versionInfo}`);
   if (mainWindow) {
-    mainWindow.webContents.send('update-downloaded', releaseName);
+    mainWindow.webContents.send('update-downloaded', versionInfo);
   }
 });
-
-
