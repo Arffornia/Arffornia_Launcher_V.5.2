@@ -45,11 +45,11 @@ function createWindow() {
   autoUpdater.checkForUpdatesAndNotify();
 
   // Simulate update downloaded
-  setTimeout(() => {
-    if (mainWindow) {
-      mainWindow.webContents.send('update-downloaded');
-    }
-  }, 5000);
+  // setTimeout(() => {
+  //   if (mainWindow) {
+  //     mainWindow.webContents.send('update-downloaded');
+  //   }
+  // }, 5000);
 }
 
 app.whenReady().then(() => {
@@ -83,10 +83,10 @@ autoUpdater.on('update-available', () => {
   console.log('New launcher version available, downloading in progress...');
 });
 
-autoUpdater.on('update-downloaded', () => {
-  console.log('Update downloaded. It will be installed at the next start-up.');
+autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
+  console.log(`Update downloaded: ${releaseName}`);
   if (mainWindow) {
-    mainWindow.webContents.send('update-downloaded');
+    mainWindow.webContents.send('update-downloaded', releaseName);
   }
 });
 

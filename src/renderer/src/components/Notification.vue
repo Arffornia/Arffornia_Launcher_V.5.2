@@ -76,16 +76,15 @@ function closeEvent() {
   width: 20px;
   height: 20px;
   position: absolute;
-  top: 0%;
-  right: 0%;
+  top: 0;
+  right: 0;
   color: #fff;
   font-weight: 700;
   border: 2px solid #ff7300;
-  border-radius: 45px;
+  border-radius: 50%;
   text-align: center;
   cursor: pointer;
   background-color: #261d31;
-  line-height: 80%;
 }
 
 @keyframes slideIn {

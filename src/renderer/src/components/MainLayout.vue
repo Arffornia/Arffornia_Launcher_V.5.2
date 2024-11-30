@@ -37,7 +37,7 @@
     <span class="v-separator"></span>
 
     <div class="scroll-container">
-      <NotificationContainer/>
+      <NotificationContainer />
       <router-view></router-view>
     </div>
   </div>
@@ -54,9 +54,9 @@ const notificationStore = useNotificationStore();
 
 onMounted(() => {
   userStore.loginNoReAsk();
-  window.api.onUpdateDownloaded(() => {
+  window.api.onUpdateDownloaded((releaseName) => {
     notificationStore.addNotification(
-      "Update downloaded. It will be installed at the next start-up.",
+      `Update downloaded (version: ${releaseName}). It will be installed at the next start-up.`,
       "update"
     );
   });
@@ -86,7 +86,7 @@ nav {
   box-sizing: border-box;
 }
 
-nav a{
+nav a {
   padding: 5px;
   display: flex;
   gap: 5px;
