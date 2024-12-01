@@ -20,6 +20,7 @@
   },
   "repository": "https://github.com/Arffornia/Arffornia_Launcher_V.5.2",
   "dependencies": {
+    "@arffornia/nexus_java": "^1.0.4",
     "@arffornia/nexus_mods": "^1.0.0",
     "@arffornia/nexus_saver": "^1.0.1",
     "@electron-toolkit/preload": "^3.0.1",

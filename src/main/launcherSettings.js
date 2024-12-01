@@ -3,6 +3,7 @@ const SERVER_ENDPOINT = "http://localhost:8080/";
 export const launcherSettings = {
   GAME_NAME: "Arffornia",
   GAME_DIR: "./.Arffornia_V.5.2",
+  JAVA_DIR: "./java",
   SERVER_ENDPOINT: SERVER_ENDPOINT,
 
   CUSTOM_SAVER_FILE_NAME: "",
