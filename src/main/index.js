@@ -73,7 +73,7 @@ app.whenReady().then(() => {
   // Simulate update downloaded
   // setTimeout(() => {
   //   if (mainWindow) {
-  //     mainWindow.webContents.send('update-downloaded');
+  //     addNotification("This is a test message", "error");
   //   }
   // }, 3000);
 })

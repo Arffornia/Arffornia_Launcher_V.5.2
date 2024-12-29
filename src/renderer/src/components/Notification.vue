@@ -3,11 +3,14 @@
     <a @click.stop="closeEvent" class="close-btn">x</a>
     <img class="image" :src="imageSrc" alt="Close" title="Close"/>
     <p class="title">{{ props.message }}</p>
+    <p class="time">{{ notifTime }}</p>
   </div>
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
+
+const notifTime = ref(getCurrentTime());
 
 const props = defineProps({
   message: {
@@ -43,6 +46,13 @@ function clickEvent() {
 function closeEvent() {
   console.log('Close the notif !')
   emit('close', props.id);
+}
+
+function getCurrentTime() {
+  const now = new Date();
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  return `${hours}:${minutes}`;
 }
 </script>
 
@@ -98,5 +108,17 @@ function closeEvent() {
   to {
     transform: translateX(0);
   }
+}
+
+.time {
+  margin: 0;
+  position: absolute;
+  bottom: 0%;
+  right: 0%;
+
+  padding-bottom: 7px;
+  padding-right: 15px;
+
+  color: #c2c2c2d3;
 }
 </style>

@@ -80,7 +80,7 @@ export async function launchMC() {
     launcher.on('debug', (e) => console.log(e));
     launcher.on('data', (e) => console.log(e));
   } catch (err) {
-    console.error("Test try catch error: " + err);
+    console.error("LaunchMC error: " + err);
     addNotification("An error occur", "error");
   }
 }
