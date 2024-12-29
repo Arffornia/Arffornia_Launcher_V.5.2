@@ -54,12 +54,6 @@ const notificationStore = useNotificationStore();
 
 onMounted(() => {
   userStore.loginNoReAsk();
-  window.api.onUpdateDownloaded((releaseName) => {
-    notificationStore.addNotification(
-      `Update downloaded: 1.0.0 !\n It will be installed at the next start-up.`,
-      "update"
-    );
-  });
 
   window.api.addNotification((message, type) => {
     notificationStore.addNotification(message, type)
