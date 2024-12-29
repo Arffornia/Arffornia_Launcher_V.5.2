@@ -18,12 +18,15 @@
               libdrm
               libxkbcommon
               mesa
+              libglvnd
               nspr
               nss
               nodePackages.pnpm
               nodejs_20
               pango
               udev
+              zlib
+              squashfsTools
             ])
             ++ (with pkgs.xorg; [
               libXcomposite
@@ -36,7 +39,6 @@
               libxcb
             ]);
   runScript = "bash";
-      profile = ''
-       export LD_LIBRARY_PATH=${pkgs.glibc}/lib
-     '';
+  profile = ''
+    export LD_LIBRARY_PATH=${pkgs.mesa}/lib:${pkgs.libglvnd}/lib:${pkgs.glibc}/lib  '';
 }).env
