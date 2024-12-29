@@ -26,6 +26,8 @@ const api = {
 
   onUpdateDownloaded: (callback) => ipcRenderer.on('update-downloaded', (event, releaseName) => callback(releaseName)),
   removeUpdateDownloadedListener: () => ipcRenderer.removeAllListeners('update-downloaded'),
+
+  addNotification: (callback) => ipcRenderer.on('add-notification', (event, message, type) => callback(message, type)),
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

@@ -27,6 +27,8 @@ function createWindow() {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false,
       webSecurity: false,
+      // nodeIntegration: true,
+      // contextIsolation: false
     }
   })
 
@@ -90,6 +92,12 @@ autoUpdater.on('update-downloaded', (info) => {
   const versionInfo = info.version || 'No version available';
   console.log(`Update downloaded: ${versionInfo}`);
   if (mainWindow) {
-    mainWindow.webContents.send('update-downloaded', versionInfo);
+    addNotification(`Update downloaded: ${versionInfo} !\n It will be installed at the next start-up.`, "update");
   }
 });
+
+export function addNotification(message, type) {
+  if (mainWindow && mainWindow.webContents) {
+      mainWindow.webContents.send('add-notification', message, type);
+  }
+}

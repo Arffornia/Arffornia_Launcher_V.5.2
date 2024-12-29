@@ -60,6 +60,10 @@ onMounted(() => {
       "update"
     );
   });
+
+  window.api.addNotification((message, type) => {
+    notificationStore.addNotification(message, type)
+  });
 });
 
 </script>

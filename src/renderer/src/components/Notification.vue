@@ -27,6 +27,7 @@ const props = defineProps({
 const imageMap = {
   "msg": new URL('../../../../resources/img/icon/mail/email_icon.png', import.meta.url).href,
   "update": new URL('../../../../resources/img/icon/update/update_white.png', import.meta.url).href,
+  "error": new URL('../../../../resources/img/icon/error/circle.png', import.meta.url).href,
 };
 
 const imageSrc = computed(() => {
