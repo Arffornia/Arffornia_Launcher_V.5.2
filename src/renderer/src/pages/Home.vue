@@ -85,7 +85,7 @@ onMounted(async () => {
     const saleData = await fetchSaleItems(3);
     saleItems.value = saleData;
   } catch (error) {
-    console.error("Error fetching items:", error.message);
+    window.api.logger("error", `Error fetching items: ${error}`);
   }
 });
 
@@ -104,9 +104,9 @@ async function playBtnEvent() {
   }
 
   window.api.launchMC().then(() => {
-    console.log('Minecraft launch command sent.');
+    window.api.logger("info", `Minecraft launch command sent.`);
   }).catch(err => {
-    console.error('Failed to launch Minecraft:', err);
+    window.api.logger("error", `Failed to launch Minecraft: ${err}`);
   });
 }
 </script>

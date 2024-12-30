@@ -15,12 +15,12 @@ export const useUserStore = defineStore('user', {
           if (authSuccess) {
             this.isAuth = true;
             await this.updateProfileImage();
-            console.log('Success to auth.');
+            window.api.logger("info", 'Success to auth.');
           } else {
-            console.error('Failed to auth.');
+            window.api.logger("error", `Failed to auth.`);
           }
         } catch (error) {
-          console.error('Error during MS auth:', error);
+          window.api.logger("error", `Error during MS auth: ${error}`);
         }
       }
     },
@@ -37,7 +37,7 @@ export const useUserStore = defineStore('user', {
         if (authSuccess) {
           this.isAuth = true;
           await this.updateProfileImage();
-          console.log('Success to re auth.');
+          window.api.logger("info", "Success to re auth.");
         }
       }
     },
@@ -47,7 +47,7 @@ export const useUserStore = defineStore('user', {
         const userName = await window.api.getUserName();
         this.profileImg = `https://minotar.net/avatar/${userName}/50`;
       } catch (error) {
-        console.error('Error fetching profile image:', error);
+        window.api.logger("error", `Error fetching profile image: ${error}`);
         this.profileImg = '/src/assets/img/steve_head.png';
       }
     },

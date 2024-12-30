@@ -74,7 +74,7 @@ onMounted(async () => {
 
     refreshSkinViewers();
   } catch (err) {
-    console.error("Failed to fetch best players:", err);
+    window.api.logger("error", `Failed to fetch best players: ${err}`);
   }
 });
 

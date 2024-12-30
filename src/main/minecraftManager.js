@@ -6,8 +6,8 @@ import { NexusJava, JavaType, JavaVersionInfo } from '@arffornia/nexus_java'
 
 import { launcherSettings } from './launcherSettings';
 import { launchMSAuth } from './msAuthManager';
-import { getArchType, getOsType } from '../utils';
-import { addNotification } from '.';
+import { getArchType, getOsType } from './utils';
+import { addNotification, logger } from '.';
 
 export async function launchMC() {
   try {
@@ -22,7 +22,7 @@ export async function launchMC() {
 
     const callback = {
       onStep(step) {
-        console.log(step);
+        logger.info(`Current step: ${step}`);
       },
     };
 
@@ -74,13 +74,32 @@ export async function launchMC() {
 
     await nexusMods.updateMods(true, true);
 
-    console.log('Starting Minecraft with options:', opts);
+    logger.info('Starting Minecraft with options:', opts);
     launcher.launch(opts);
 
-    launcher.on('debug', (e) => console.log(e));
-    launcher.on('data', (e) => console.log(e));
+    launcher.on('debug', (e) => logger.debug(e));
+    launcher.on('data', (e) => logger.info(e));
+
+    launcher.on('download', (e) => console.log("download: " + e));
+
+    launcher.on('progress', (e) => {
+      const { type, task, total } = e;
+      console.log(`Progress : type: ${type} | task: ${task} | total: ${total}`);
+    });
+
+    launcher.on('download', (e) => {
+      const { name } = e;
+      console.log(`Download : name: ${name}`);
+    });
+
+    launcher.on('download-status', (e) => {
+      const { name, type, current, total } = e;
+      // console.log(`Download-status : name: ${name} | type: ${type} | current: ${current} | total: ${total}`);
+    });
+
+
   } catch (err) {
-    console.error("LaunchMC error: " + err);
+    logger.error("LaunchMC error: " + err);
     addNotification("An error occur", "error");
   }
 }

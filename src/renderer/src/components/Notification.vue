@@ -40,11 +40,11 @@ const imageSrc = computed(() => {
 const emit = defineEmits();
 
 function clickEvent() {
-  console.log('Click on the notif !')
+  window.api.logger("info", `Click on the notif !`);
 }
 
 function closeEvent() {
-  console.log('Close the notif !')
+  window.api.logger("info", `Close the notif !`);
   emit('close', props.id);
 }
 

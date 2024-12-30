@@ -1,3 +1,5 @@
+import { logger } from ".";
+
 class User
 {
   constructor(name)
@@ -7,7 +9,7 @@ class User
   }
 
   setIsAuth(authStatus) {
-    console.log("Turn " + authStatus + " the authStatus");
+    logger.info("Turn " + authStatus + " the authStatus");
     this.isAuth = authStatus;
   }
 
@@ -16,7 +18,7 @@ class User
   }
 
   setName(name) {
-    console.log("Set the current user name to: " + name);
+    logger.info("Set the current user name to: " + name);
     this.name = name;
   }
 

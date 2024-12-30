@@ -25,7 +25,7 @@ onMounted(async () => {
       serverStatusDisplay.value = `${onlinePlayers} / ${maxPlayers}`;
     }
   } catch (err) {
-    console.error("Failed to fetch server status:", err);
+    window.api.logger("error", `Failed to fetch server status: ${err}`);
     serverStatusDisplay.value = "off";
   }
 });

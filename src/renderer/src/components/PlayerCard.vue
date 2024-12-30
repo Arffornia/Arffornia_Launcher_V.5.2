@@ -45,7 +45,7 @@ onMounted(async () => {
   try {
     playerProfile.value = await fetchPlayerProfile(props.username);
   } catch (err) {
-    console.error("Failed to fetch player profile:", err);
+    window.api.logger("error", `Failed to fetch player profile: ${err}`);
   }
 });
 

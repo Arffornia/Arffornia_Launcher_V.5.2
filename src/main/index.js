@@ -1,5 +1,5 @@
 import { app, shell, BrowserWindow } from 'electron'
-import { join } from 'path'
+import path, { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { autoUpdater } from 'electron-updater'
 import icon from '../../resources/img/Crafting_Table.png?asset'
@@ -9,6 +9,12 @@ import { registerOtherHandlers } from './ipcHandlers/otherHandlers';
 import { registerGameManagerHandlers } from './ipcHandlers/gameManagerHandlers';
 import { registerUserManagerHandlers } from './ipcHandlers/userManagerHandler';
 import { registerUtilsManagerHandlers } from './ipcHandlers/utilsManagerHandler';
+
+import { NexusLogger } from '@arffornia/nexus_logger';
+import { launcherSettings } from './launcherSettings'
+import { registerLoggerHandlers } from './ipcHandlers/logHandler'
+
+export const logger = new NexusLogger(path.join(launcherSettings.GAME_DIR, "launcher_log.txt"), "ArfforniaLogger");
 
 autoUpdater.autoDownload = true;
 autoUpdater.autoInstallOnAppQuit = true;
@@ -63,6 +69,7 @@ app.whenReady().then(() => {
   registerNexusSaverHandlers();
   registerOtherHandlers();
   registerUtilsManagerHandlers();
+  registerLoggerHandlers();
 
   createWindow()
 
@@ -85,12 +92,12 @@ app.on('window-all-closed', () => {
 })
 
 autoUpdater.on('update-available', () => {
-  console.log('New launcher version available, downloading in progress...');
+  logger.info('New launcher version available, downloading in progress...');
 });
 
 autoUpdater.on('update-downloaded', (info) => {
   const versionInfo = info.version || 'No version available';
-  console.log(`Update downloaded: ${versionInfo}`);
+  logger.info(`Update downloaded: ${versionInfo}`);
   if (mainWindow) {
     addNotification(`Update downloaded: ${versionInfo} !\n It will be installed at the next start-up.`, "update");
   }
@@ -99,5 +106,6 @@ autoUpdater.on('update-downloaded', (info) => {
 export function addNotification(message, type) {
   if (mainWindow && mainWindow.webContents) {
       mainWindow.webContents.send('add-notification', message, type);
+      logger.info(`Add Notification: [${type}] Message: ${message}`);
   }
 }

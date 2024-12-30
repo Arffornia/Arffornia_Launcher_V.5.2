@@ -2,7 +2,7 @@ import { saver, saverKeys } from './ipcHandlers/nexusSaverHandler';
 
 import { Auth } from 'msmc';
 import currentUser from './user';
-import { addNotification } from '.';
+import { addNotification, logger } from '.';
 
 export async function launchMSAuth(reAsk = false) {
   try {
@@ -36,7 +36,7 @@ export async function launchMSAuth(reAsk = false) {
 
     return token.mclc();
   } catch (err) {
-    console.error("Error in MS auth: " + err);
+    logger.error(`Error in MS auth: ${err}`);
     addNotification("Failed to login!", "error");
   }
 }

@@ -14,7 +14,7 @@ export async function initializeSkinViewers() {
       const response = await fetch(url);
       return response.ok;
     } catch (error) {
-      console.error("Erreur lors de la requête :", error);
+      window.api.logger("error", `Failed to fetch skin : ${error}`);
       return false;
     }
   }

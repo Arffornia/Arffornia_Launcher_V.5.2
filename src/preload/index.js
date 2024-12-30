@@ -25,6 +25,9 @@ const api = {
   openWebsite: (url) => ipcRenderer.invoke('open-website', url),
 
   addNotification: (callback) => ipcRenderer.on('add-notification', (event, message, type) => callback(message, type)),
+
+  // Logger
+  logger: (logLevel, message) => ipcRenderer.invoke('logger', logLevel, message),
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to
@@ -35,7 +38,7 @@ if (process.contextIsolated) {
     contextBridge.exposeInMainWorld('electron', electronAPI)
     contextBridge.exposeInMainWorld('api', api)
   } catch (error) {
-    console.error(error)
+     window.api.logger("error", `Failed in preload script: ${error}`);
   }
 } else {
   window.electron = electronAPI
