@@ -4,11 +4,11 @@
     <!-- <Notification message="Update available !!"/> -->
 
     <!-- <img class="isoimg" src="@res/img/iso/testiso1ps.png" alt=""> -->
-    <div class="podium-container">
-      <transition name="fade" appear>
-          <Podium />
-      </transition>
-    </div>
+    <transition name="fade">
+      <div v-show="showPodium" class="podium-container">
+        <Podium />
+      </div>
+    </transition>
 
 
     <div class="playBox">
@@ -81,6 +81,8 @@ const bestSellerItems = ref([]);
 const newestItems = ref([]);
 const saleItems = ref([]);
 
+const showPodium = ref(false)
+
 onMounted(async () => {
   try {
     const bestSellerData = await fetchBestSellers(3);
@@ -91,6 +93,10 @@ onMounted(async () => {
 
     const saleData = await fetchSaleItems(3);
     saleItems.value = saleData;
+
+    setTimeout(() => {
+      showPodium.value = true
+    }, 150)
   } catch (error) {
     window.api.logger("error", `Error fetching items: ${error}`);
   }
