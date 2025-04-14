@@ -1,4 +1,4 @@
-const SERVER_ENDPOINT = "http://localhost:8080/";
+const SERVER_ENDPOINT = "http://localhost/";
 
 export const launcherSettings = {
   GAME_NAME: "Arffornia",

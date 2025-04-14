@@ -1,65 +1,72 @@
 <template>
-    <div class="home-content">
+  <div class="home-content">
 
-      <!-- <Notification message="Update available !!"/> -->
+    <!-- <Notification message="Update available !!"/> -->
 
-      <!-- <img class="isoimg" src="@res/img/iso/testiso1ps.png" alt=""> -->
-       <div class="podium-container">
-          <Podium/>
-       </div>
+    <!-- <img class="isoimg" src="@res/img/iso/testiso1ps.png" alt=""> -->
+    <div class="podium-container">
+      <transition name="fade" appear>
+          <Podium />
+      </transition>
+    </div>
 
 
-      <div class="playBox">
-        <p id="title">ARFFORNIA</p>
-        <div class="description">
-          <p class="description-content">+ 330 Mods</p>
-          <p class="description-content">+ 25 Paliers de progression</p>
+    <div class="playBox">
+      <p id="title">ARFFORNIA</p>
+      <div class="description">
+        <p class="description-content">+ 330 Mods</p>
+        <p class="description-content">+ 25 Paliers de progression</p>
 
-        </div>
-        <input @click="playBtnEvent" class="mediumPlayBtn" type="button" value="Jouer">
       </div>
-      <div class="shop">
-        <div class="shop-section">
-          <p class="section-title">Arrivals: </p>
-          <div class="items-container">
-            <a v-for="item in newestItems" :key="item.id" @click.prevent="redirect_item_shop(item.img_url)" class="shop-item" title="See on Website">
-              <div class="item-container">
-                <img class="item-icon" :src="item.img_url" :alt="item.name" />
-                <p class="item-title">{{ item.name }}</p>
-                <p class="item-price">{{item.real_price }}</p>
-              </div>
-            </a>
-          </div>
-          <p class="section-title">This Week's Deals: </p>
-          <div class="items-container">
-            <a v-for="item in saleItems" :key="item.id" @click.prevent="redirect_item_shop(item.img_url)" class="shop-item" title="See on Website">
-              <div class="item-container">
-                <img class="item-icon" :src="item.img_url" :alt="item.name" />
-                <p class="item-title">{{ item.name }}</p>
-                  <p class="item-price">
-                    <span class="item-price-sale">
-                      {{ item.real_price }}
-                    </span>
-                      {{ item.promo_price }}
-                  </p>
-              </div>
-            </a>
-          </div>
-          <p class="section-title">Best Sellers: </p>
-          <div class="items-container">
-            <a v-for="item in bestSellerItems" :key="item.id" @click.prevent="redirect_item_shop(item.img_url)" class="shop-item" title="See on Website">
-              <div class="item-container">
-                <img class="item-icon" :src="item.img_url" :alt="item.name" />
-                <p class="item-title">{{ item.name }}</p>
-                <p class="item-price">{{ item.real_price }}</p>
-              </div>
-            </a>
-          </div>
+      <input @click="playBtnEvent" class="mediumPlayBtn" type="button" value="Jouer">
+    </div>
+    <div class="shop">
+      <div class="shop-section">
+        <p class="section-title">Arrivals: </p>
+        <div class="items-container">
+          <a v-for="item in newestItems" :key="item.id" @click.prevent="redirect_item_shop(item.img_url)"
+            class="shop-item" title="See on Website">
+            <div class="item-container">
+              <img class="item-icon" :src="item.img_url" :alt="item.name" />
+              <p class="item-title">{{ item.name }}</p>
+              <p class="item-price">{{ item.real_price }}</p>
+            </div>
+          </a>
+        </div>
+        <p class="section-title">This Week's Deals: </p>
+        <div class="items-container">
+          <a v-for="item in saleItems" :key="item.id" @click.prevent="redirect_item_shop(item.img_url)"
+            class="shop-item" title="See on Website">
+            <div class="item-container">
+              <img class="item-icon" :src="item.img_url" :alt="item.name" />
+              <p class="item-title">{{ item.name }}</p>
+              <p class="item-price">
+                <span class="item-price-sale">
+                  {{ item.real_price }}
+                </span>
+                {{ item.promo_price }}
+              </p>
+            </div>
+          </a>
+        </div>
+        <p class="section-title">Best Sellers: </p>
+        <div class="items-container">
+          <a v-for="item in bestSellerItems" :key="item.id" @click.prevent="redirect_item_shop(item.img_url)"
+            class="shop-item" title="See on Website">
+            <div class="item-container">
+              <img class="item-icon" :src="item.img_url" :alt="item.name" />
+              <p class="item-title">{{ item.name }}</p>
+              <p class="item-price">{{ item.real_price }}</p>
+            </div>
+          </a>
         </div>
       </div>
     </div>
+  </div>
 
-  <TopBar/>
+  <transition name="fade" appear>
+    <TopBar />
+  </transition>
 </template>
 
 <script setup>
@@ -94,11 +101,9 @@ function redirect_item_shop(url) {
 }
 
 async function playBtnEvent() {
-  if (!userStore.isAuth)
-  {
+  if (!userStore.isAuth) {
     await userStore.login();
-    if (!userStore.isAuth)
-    {
+    if (!userStore.isAuth) {
       return;
     }
   }
@@ -118,7 +123,7 @@ async function playBtnEvent() {
   left: 20%;
   position: absolute;
   width: 1000px;
- }
+}
 
 #title {
   color: white;
@@ -159,11 +164,11 @@ async function playBtnEvent() {
   font-weight: 400;
 }
 
- .podium-container {
+.podium-container {
   transform: translate(56%, 32%);
- }
+}
 
- .mediumPlayBtn{
+.mediumPlayBtn {
   height: 50px;
   font-weight: 1000;
   min-width: 250px;
@@ -241,7 +246,7 @@ async function playBtnEvent() {
   text-decoration: line-through;
   text-decoration-color: #ff0000;
   text-decoration-thickness: 3px;
- }
+}
 
 .item-icon {
   max-width: 90px;
