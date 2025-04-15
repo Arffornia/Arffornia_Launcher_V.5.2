@@ -12,11 +12,11 @@
         <div class="description">
           <p class="description-content">+ 330 Mods</p>
           <p class="description-content">+ 25 Paliers de progression</p>
-
         </div>
         <input @click="playBtnEvent" class="mediumPlayBtn" type="button" value="Jouer">
       </div>
-      <Podium  class="podium"/>
+
+      <Podium class="podium" />
     </div>
     <div class="shop">
       <div class="shop-section">
@@ -66,7 +66,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import Podium from '../components/Podium.vue';
-import TopBar from '../components/TopBar.vue';
 import { useUserStore } from '../stores/userStore';
 import { fetchBestSellers, fetchNewestItems, fetchSaleItems } from '../js/arfforniaApi.js';
 
@@ -118,11 +117,17 @@ async function playBtnEvent() {
 
 
 <style scoped>
-.podium {
+.play-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
   position: absolute;
   top: 13%;
-  right: 2%;
-  padding-right: 10px;
+  width: 95%;
+  padding-left: 5%;
+}
+
+.podium {
 }
 
 .isoimg {
@@ -143,9 +148,6 @@ async function playBtnEvent() {
   background: linear-gradient(135deg, rgba(33, 33, 33, 0.737) 0%, rgba(29, 29, 29, 0.236) 100%);
   box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
   backdrop-filter: blur(4px);
-  position: absolute;
-  top: 31%;
-  left: 5%;
   border-radius: 15px;
   max-width: fit-content;
 
