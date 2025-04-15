@@ -4,21 +4,19 @@
     <!-- <Notification message="Update available !!"/> -->
 
     <!-- <img class="isoimg" src="@res/img/iso/testiso1ps.png" alt=""> -->
-    <transition name="fade">
-      <div v-show="showPodium" class="podium-container">
-        <Podium />
+
+
+    <div class="play-container">
+      <div class="playBox">
+        <p id="title">ARFFORNIA</p>
+        <div class="description">
+          <p class="description-content">+ 330 Mods</p>
+          <p class="description-content">+ 25 Paliers de progression</p>
+
+        </div>
+        <input @click="playBtnEvent" class="mediumPlayBtn" type="button" value="Jouer">
       </div>
-    </transition>
-
-
-    <div class="playBox">
-      <p id="title">ARFFORNIA</p>
-      <div class="description">
-        <p class="description-content">+ 330 Mods</p>
-        <p class="description-content">+ 25 Paliers de progression</p>
-
-      </div>
-      <input @click="playBtnEvent" class="mediumPlayBtn" type="button" value="Jouer">
+      <Podium  class="podium"/>
     </div>
     <div class="shop">
       <div class="shop-section">
@@ -63,10 +61,6 @@
       </div>
     </div>
   </div>
-
-  <transition name="fade" appear>
-    <TopBar />
-  </transition>
 </template>
 
 <script setup>
@@ -124,6 +118,13 @@ async function playBtnEvent() {
 
 
 <style scoped>
+.podium {
+  position: absolute;
+  top: 13%;
+  right: 2%;
+  padding-right: 10px;
+}
+
 .isoimg {
   top: 20%;
   left: 20%;
@@ -170,9 +171,7 @@ async function playBtnEvent() {
   font-weight: 400;
 }
 
-.podium-container {
-  transform: translate(56%, 32%);
-}
+
 
 .mediumPlayBtn {
   height: 50px;

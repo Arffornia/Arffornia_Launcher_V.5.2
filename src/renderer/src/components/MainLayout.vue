@@ -37,6 +37,7 @@
     <span class="v-separator"></span>
 
     <div class="scroll-container">
+      <TopBar />
       <NotificationContainer />
       <transition name="fade" mode="out-in">
         <router-view />
@@ -50,6 +51,7 @@ import { useUserStore } from '../stores/userStore';
 import { onMounted } from 'vue';
 import NotificationContainer from './NotificationContainer.vue';
 import { useNotificationStore } from '../stores/notificationStore';
+import TopBar from './TopBar.vue';
 
 const userStore = useUserStore();
 const notificationStore = useNotificationStore();

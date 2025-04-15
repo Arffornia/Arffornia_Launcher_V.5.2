@@ -5,7 +5,7 @@
         <p class="playerName">{{ bestPlayers ? bestPlayers[1]?.name : 'Chargement...' }}</p>
         <div class="player-skin">
           <router-link class="nav-link" :to="bestPlayers ? `/profile/${bestPlayers[1]?.name}` : '#'" title="Show profile" exact>
-            <canvas class="skin_viewer" :data-username="bestPlayers ? bestPlayers[1]?.name : 'MHF_Steve'"></canvas>
+            <canvas class="skin_viewer" :data-width="skinWidth" :data-height="skinHeight" :data-username="bestPlayers ? bestPlayers[1]?.name : 'MHF_Steve'"></canvas>
           </router-link>
         </div>
         <div class="shape">
@@ -20,7 +20,7 @@
         <p class="playerName">{{ bestPlayers ? bestPlayers[0]?.name : 'Chargement...' }}</p>
         <div class="player-skin">
           <router-link class="nav-link" :to="bestPlayers ? `/profile/${bestPlayers[0]?.name}` : '#'" title="Show profile" exact>
-            <canvas class="skin_viewer" :data-username="bestPlayers ? bestPlayers[0]?.name : 'MHF_Steve'"></canvas>
+            <canvas class="skin_viewer" :data-width="skinWidth" :data-height="skinHeight" :data-username="bestPlayers ? bestPlayers[0]?.name : 'MHF_Steve'"></canvas>
           </router-link>
         </div>
         <div class="shape">
@@ -35,7 +35,7 @@
         <p class="playerName">{{ bestPlayers ? bestPlayers[2]?.name : 'Chargement...' }}</p>
         <div class="player-skin">
           <router-link class="nav-link" :to="bestPlayers ? `/profile/${bestPlayers[2]?.name}` : '#'" title="Show profile" exact>
-            <canvas class="skin_viewer" :data-username="bestPlayers ? bestPlayers[2]?.name : 'MHF_Steve'"></canvas>
+            <canvas class="skin_viewer" :data-width="skinWidth" :data-height="skinHeight" :data-username="bestPlayers ? bestPlayers[2]?.name : 'MHF_Steve'"></canvas>
           </router-link>
         </div>
         <div class="shape">
@@ -62,6 +62,9 @@ import { fetchBestPlayersByVote, fetchBestPlayersByPoint } from '../js/arffornia
 const bestPlayers = ref(null);
 const bestPlayersByVote = ref(null);
 const bestPlayersByPoint = ref(null);
+
+const skinWidth = ref(66);
+const skinHeight = ref(100);
 
 const scoreboardUnit = ref("votes");
 const scoreboardTitle = ref("Best voters");
@@ -104,14 +107,15 @@ function refreshSkinViewers() {
 
 <style scoped>
   .podium {
-    transform: scale(0.4);
-    transform-origin: top left;
+    width:  30%;
+    min-width: 400px;
   }
 
   .podium .content {
     display: flex;
     justify-content: center;
     gap: 6%;
+    min-height: 300px;
   }
 
   .podium .title {
@@ -122,7 +126,7 @@ function refreshSkinViewers() {
     text-align: center;
     color: #fff;
     background-color: #160020d1;
-    border: solid 3px #ff7300;
+    border: solid 2px #ff7300;
     border-radius: 10px;
   }
 
@@ -135,8 +139,8 @@ function refreshSkinViewers() {
     background-color: #00000000;
     text-align: center;
     color: #fff;
-    font-size: 250%;
-    font-weight: 700;
+    font-size: 125%;
+    font-weight: 600;
     white-space: nowrap;
     border: none;
   }
@@ -149,9 +153,9 @@ function refreshSkinViewers() {
   .podium .shape {
     background-color: #160020d1;
     border-radius: 10px;
-    border: solid 3px #ff7300;
+    border: solid 2px #ff7300;
     position: relative;
-    padding: 40px 50px;
+    padding: 20px 25px;
   }
 
   .p2 .shape {
@@ -189,7 +193,7 @@ function refreshSkinViewers() {
 
   .podium .playerName {
     font-weight: 700;
-    font-size: 60%;
+    font-size: 30%;
     color: #d4af37;
     text-align: center;
     transform: scale(2);
@@ -198,21 +202,22 @@ function refreshSkinViewers() {
 
   .podium .p2 .rank {
     font-weight: 600;
-    font-size: 225%;
+    font-size: 112.5%;
   }
 
   .podium .p1 .rank {
     font-weight: 650;
-    font-size: 300%;
+    font-size: 150%;
   }
 
   .podium .p3 .rank {
     font-weight: 550;
-    font-size: 175%;
+    font-size: 87.5%;
   }
 
   .podium .score {
-    font-weight: 500;
+    font-weight: 300;
+    font-size: 60%;
   }
 
 
