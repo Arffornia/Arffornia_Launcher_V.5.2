@@ -4,11 +4,17 @@
 
 <script setup>
 import { onMounted } from 'vue';
+import { usePodiumStore } from './stores/podiumStore';
 import router from './router';
 
-onMounted(() => {
+const launcherStore = usePodiumStore();
+
+onMounted(async () => {
+  launcherStore.fetchData();
   router.push('/');
 });
+
+
 </script>
 
 <style>
