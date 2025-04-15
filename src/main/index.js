@@ -109,3 +109,7 @@ export function addNotification(message, type) {
       logger.info(`Add Notification: [${type}] Message: ${message}`);
   }
 }
+
+export function getMainWindow() {
+  return mainWindow;
+}
