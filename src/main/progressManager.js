@@ -1,10 +1,18 @@
 import { getMainWindow, logger } from ".";
 
 const StepName = Object.freeze({
+
+  // Nexus Java
   CHECK_JAVA: 'CHECK_JAVA',
   INSTALL_JAVA: 'INSTALL_JAVA',
-  DOWNLOAD_MC: 'DOWNLOAD_MC',
   DOWNLOAD_MODS: 'DOWNLOAD_MODS',
+
+  // Nexus ModLoader (coming soon)
+
+  // Nexus Mods
+
+  // MCLC
+  DOWNLOAD_MC: 'DOWNLOAD_MC',
   DOWNLOAD_ASSETS: 'DOWNLOAD_ASSETS',
 });
 
