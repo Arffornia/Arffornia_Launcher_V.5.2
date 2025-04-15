@@ -16,7 +16,7 @@ export const usePodiumStore = defineStore('podium', () => {
     try {
       bestPlayersByVote.value = await fetchBestPlayersByVote(3);
       bestPlayersByPoint.value = await fetchBestPlayersByPoint(3);
-      bestPlayers.value = bestPlayersByPoint.value;
+      bestPlayers.value = bestPlayersByVote.value;
 
       setTimeout(() => {
         initializeSkinViewers();

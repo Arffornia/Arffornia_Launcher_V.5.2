@@ -9,7 +9,17 @@ import { launchMSAuth } from './msAuthManager';
 import { getArchType, getOsType } from './utils';
 import { addNotification, logger } from '.';
 
+let isGameRunning = false;
+
 export async function launchMC() {
+  if (isGameRunning) {
+    logger.warn("The game is already running!");
+    addNotification("The game is already running!", "error");
+    return;
+  }
+
+  isGameRunning = true;
+
   try {
     // Is MS auth ?
     const authToken = launchMSAuth(true);
@@ -97,9 +107,13 @@ export async function launchMC() {
       // console.log(`Download-status : name: ${name} | type: ${type} | current: ${current} | total: ${total}`);
     });
 
-
+    launcher.on('close', () => {
+      isGameRunning = false;
+      logger.info("Game closed.");
+    });
   } catch (err) {
     logger.error("LaunchMC error: " + err);
     addNotification("An error occur", "error");
+    isGameRunning = false;
   }
 }

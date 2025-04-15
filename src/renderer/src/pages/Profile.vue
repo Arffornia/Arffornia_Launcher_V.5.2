@@ -20,6 +20,7 @@ watchEffect(() => {
 
 <style scoped>
 .profile-content {
+  padding-top: 5%;
   width: 100%;
 }
 </style>
