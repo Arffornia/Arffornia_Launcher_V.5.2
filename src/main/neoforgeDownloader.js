@@ -9,10 +9,13 @@ const NEOFORGE_ENDPOINT = 'https://maven.neoforged.net/releases/net/neoforged/fo
  * @param {string} outputPath - The directory to save the installer file.
  * @param {string} loadVersion - The version of NeoForge to download (e.g., '1.20.1-47.2.0').
  * @param {boolean} [forceDownload=false] - Whether to force download the file even if it already exists.
+ * @param {(step: string) => void} [progressCallback] - Optional callback to report progress steps.
  * @returns {Promise<string>} - Neoforge installer path.
  */
-export async function downloadNeoforge(outputPath, loadVersion, forceDownload = false) {
+export async function downloadNeoforge(outputPath, loadVersion, forceDownload = false, progressCallback) {
   try {
+    progressCallback?.('CHECKING');
+
     const dirPath = path.resolve(outputPath, 'neoforgeInstaller');
     if (!fs.existsSync(dirPath)) {
       fs.mkdirSync(dirPath, { recursive: true });
@@ -31,6 +34,8 @@ export async function downloadNeoforge(outputPath, loadVersion, forceDownload = 
     console.log('Download URL:', url);
 
     console.log('Saving file to:', filePath);
+
+    progressCallback?.('DOWNLOADING');
 
     const response = await axios({
       url: url,

@@ -39,6 +39,8 @@
     <div class="scroll-container">
       <TopBar />
       <NotificationContainer />
+      <GlobalProgressBar />
+
       <transition name="fade" mode="out-in">
         <router-view />
       </transition>
@@ -52,6 +54,7 @@ import { onMounted } from 'vue';
 import NotificationContainer from './NotificationContainer.vue';
 import { useNotificationStore } from '../stores/notificationStore';
 import TopBar from './TopBar.vue';
+import GlobalProgressBar from './GlobalProgressBar.vue';
 
 const userStore = useUserStore();
 const notificationStore = useNotificationStore();
