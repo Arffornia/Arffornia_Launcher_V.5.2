@@ -1,27 +1,43 @@
 import { Client } from 'minecraft-launcher-core';
 import { downloadNeoforge } from './neoforgeDownloader';
-import path from 'path';
 import { NexusMods } from '@arffornia/nexus_mods'
-import { NexusJava, JavaType, JavaVersionInfo, Step } from '@arffornia/nexus_java'
+import { NexusJava, JavaType, JavaVersionInfo } from '@arffornia/nexus_java'
 
 import { launcherSettings } from './launcherSettings';
 import { launchMSAuth } from './msAuthManager';
 import { getArchType, getOsType } from './utils';
-import { addNotification, logger } from '.';
+import { addNotification, logger, getMainWindow } from '.';
+import { ipcMain } from "electron";
 
 import { handleJavaCallback, handleNexusModLoaderCallback, handleNexusModsCallback, handleMCLCEvent, progressManager, StepName } from './progressManager';
 
 let isGameRunning = false;
 
+function updateGameState(isRunning) {
+  if (isGameRunning === isRunning) return;
+
+  isGameRunning = isRunning;
+
+  const mainWindow = getMainWindow();
+  if (mainWindow && mainWindow.webContents) {
+    mainWindow.webContents.send('gameRunningState', {
+      isRunning
+    });
+  }
+}
+
+ipcMain.handle('is-game-running', () => {
+  return isGameRunning;
+});
+
 export async function launchMC() {
   if (isGameRunning) {
-    logger.warn("The game is already running!");
     addNotification("The game is already running!", "error");
     return;
   }
 
-  isGameRunning = true;
   progressManager.reset();
+  updateGameState(true);
 
   try {
     // Is MS auth ?
@@ -92,12 +108,12 @@ export async function launchMC() {
     });
 
     launcher.on('close', () => {
-      isGameRunning = false;
+      updateGameState(false);
       logger.info("Game closed.");
     });
   } catch (err) {
     logger.error("LaunchMC error: " + err);
     addNotification("An error occur", "error");
-    isGameRunning = false;
+    updateGameState(false);
   }
 }

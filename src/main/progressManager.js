@@ -171,9 +171,6 @@ export function handleNexusModLoaderCallback(step) {
   let progress = 0;
   let stepName = StepName.DOWNLOAD_MODLOADER;
 
-  console.debug(`debug handleNexusModLoaderCallback step: ${step}`);
-
-
   switch (step) {
     case 'CHECKING': progress = 0.1; StepName.CHECK_MODLOADER; break;
     case 'DOWNLOADING': progress = 0.5; break;
@@ -201,9 +198,6 @@ export const handleNexusModsCallback = {
   onProgress(downloaded, total, name) {
     const percent = total === 0 ? 0 : downloaded / total;
     progressManager.updateStep(StepName.DOWNLOAD_MODS, percent);
-
-    console.debug(`debug onProgress: percent: ${percent}`);
-
   }
 };
 
@@ -236,8 +230,6 @@ export function handleMCLCEvent(e) {
 
     return;
   }
-
-  console.debug(`debug handleMCLCEvent e.type: ${e.type} | percent: ${percent}`);
 
   progressManager.updateStep(stepName, percent);
 }
