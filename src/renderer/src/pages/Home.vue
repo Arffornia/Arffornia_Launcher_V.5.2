@@ -13,7 +13,7 @@
           <p class="description-content">+ 330 Mods</p>
           <p class="description-content">+ 25 Paliers de progression</p>
         </div>
-        <input @click="playBtnEvent" class="mediumPlayBtn" type="button" value="Jouer">
+        <input @click="playBtnEvent" :disabled="gameRunning" class="mediumPlayBtn" type="button" :value="playLabel">
       </div>
 
       <Podium class="podium" />
@@ -64,7 +64,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import Podium from '../components/Podium.vue';
 import { useUserStore } from '../stores/userStore';
 import { fetchBestSellers, fetchNewestItems, fetchSaleItems } from '../js/arfforniaApi.js';
@@ -74,10 +74,16 @@ const bestSellerItems = ref([]);
 const newestItems = ref([]);
 const saleItems = ref([]);
 
-const showPodium = ref(false)
+const showPodium = ref(false);
+const gameRunning = ref(false);
 
 onMounted(async () => {
+  window.electron.ipcRenderer.on('gameRunningState', handleGameRunningState);
+
   try {
+    const isRunning = await window.api.getIsGameRunning();
+    gameRunning.value = isRunning;
+
     const bestSellerData = await fetchBestSellers(3);
     bestSellerItems.value = bestSellerData;
 
@@ -94,6 +100,15 @@ onMounted(async () => {
     window.api.logger("error", `Error fetching items: ${error}`);
   }
 });
+
+const playLabel = computed(() =>
+  // gameRunning.value ? (userStore.lang === 'fr' ? 'En cours...' : 'Launching...') : (userStore.lang === 'fr' ? 'Jouer' : 'Play')
+  gameRunning.value ? 'Running...' : 'Play'
+);
+
+const handleGameRunningState = (_event, data) => {
+  gameRunning.value = data.isRunning;
+};
 
 function redirect_item_shop(url) {
   window.api.openWebsite(url);
@@ -195,6 +210,13 @@ async function playBtnEvent() {
   font-size: 140%;
   box-shadow: 0px 15px 20px #ff730097;
   transform: translateY(-3px);
+}
+
+.mediumPlayBtn:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
 }
 
 .shop {
