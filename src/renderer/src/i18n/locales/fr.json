@@ -1,4 +1,29 @@
 {
-  "hello": "Bonjour",
-  "welcome": "Bienvenue dans mon app Electron !"
+  "home": {
+    "playbox": {
+      "title": "ARFFORNIA",
+      "description1": "+ 33 Mods",
+      "description2": "+ 25 Paliers de progression"
+    },
+    "shop": {
+      "arrivals": "Nouveautés : ",
+      "weeks_deels": "Offres de la semaine : ",
+      "best_sellers": "Meilleures ventes : "
+    }
+  },
+  "settings": {
+    "title": "Paramètres : ",
+    "game": {
+      "title": "Paramètres du jeu : ",
+      "ram": "Mémoire RAM allouée :",
+      "language": "Langue du launcher :",
+      "logout": "Se déconnecter de votre compte Minecraft :",
+      "logout_btn": "Déconnection"
+    },
+    "launcher": {
+      "game_file": "Fichiers du jeu",
+      "game_file_btn": "Ouvrir",
+      "launcher_version": "Version du launcher :"
+    }
+  }
 }

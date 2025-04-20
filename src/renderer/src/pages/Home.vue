@@ -8,10 +8,10 @@
 
     <div class="play-container">
       <div class="playBox">
-        <p id="title">ARFFORNIA {{ t('welcome') }}</p>
+        <p id="title">{{ t('home.playbox.title') }}</p>
         <div class="description">
-          <p class="description-content">+ 330 Mods</p>
-          <p class="description-content">+ 25 Paliers de progression</p>
+          <p class="description-content">{{ t('home.playbox.description1') }}</p>
+          <p class="description-content">{{ t('home.playbox.description2') }}</p>
         </div>
         <input @click="playBtnEvent" :disabled="gameRunning" class="mediumPlayBtn" type="button" :value="playLabel">
       </div>
@@ -20,7 +20,7 @@
     </div>
     <div class="shop">
       <div class="shop-section">
-        <p class="section-title">Arrivals: </p>
+        <p class="section-title">{{ t('home.shop.arrivals') }}</p>
         <div class="items-container">
           <a v-for="item in newestItems" :key="item.id" @click.prevent="redirect_item_shop(item.img_url)"
             class="shop-item" title="See on Website">
@@ -31,7 +31,7 @@
             </div>
           </a>
         </div>
-        <p class="section-title">This Week's Deals: </p>
+        <p class="section-title">{{ t('home.shop.weeks_deels') }}</p>
         <div class="items-container">
           <a v-for="item in saleItems" :key="item.id" @click.prevent="redirect_item_shop(item.img_url)"
             class="shop-item" title="See on Website">
@@ -47,7 +47,7 @@
             </div>
           </a>
         </div>
-        <p class="section-title">Best Sellers: </p>
+        <p class="section-title">{{ t('home.shop.best_sellers') }}</p>
         <div class="items-container">
           <a v-for="item in bestSellerItems" :key="item.id" @click.prevent="redirect_item_shop(item.img_url)"
             class="shop-item" title="See on Website">
@@ -144,8 +144,7 @@ async function playBtnEvent() {
   padding-left: 5%;
 }
 
-.podium {
-}
+.podium {}
 
 .isoimg {
   top: 20%;

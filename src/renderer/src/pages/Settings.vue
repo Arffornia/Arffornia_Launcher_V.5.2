@@ -1,13 +1,13 @@
 <template>
   <div class="settings-content">
-    <p id="page-title">Settings :</p>
+    <p id="page-title">{{ t('settings.title') }}</p>
     <div class="section-container">
       <div class="section-box">
-        <p class="title">Game settings :</p>
+        <p class="title">{{ t('settings.game.title') }}</p>
         <div class="info">
           <div class="info-list">
             <div class="content">
-              Allocated Ram:
+              {{ t('settings.game.ram') }}
               <div class="container">
                 <div class="select">
                   <select id="ram-select" v-if="ramOptions.length" v-model="selectedRAM" @change="onRamChangeEvent">
@@ -20,7 +20,7 @@
             </div>
 
             <div class="content">
-              Launcher language:
+              {{ t('settings.game.language') }}
               <div class="select">
                 <select id="lang-select" v-model="userStore.selectedLang" @change="onLangChangeEvent">
                   <option v-for="lang in userStore.availableLangs" :key="lang" :value="lang">
@@ -31,8 +31,8 @@
             </div>
 
             <div class="content">
-              Logout from your Minecraft Account:
-              <input @click="logoutMSEvent" class="mediumBtn" type="button" value="Logout">
+              {{ t('settings.game.logout') }}
+              <input @click="logoutMSEvent" class="mediumBtn" type="button" :value="t('settings.game.logout_btn')">
             </div>
 
           </div>
@@ -40,17 +40,17 @@
       </div>
 
       <div class="section-box">
-        <p class="title">Launcher settings :</p>
+        <p class="title">{{ t('settings.launcher.title') }}</p>
         <div class="info">
           <div class="info-list">
 
             <div class="content">
-              Launcher install location:
-              <input @click="openLocalGameFileEvent" class="mediumBtn" type="button" value="Open">
+              {{ t('settings.launcher.game_file') }}
+              <input @click="openLocalGameFileEvent" class="mediumBtn" type="button" :value="t('settings.launcher.game_file_btn')">
             </div>
 
             <div class="content">
-              Launcher version:
+              {{ t('settings.launcher.launcher_version') }}
               <p id="launcherVersion">Alpha 0.1.0</p>
             </div>
           </div>
@@ -65,6 +65,8 @@ import { ref, onMounted } from 'vue';
 import { useUserStore } from '../stores/userStore';
 
 import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n()
 const { locale } = useI18n();
 
 const totalRAM = ref(0);
