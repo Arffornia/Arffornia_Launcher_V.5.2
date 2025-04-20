@@ -8,7 +8,7 @@
 
     <div class="play-container">
       <div class="playBox">
-        <p id="title">ARFFORNIA</p>
+        <p id="title">ARFFORNIA {{ t('welcome') }}</p>
         <div class="description">
           <p class="description-content">+ 330 Mods</p>
           <p class="description-content">+ 25 Paliers de progression</p>
@@ -68,7 +68,9 @@ import { ref, onMounted, computed } from 'vue'
 import Podium from '../components/Podium.vue';
 import { useUserStore } from '../stores/userStore';
 import { fetchBestSellers, fetchNewestItems, fetchSaleItems } from '../js/arfforniaApi.js';
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const userStore = useUserStore();
 const bestSellerItems = ref([]);
 const newestItems = ref([]);
