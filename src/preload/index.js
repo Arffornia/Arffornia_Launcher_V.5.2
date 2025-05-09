@@ -1,11 +1,14 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
+import { app } from 'electron'
 
 // Custom APIs for renderer
 const api = {
   // User Manager handler:
   isAuth: () => ipcRenderer.invoke('is-auth'),
   getUserName: () => ipcRenderer.invoke('get-user-name'),
+  setLang: (lang) => ipcRenderer.invoke('set-lang', lang),
+  getSystemLang: () => ipcRenderer.invoke('get-system-lang'),
 
   // Game Manager handlers:
   launchMC: () => ipcRenderer.invoke('launch-mc'),

@@ -4,6 +4,8 @@ export const useUserStore = defineStore('user', {
   state: () => ({
     isAuth: false,
     profileImg: new URL('../../../../resources/img/steve_head.png', import.meta.url).href,
+    selectedLang: 'en',
+    availableLangs: ['fr', 'en'],
   }),
 
   actions: {
@@ -49,6 +51,35 @@ export const useUserStore = defineStore('user', {
       } catch (error) {
         window.api.logger("error", `Error fetching profile image: ${error}`);
         this.profileImg = '/src/assets/img/steve_head.png';
+      }
+    },
+
+    async initLang(locale) {
+      const availableLangs = ['fr', 'en'];
+
+      const savedLang = await window.api.saverLoad("lang");
+
+      if (savedLang && availableLangs.includes(savedLang)) {
+        this.selectedLang = savedLang;
+        locale.value = savedLang;
+        return;
+      }
+
+      const systemLangRaw = await window.api.getSystemLang();
+      const baseLang = systemLangRaw.split('-')[0]; // en-us cases
+
+      const langToSet = availableLangs.includes(baseLang) ? baseLang : 'en';
+
+      this.setLang(locale, langToSet);
+    },
+
+
+    setLang(locale, lang) {
+      if (this.availableLangs.includes(lang)) {
+        this.selectedLang = lang;
+        locale.value = lang;
+        window.api.saverSave("lang", lang);
+        window.api.setLang(lang);
       }
     },
   },
