@@ -52,7 +52,7 @@ export async function launchMC() {
     const nexusJava = new NexusJava(
       launcherSettings.JAVA_DIR,
       new JavaVersionInfo(
-        "17",
+        launcherSettings.JAVA_VERSION,
         JavaType.JRE,
         getOsType(),
         getArchType(),
