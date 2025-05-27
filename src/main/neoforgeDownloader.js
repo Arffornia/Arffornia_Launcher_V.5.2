@@ -2,7 +2,21 @@ import axios from 'axios';
 import fs from 'fs';
 import path from 'path';
 
-const NEOFORGE_ENDPOINT = 'https://maven.neoforged.net/releases/net/neoforged/forge/${version}/forge-${version}-installer.jar';
+const NEOFORGE_ENDPOINT = 'https://maven.neoforged.net/releases/net/neoforged/${name}/${version}/${name}-${version}-installer.jar';
+
+
+function isBeforeVersion(version, target) {
+  const v1 = version.split('.').map(Number);
+  const v2 = target.split('.').map(Number);
+
+  for (let i = 0; i < Math.max(v1.length, v2.length); i++) {
+    const num1 = v1[i] || 0;
+    const num2 = v2[i] || 0;
+    if (num1 < num2) return true;
+    if (num1 > num2) return false;
+  }
+  return false;
+}
 
 /**
  * Downloads a NeoForge installer file.
@@ -30,7 +44,9 @@ export async function downloadNeoforge(outputPath, loadVersion, forceDownload = 
       return filePath;
     }
 
-    const url = NEOFORGE_ENDPOINT.replace(/\${version}/g, loadVersion);
+    const name = isBeforeVersion(loadVersion, "1.20.2") ? "forge" : "neoforge";
+
+    const url = NEOFORGE_ENDPOINT.replace(/\${version}/g, loadVersion).replace(/\${name}/g, name);
     console.log('Download URL:', url);
 
     console.log('Saving file to:', filePath);

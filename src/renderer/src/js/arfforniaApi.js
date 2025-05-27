@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { launcherSettings } from '../../../main/launcherSettings';
 
-const ENDPOINT = launcherSettings.SERVER_ENDPOINT + 'api/';
+const ENDPOINT = launcherSettings.ARFFORNIA_API_ENDPOINT;
 
 export async function fetchPlayerProfile(pseudo) {
   try {

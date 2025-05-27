@@ -192,7 +192,7 @@ export const handleNexusModsCallback = {
       default: return;
     }
 
-    progressManager.updateStep(stepName, percent);
+    progressManager.updateStep(stepName, progress);
   },
 
   onProgress(downloaded, total, name) {
