@@ -32,7 +32,6 @@
     "msmc": "^5.0.5",
     "pinia": "3.0.2",
     "skinview3d": "3.4.1",
-    "tomate-mods": "github:doublekekse/tomate-mods",
     "vue-router": "4.5.1"
   },
   "devDependencies": {
