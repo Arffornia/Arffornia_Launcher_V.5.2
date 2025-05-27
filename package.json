@@ -1,10 +1,14 @@
 {
   "name": "arffornia-launcher-v.5.2",
   "productName": "Arffornia Launcher",
-  "version": "0.1.0",
+  "version": "0.1.5",
   "description": "Official launcher of Arffornia",
   "main": "./out/main/index.js",
-  "author": "thegostsniperfr",
+  "author": {
+    "name": "thegostsniperfr",
+    "email": "brianperret.pro@gmail.com",
+    "url": "https://github.com/TheGostsniperfr"
+  },
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix",
@@ -22,33 +26,32 @@
   "dependencies": {
     "@arffornia/nexus_java": "^1.0.4",
     "@arffornia/nexus_logger": "^1.0.2",
-    "@arffornia/nexus_mods": "^1.0.1",
+    "@arffornia/nexus_mods": "1.0.5",
     "@arffornia/nexus_saver": "^1.0.1",
     "@electron-toolkit/preload": "^3.0.1",
     "@electron-toolkit/utils": "4.0.0",
-    "axios": "^1.7.2",
-    "electron-updater": "6.6.3",
+    "axios": "1.9.0",
+    "electron-updater": "6.6.4",
     "minecraft-launcher-core": "^3.18.1",
     "msmc": "^5.0.5",
     "pinia": "3.0.2",
     "skinview3d": "^3.0.1",
-    "tomate-mods": "github:doublekekse/tomate-mods",
     "vue-i18n": "^11.1.3",
     "vue-router": "^4.4.0"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config": "2.1.0",
     "@rushstack/eslint-patch": "^1.10.3",
-    "@vitejs/plugin-vue": "^5.0.5",
+    "@vitejs/plugin-vue": "5.2.4",
     "@vue/eslint-config-prettier": "10.2.0",
-    "electron": "35.1.5",
-    "electron-builder": "26.0.13",
+    "electron": "36.3.1",
+    "electron-builder": "26.0.15",
     "electron-vite": "3.1.0",
-    "eslint": "9.24.0",
-    "eslint-plugin-vue": "10.0.0",
+    "eslint": "9.27.0",
+    "eslint-plugin-vue": "10.1.0",
     "prettier": "^3.3.2",
-    "vite": "6.3.0",
-    "vue": "^3.4.30"
+    "vite": "6.3.5",
+    "vue": "3.5.15"
   },
   "build": {
     "files": [
@@ -66,7 +69,8 @@
     },
     "asar": true,
     "win": {
-      "icon": "resources/img/Crafting_Table.ico"
+      "icon": "resources/img/Crafting_Table.ico",
+      "target": ["nsis"]
     },
     "nsis": {
       "oneClick": false,
@@ -75,6 +79,21 @@
       "uninstallerIcon": "resources/img/Crafting_Table.ico",
       "shortcutName": "Arffornia Launcher"
     },
+    "mac": {
+      "target": ["dmg", "zip"],
+      "icon": "resources/img/Crafting_Table.icns",
+      "category": "public.app-category.games",
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false
+    },
+
+    "linux": {
+      "target": ["AppImage", "deb"],
+      "icon": "resources/img/Crafting_Table.png",
+      "category": "Game",
+        "maintainer": "thegostsniperfr <brianperret.pro@gmail.com>"
+    },
+
     "publish": [
       {
         "provider": "github",
