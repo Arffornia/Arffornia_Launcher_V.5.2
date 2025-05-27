@@ -1,16 +1,13 @@
 <template>
   <div class="settings-content">
-    <p id="page-title">Settings :</p>
-
-
+    <p id="page-title">{{ t('settings.title') }}</p>
     <div class="section-container">
       <div class="section-box">
-        <p class="title">Game settings :</p>
+        <p class="title">{{ t('settings.game.title') }}</p>
         <div class="info">
           <div class="info-list">
-
             <div class="content">
-              Allocated Ram:
+              {{ t('settings.game.ram') }}
               <div class="container">
                 <div class="select">
                   <select id="ram-select" v-if="ramOptions.length" v-model="selectedRAM" @change="onRamChangeEvent">
@@ -23,8 +20,19 @@
             </div>
 
             <div class="content">
-              Logout from your Minecraft Account:
-              <input @click="logoutMSEvent" class="mediumBtn" type="button" value="Logout">
+              {{ t('settings.game.language') }}
+              <div class="select">
+                <select id="lang-select" v-model="userStore.selectedLang" @change="onLangChangeEvent">
+                  <option v-for="lang in userStore.availableLangs" :key="lang" :value="lang">
+                    {{ lang.toUpperCase() }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div class="content">
+              {{ t('settings.game.logout') }}
+              <input @click="logoutMSEvent" class="mediumBtn" type="button" :value="t('settings.game.logout_btn')">
             </div>
 
           </div>
@@ -32,63 +40,71 @@
       </div>
 
       <div class="section-box">
-        <p class="title">Launcher settings :</p>
+        <p class="title">{{ t('settings.launcher.title') }}</p>
         <div class="info">
           <div class="info-list">
 
-              <div class="content">
-                Launcher install location:
-                <input @click="openLocalGameFileEvent" class="mediumBtn" type="button" value="Open">
-              </div>
+            <div class="content">
+              {{ t('settings.launcher.game_file') }}
+              <input @click="openLocalGameFileEvent" class="mediumBtn" type="button" :value="t('settings.launcher.game_file_btn')">
+            </div>
 
-              <div class="content">
-                Launcher version:
-                <p id="launcherVersion">Alpha 0.1.0</p>
-              </div>
-
+            <div class="content">
+              {{ t('settings.launcher.launcher_version') }}
+              <p id="launcherVersion">Alpha 0.1.0</p>
+            </div>
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </template>
 
 <script setup>
-  import { ref, onMounted } from 'vue';
-  import { useUserStore } from '../stores/userStore';
+import { ref, onMounted } from 'vue';
+import { useUserStore } from '../stores/userStore';
 
-  const totalRAM = ref(0);
-  const ramOptions = ref([]);
-  const selectedRAM = ref(5);
+import { useI18n } from 'vue-i18n';
 
-  const userStore = useUserStore();
+const { t } = useI18n()
+const { locale } = useI18n();
 
-  onMounted(async () => {
-    const savedSelectedRam = await window.api.saverLoad("allocatedRam");
-    if (savedSelectedRam !== '') {
-      selectedRAM.value = savedSelectedRam;
-    }
+const totalRAM = ref(0);
+const ramOptions = ref([]);
+const selectedRAM = ref(5);
 
-    totalRAM.value = await window.api.getTotalRAM();
+const userStore = useUserStore();
 
-    for(let i = 1; i <= totalRAM.value; i++) {
-      ramOptions.value.push(i);
-    }
-  });
+onMounted(async () => {
+  await initRam();
+});
 
-  const onRamChangeEvent = () => {
-    window.api.saverSave("allocatedRam", selectedRAM.value);
-  };
-
-  function openLocalGameFileEvent() {
-    window.api.openLocalGameFile();
+async function initRam() {
+  const savedSelectedRam = await window.api.saverLoad("allocatedRam");
+  if (savedSelectedRam !== '') {
+    selectedRAM.value = savedSelectedRam;
   }
 
-  function logoutMSEvent() {
-    window.api.logoutMS();
-    userStore.logout();
-  }
+  totalRAM.value = await window.api.getTotalRAM();
+  ramOptions.value = Array.from({ length: totalRAM.value }, (_, i) => i + 1);
+}
+
+const onLangChangeEvent = () => {
+  userStore.setLang(locale, userStore.selectedLang);
+};
+
+const onRamChangeEvent = () => {
+  window.api.saverSave("allocatedRam", selectedRAM.value);
+};
+
+function openLocalGameFileEvent() {
+  window.api.openLocalGameFile();
+}
+
+function logoutMSEvent() {
+  window.api.logoutMS();
+  userStore.logout();
+}
 </script>
 
 <style scoped>
@@ -124,6 +140,7 @@ select {
   transition: .25s all ease;
   border: 2px solid #f39c12;
 }
+
 /* Arrow */
 .select::after {
   content: '\25BC';
@@ -135,6 +152,7 @@ select {
   transition: .25s all ease;
   pointer-events: none;
 }
+
 /* Transition */
 .select:hover::after {
   color: #f39c12;
@@ -196,7 +214,7 @@ select {
   margin: 0px 0px 35px 0px;
 }
 
-.mediumBtn{
+.mediumBtn {
   height: 50px;
   font-weight: 1000;
   min-width: 200px;

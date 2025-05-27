@@ -1,0 +1,29 @@
+{
+  "home": {
+    "playbox": {
+      "title": "ARFFORNIA",
+      "description1": "+ 33 Mods",
+      "description2": "+ 25 Progression stages"
+    },
+    "shop": {
+      "arrivals": "Arrivals: ",
+      "weeks_deels": "This Week's Deals: ",
+      "best_sellers": "Best Sellers: "
+    }
+  },
+  "settings": {
+    "title": "Settings: ",
+    "game": {
+      "title": "Game settings: ",
+      "ram": "Allocated Ram:",
+      "language": "Launcher language:",
+      "logout": "Logout from your Minecraft Account:",
+      "logout_btn": "Logout"
+    },
+    "launcher": {
+      "game_file": "Game files",
+      "game_file_btn": "Open",
+      "launcher_version": "Launcher version:"
+    }
+  }
+}
