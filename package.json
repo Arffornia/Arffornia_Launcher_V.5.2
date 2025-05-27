@@ -1,10 +1,14 @@
 {
   "name": "arffornia-launcher-v.5.2",
   "productName": "Arffornia Launcher",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Official launcher of Arffornia",
   "main": "./out/main/index.js",
-  "author": "thegostsniperfr",
+  "author": {
+    "name": "thegostsniperfr",
+    "email": "brianperret.pro@gmail.com",
+    "url": "https://github.com/TheGostsniperfr"
+  },
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix",
@@ -85,7 +89,8 @@
     "linux": {
       "target": ["AppImage", "deb"],
       "icon": "resources/img/Crafting_Table.png",
-      "category": "Game"
+      "category": "Game",
+        "maintainer": "thegostsniperfr <brianperret.pro@gmail.com>"
     },
 
     "publish": [
