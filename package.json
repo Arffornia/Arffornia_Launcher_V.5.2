@@ -76,7 +76,7 @@
     },
     "mac": {
       "target": ["dmg", "zip"],
-      "icon": "resources/img/Crafting_Table.ico",
+      "icon": "resources/img/Crafting_Table.icns",
       "category": "public.app-category.games",
       "hardenedRuntime": true,
       "gatekeeperAssess": false
@@ -84,7 +84,7 @@
 
     "linux": {
       "target": ["AppImage", "deb"],
-      "icon": "resources/img/Crafting_Table.ico",
+      "icon": "resources/img/Crafting_Table.png",
       "category": "Game"
     },
 
