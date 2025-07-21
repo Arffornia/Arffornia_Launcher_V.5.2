@@ -3,7 +3,7 @@ export const launcherSettings = {
   GAME_NAME: "Arffornia",
   GAME_DIR: "./.Arffornia_V.5.2",
   JAVA_DIR: "./java",
-  ARFFORNIA_API_ENDPOINT: "http://localhost/api/",
+  ARFFORNIA_API_ENDPOINT: "http://localhost:8000/api/",
 
   CUSTOM_SAVER_FILE_NAME: "",
 
@@ -14,4 +14,5 @@ export const launcherSettings = {
 
   MOD_LOADER_VERSION: "21.1.172",
   JSON_MOD_LIST_URL: "https://raw.githubusercontent.com/Arffornia/Arffornia_Network/refs/heads/main/config/launcher/modList.json",
+  JSON_EXTERNAL_FILES_URL: "https://raw.githubusercontent.com/Arffornia/Arffornia_Provisioning/refs/heads/main/config/launcher/",
 };

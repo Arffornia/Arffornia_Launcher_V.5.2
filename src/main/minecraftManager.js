@@ -94,6 +94,7 @@ export async function launchMC() {
     const nexusMods = new NexusMods(launcherSettings.GAME_DIR, handleNexusModsCallback);
 
     await nexusMods.loadModsFromJsonUrl(launcherSettings.JSON_MOD_LIST_URL);
+    await nexusMods.loadExternalFilesFromJsonUrl(launcherSettings.JSON_EXTERNAL_FILES_URL);
 
     await nexusMods.updateMods(true, true);
 

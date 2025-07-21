@@ -1,5 +1,5 @@
 { pkgs ? import <nixpkgs> {} }:
-(pkgs.buildFHSUserEnv {
+(pkgs.buildFHSEnv {
   name = "electron_env";
   targetPkgs = pkgs:
             (with pkgs; [
@@ -16,6 +16,7 @@
               gtk3
               gtk4
               libdrm
+              libgbm
               libxkbcommon
               mesa
               libglvnd
