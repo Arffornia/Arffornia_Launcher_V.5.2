@@ -3,7 +3,8 @@ export const launcherSettings = {
   GAME_NAME: "Arffornia",
   GAME_DIR: "./.Arffornia_V.5.2",
   JAVA_DIR: "./java",
-  ARFFORNIA_API_ENDPOINT: "http://localhost:8000/api/",
+  // ARFFORNIA_API_ENDPOINT: "http://localhost:8000/api/",
+  ARFFORNIA_API_ENDPOINT: "https://arffornia.com/api/",
 
   CUSTOM_SAVER_FILE_NAME: "",
 

@@ -61,7 +61,7 @@
         </div>
       </div>
     </div>
-    <div class="title" :title="`Switch to ${podiumStore.scoreboardUnit}`" @click="scoreboardTitleSwitcher">
+    <div class="title" :title="switchTitle" @click="scoreboardTitleSwitcher">
       <button class="titleBtn">
         <p>{{ podiumStore.scoreboardTitle }}</p>
       </button>
@@ -70,7 +70,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { usePodiumStore } from '../stores/podiumStore.js';
 import { initializeSkinViewers } from '../js/skinviewer.js';
 
@@ -78,6 +78,14 @@ const skinWidth = ref(66);
 const skinHeight = ref(100);
 
 const podiumStore = usePodiumStore();
+
+const switchTitle = computed(() => {
+  if (podiumStore.scoreboardTitle === "Best voters") {
+    return 'Switch to best players';
+  } else {
+    return 'Switch to best voters';
+  }
+});
 
 
 onMounted(() => {
