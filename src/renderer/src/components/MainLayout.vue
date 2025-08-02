@@ -3,7 +3,7 @@
     <nav>
       <!-- Profile btn management section -->
       <div class="top-nav-link">
-        <router-link v-if="userStore.isAuth" class="nav-link" to="/profile" exact>
+        <router-link v-if="userStore.isAuth && userStore.username" class="nav-link" :to="`/profile/${userStore.username}`" exact>
           <img :src="userStore.profileImg" alt="Profile">
         </router-link>
 
@@ -50,7 +50,8 @@
 
 <script setup>
 import { useUserStore } from '../stores/userStore';
-import { onMounted } from 'vue';
+import { onMounted, onUnmounted } from 'vue';
+import { useRouter } from 'vue-router';
 import NotificationContainer from './NotificationContainer.vue';
 import { useNotificationStore } from '../stores/notificationStore';
 import TopBar from './TopBar.vue';
@@ -59,12 +60,27 @@ import GlobalProgressBar from './GlobalProgressBar.vue';
 const userStore = useUserStore();
 const notificationStore = useNotificationStore();
 
+const router = useRouter();
+
+const handleKeydown = (event) => {
+  if (event.key === 'Escape') {
+    console.info("Escape btn pressed.");
+    router.back();
+  }
+};
+
 onMounted(() => {
   userStore.loginNoReAsk();
 
   window.api.addNotification((message, type) => {
     notificationStore.addNotification(message, type)
   });
+
+  window.addEventListener('keydown', handleKeydown);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleKeydown);
 });
 
 </script>

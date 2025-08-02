@@ -9,14 +9,14 @@ export const usePodiumStore = defineStore('podium', () => {
   const bestPlayersByVote = ref(null);
   const bestPlayersByPoint = ref(null);
 
-  const scoreboardUnit = ref("votes");
-  const scoreboardTitle = ref("Best voters");
+  const activeScoreboard = ref("votes");
 
   const fetchData = async () => {
     try {
       bestPlayersByVote.value = await fetchBestPlayersByVote(3);
       bestPlayersByPoint.value = await fetchBestPlayersByPoint(3);
-      bestPlayers.value = bestPlayersByVote.value;
+
+      bestPlayers.value = activeScoreboard.value === 'votes' ? bestPlayersByVote.value : bestPlayersByPoint.value;
 
       setTimeout(() => {
         initializeSkinViewers();
@@ -30,8 +30,7 @@ export const usePodiumStore = defineStore('podium', () => {
     bestPlayers,
     bestPlayersByVote,
     bestPlayersByPoint,
-    scoreboardUnit,
-    scoreboardTitle,
+    activeScoreboard,
     fetchData,
   };
 });

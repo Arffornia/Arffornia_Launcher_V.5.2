@@ -4,7 +4,7 @@ Official launcher of Arffornia, I'm remaking it, but this time using Electron, V
 
 ### Website :
 
-You can keep up to date with the project by visiting our website: [Click me :D !](http://arffornia.ddns.net/)
+You can keep up to date with the project by visiting our website: [Click me :D !](https://arffornia.com/)
 
 ## Project Setup
 

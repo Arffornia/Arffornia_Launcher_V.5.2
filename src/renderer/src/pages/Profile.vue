@@ -8,12 +8,14 @@
 import { useRoute } from 'vue-router';
 import { ref, watchEffect } from 'vue';
 import PlayerCard from '../components/PlayerCard.vue';
+import { useUserStore } from '../stores/userStore';
 
 const route = useRoute();
-const username = ref(route.params.username || 'The_Gost_sniper');
+const userStore = useUserStore();
+const username = ref(route.params.username || userStore.username);
 
 watchEffect(() => {
-  username.value = route.params.username || 'The_Gost_sniper';
+  username.value = route.params.username || userStore.username;
 });
 
 </script>

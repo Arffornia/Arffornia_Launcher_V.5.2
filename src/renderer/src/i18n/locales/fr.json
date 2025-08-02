@@ -9,6 +9,14 @@
       "arrivals": "Nouveautés : ",
       "weeks_deels": "Offres de la semaine : ",
       "best_sellers": "Meilleures ventes : "
+    },
+    "podium": {
+      "best_voters": "Meilleurs Voteurs",
+      "best_players": "Meilleurs Joueurs",
+      "votes_unit": "votes",
+      "points_unit": "points",
+      "switch_to_players": "Passer aux meilleurs joueurs",
+      "switch_to_voters": "Passer aux meilleurs voteurs"
     }
   },
   "settings": {
@@ -21,6 +29,7 @@
       "logout_btn": "Déconnection"
     },
     "launcher": {
+      "title": "Paramètres du launcher : ",
       "game_file": "Fichiers du jeu",
       "game_file_btn": "Ouvrir",
       "launcher_version": "Version du launcher :"

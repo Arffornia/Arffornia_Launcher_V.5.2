@@ -16,7 +16,7 @@
           <div class="textContainer">
             <div class="rank">#2</div>
             <div class="score">{{ podiumStore.bestPlayers ? `${podiumStore.bestPlayers[ 1 ]?.value}
-              ${podiumStore.scoreboardUnit}` : '...' }}</div>
+              ${podiumUnit}` : '...' }}</div>
           </div>
         </div>
       </div>
@@ -36,7 +36,7 @@
           <div class="textContainer">
             <div class="rank">#1</div>
             <div class="score">{{ podiumStore.bestPlayers ? `${podiumStore.bestPlayers[ 0 ]?.value}
-              ${podiumStore.scoreboardUnit}` : '...' }}</div>
+              ${podiumUnit}` : '...' }}</div>
           </div>
         </div>
       </div>
@@ -56,14 +56,14 @@
           <div class="textContainer">
             <div class="rank">#3</div>
             <div class="score">{{ podiumStore.bestPlayers ? `${podiumStore.bestPlayers[ 2 ]?.value}
-              ${podiumStore.scoreboardUnit}` : '...' }}</div>
+              ${podiumUnit}` : '...' }}</div>
           </div>
         </div>
       </div>
     </div>
     <div class="title" :title="switchTitle" @click="scoreboardTitleSwitcher">
       <button class="titleBtn">
-        <p>{{ podiumStore.scoreboardTitle }}</p>
+        <p>{{ podiumTitle }}</p>
       </button>
     </div>
   </div>
@@ -71,20 +71,32 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { usePodiumStore } from '../stores/podiumStore.js';
 import { initializeSkinViewers } from '../js/skinviewer.js';
+
+const { t } = useI18n();
+const podiumStore = usePodiumStore();
 
 const skinWidth = ref(66);
 const skinHeight = ref(100);
 
-const podiumStore = usePodiumStore();
+const podiumTitle = computed(() => {
+  return podiumStore.activeScoreboard === 'votes'
+    ? t('home.podium.best_voters')
+    : t('home.podium.best_players');
+});
+
+const podiumUnit = computed(() => {
+  return podiumStore.activeScoreboard === 'votes'
+    ? t('home.podium.votes_unit')
+    : t('home.podium.points_unit');
+});
 
 const switchTitle = computed(() => {
-  if (podiumStore.scoreboardTitle === "Best voters") {
-    return 'Switch to best players';
-  } else {
-    return 'Switch to best voters';
-  }
+  return podiumStore.activeScoreboard === 'votes'
+    ? t('home.podium.switch_to_players')
+    : t('home.podium.switch_to_voters');
 });
 
 
@@ -92,16 +104,12 @@ onMounted(() => {
   refreshSkinViewers();
 });
 
-function scoreboardTitleSwitcher(event) {
-  if (podiumStore.scoreboardTitle === "Best voters") {
-    podiumStore.scoreboardTitle = "Best players";
-    podiumStore.scoreboardUnit = "points";
-
+function scoreboardTitleSwitcher() {
+  if (podiumStore.activeScoreboard === 'votes') {
+    podiumStore.activeScoreboard = 'points';
     podiumStore.bestPlayers = podiumStore.bestPlayersByPoint;
   } else {
-    podiumStore.scoreboardTitle = "Best voters";
-    podiumStore.scoreboardUnit = "votes";
-
+    podiumStore.activeScoreboard = 'votes';
     podiumStore.bestPlayers = podiumStore.bestPlayersByVote;
   }
 
@@ -109,7 +117,6 @@ function scoreboardTitleSwitcher(event) {
 }
 
 function refreshSkinViewers() {
-  // wait a bit, to allow the canvas to load
   setTimeout(() => {
     initializeSkinViewers();
   }, 100);

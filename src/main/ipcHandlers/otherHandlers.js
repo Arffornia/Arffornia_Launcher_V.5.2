@@ -10,6 +10,6 @@ export function registerOtherHandlers() {
   });
 
   ipcMain.handle('open-local-game-file', () => {
-    return shell.openPath(path.join(app.getAppPath(), launcherSettings.GAME_DIR));
+    return shell.openPath(path.join(app.getPath('userData'), launcherSettings.GAME_DIR));
   });
 }

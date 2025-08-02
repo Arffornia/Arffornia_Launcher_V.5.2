@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const ENDPOINT = "https://api.mcstatus.io/v2/";
-const ARFFORNIA_MC_IP = "arffornia.ddns.net:25565"
+const ARFFORNIA_MC_IP = "arffornia.com:25565"
 
 export async function fetchServerStatus() {
   try {

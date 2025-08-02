@@ -22,7 +22,7 @@
       <div class="shop-section">
         <p class="section-title">{{ t('home.shop.arrivals') }}</p>
         <div class="items-container">
-          <a v-for="item in newestItems" :key="item.id" @click.prevent="redirect_item_shop(item.img_url)"
+          <a v-for="item in newestItems" :key="item.id" @click.prevent="redirect_item_shop(item)"
             class="shop-item" title="See on Website">
             <div class="item-container">
               <img class="item-icon" :src="item.img_url" :alt="item.name" />
@@ -33,7 +33,7 @@
         </div>
         <p class="section-title">{{ t('home.shop.weeks_deels') }}</p>
         <div class="items-container">
-          <a v-for="item in saleItems" :key="item.id" @click.prevent="redirect_item_shop(item.img_url)"
+          <a v-for="item in saleItems" :key="item.id" @click.prevent="redirect_item_shop(item)"
             class="shop-item" title="See on Website">
             <div class="item-container">
               <img class="item-icon" :src="item.img_url" :alt="item.name" />
@@ -49,7 +49,7 @@
         </div>
         <p class="section-title">{{ t('home.shop.best_sellers') }}</p>
         <div class="items-container">
-          <a v-for="item in bestSellerItems" :key="item.id" @click.prevent="redirect_item_shop(item.img_url)"
+          <a v-for="item in bestSellerItems" :key="item.id" @click.prevent="redirect_item_shop(item)"
             class="shop-item" title="See on Website">
             <div class="item-container">
               <img class="item-icon" :src="item.img_url" :alt="item.name" />
@@ -112,8 +112,11 @@ const handleGameRunningState = (_event, data) => {
   gameRunning.value = data.isRunning;
 };
 
-function redirect_item_shop(url) {
-  window.api.openWebsite(url);
+function redirect_item_shop(item) {
+  if (item && item.id) {
+    const shopUrl = `http://arffornia.com/shop/${item.id}`;
+    window.api.openWebsite(shopUrl);
+  }
 }
 
 async function playBtnEvent() {

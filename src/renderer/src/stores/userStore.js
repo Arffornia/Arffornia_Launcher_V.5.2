@@ -3,6 +3,7 @@ import { defineStore } from 'pinia';
 export const useUserStore = defineStore('user', {
   state: () => ({
     isAuth: false,
+    username: null,
     profileImg: new URL('../../../../resources/img/steve_head.png', import.meta.url).href,
     selectedLang: 'en',
     availableLangs: ['fr', 'en'],
@@ -29,6 +30,7 @@ export const useUserStore = defineStore('user', {
 
     logout() {
       this.isAuth = false;
+      this.username = null;
       this.profileImg = new URL('../../../../resources/img/steve_head.png', import.meta.url).href;
     },
 
@@ -46,8 +48,8 @@ export const useUserStore = defineStore('user', {
 
     async updateProfileImage() {
       try {
-        const userName = await window.api.getUserName();
-        this.profileImg = `https://minotar.net/avatar/${userName}/50`;
+        this.username = await window.api.getUserName();
+        this.profileImg = `https://minotar.net/avatar/${this.username}/50`;
       } catch (error) {
         window.api.logger("error", `Error fetching profile image: ${error}`);
         this.profileImg = '/src/assets/img/steve_head.png';
