@@ -36,7 +36,7 @@
     "msmc": "^5.0.5",
     "pinia": "3.0.2",
     "skinview3d": "^3.0.1",
-    "vue-i18n": "11.1.5",
+    "vue-i18n": "11.1.10",
     "vue-router": "^4.4.0"
   },
   "devDependencies": {
