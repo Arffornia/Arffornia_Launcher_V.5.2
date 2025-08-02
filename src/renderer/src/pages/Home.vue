@@ -114,7 +114,7 @@ const handleGameRunningState = (_event, data) => {
 
 function redirect_item_shop(item) {
   if (item && item.id) {
-    const shopUrl = `http://arffornia.com/shop/${item.id}`;
+    const shopUrl = `https://arffornia.com/shop/${item.id}`;
     window.api.openWebsite(shopUrl);
   }
 }
