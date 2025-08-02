@@ -51,7 +51,7 @@
 
             <div class="content">
               {{ t('settings.launcher.launcher_version') }}
-              <p id="launcherVersion">Alpha 0.1.9</p>
+              <p id="launcherVersion">Alpha 0.1.10</p>
             </div>
           </div>
         </div>

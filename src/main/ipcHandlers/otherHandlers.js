@@ -1,6 +1,5 @@
-import { ipcMain, app } from "electron";
+import { ipcMain, app, shell } from "electron";
 import os from 'os';
-import { shell } from "electron";
 import { launcherSettings } from "../launcherSettings";
 import path from "path";
 
@@ -10,6 +9,8 @@ export function registerOtherHandlers() {
   });
 
   ipcMain.handle('open-local-game-file', () => {
-    return shell.openPath(path.join(app.getAppPath(), launcherSettings.GAME_DIR));
+    const launcherRoot = path.dirname(app.getPath("exe"));
+    const gameDir = path.join(launcherRoot, launcherSettings.GAME_DIR);
+    return shell.openPath(gameDir);
   });
 }
