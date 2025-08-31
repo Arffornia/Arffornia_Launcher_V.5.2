@@ -81,3 +81,16 @@ export async function fetchSaleItems(size) {
     }
   }
 };
+
+export async function fetchLauncherImages() {
+  try {
+    const response = await axios.get(`${ENDPOINT}launcherImages`);
+    return response.data;
+  } catch (err) {
+    if (err.response && err.response.data) {
+      throw new Error(err.response.data.error || 'An error occurred while fetching launcher images.');
+    } else {
+      throw new Error('An error occurred while fetching launcher images.');
+    }
+  }
+};
