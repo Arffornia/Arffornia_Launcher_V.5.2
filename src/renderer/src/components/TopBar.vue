@@ -36,6 +36,7 @@ function openWebsite() {
   align-items: center;
 
   padding: 0 20px;
+  z-index: 500;
 }
 
 .info-btn {

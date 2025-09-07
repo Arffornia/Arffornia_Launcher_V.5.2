@@ -40,13 +40,11 @@ export async function launchMC() {
   updateGameState(true);
 
   try {
-    // Is MS auth ?
     const authToken = launchMSAuth(true);
     if (authToken == null) {
       return;
     }
 
-    // Init vars:
     const launcher = new Client();
 
     const nexusJava = new NexusJava(
@@ -93,8 +91,10 @@ export async function launchMC() {
 
     const nexusMods = new NexusMods(launcherSettings.GAME_DIR, handleNexusModsCallback);
 
+    progressManager.updateStep(StepName.FETCHING_MODS, 0.1);
     await nexusMods.loadModsFromJsonUrl(launcherSettings.JSON_MOD_LIST_URL);
     await nexusMods.loadExternalFilesFromJsonUrl(launcherSettings.JSON_EXTERNAL_FILES_URL);
+    progressManager.updateStep(StepName.FETCHING_MODS, 1);
 
     await nexusMods.updateMods(true, true);
 
