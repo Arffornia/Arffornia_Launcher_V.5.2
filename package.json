@@ -1,7 +1,7 @@
 {
   "name": "arffornia-launcher-v.5.2",
   "productName": "Arffornia Launcher",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "description": "Official launcher of Arffornia",
   "main": "./out/main/index.js",
   "author": {
@@ -30,28 +30,28 @@
     "@arffornia/nexus_saver": "^1.0.1",
     "@electron-toolkit/preload": "^3.0.1",
     "@electron-toolkit/utils": "4.0.0",
-    "axios": "1.9.0",
-    "electron-updater": "6.6.4",
+    "axios": "1.11.0",
+    "electron-updater": "6.6.8",
     "minecraft-launcher-core": "^3.18.1",
     "msmc": "^5.0.5",
-    "pinia": "3.0.2",
+    "pinia": "3.0.3",
     "skinview3d": "^3.0.1",
-    "vue-i18n": "11.1.5",
+    "vue-i18n": "11.1.12",
     "vue-router": "^4.4.0"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config": "2.1.0",
     "@rushstack/eslint-patch": "^1.10.3",
-    "@vitejs/plugin-vue": "5.2.4",
+    "@vitejs/plugin-vue": "6.0.1",
     "@vue/eslint-config-prettier": "10.2.0",
-    "electron": "36.3.1",
-    "electron-builder": "26.0.15",
-    "electron-vite": "3.1.0",
-    "eslint": "9.27.0",
-    "eslint-plugin-vue": "10.1.0",
+    "electron": "38.0.0",
+    "electron-builder": "26.0.20",
+    "electron-vite": "4.0.0",
+    "eslint": "9.35.0",
+    "eslint-plugin-vue": "10.4.0",
     "prettier": "^3.3.2",
-    "vite": "6.3.5",
-    "vue": "3.5.15"
+    "vite": "7.1.4",
+    "vue": "3.5.21"
   },
   "build": {
     "files": [
