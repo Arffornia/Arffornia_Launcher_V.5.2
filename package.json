@@ -30,7 +30,7 @@
     "@arffornia/nexus_saver": "^1.0.1",
     "@electron-toolkit/preload": "^3.0.1",
     "@electron-toolkit/utils": "4.0.0",
-    "axios": "1.11.0",
+    "axios": "1.12.0",
     "electron-updater": "6.6.8",
     "minecraft-launcher-core": "^3.18.1",
     "msmc": "^5.0.5",
