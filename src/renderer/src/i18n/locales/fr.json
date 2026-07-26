@@ -34,5 +34,37 @@
       "game_file_btn": "Ouvrir",
       "launcher_version": "Version du launcher :"
     }
+  },
+  "shaders": {
+    "title": "Gestionnaire de Shaders",
+    "subtitle": "Personnalisez vos graphismes avec des shaders haute performance",
+    "active_label": "Shader Actif :",
+    "disabled": "Désactivé",
+    "search_btn": "Rechercher",
+    "loading_featured": "Chargement de la sélection...",
+    "searching_catalog": "Recherche sur Modrinth...",
+    "prev_page": "‹ Précédent",
+    "next_page": "Suivant ›",
+    "page_indicator": "Page {current} sur {total}",
+    "tabs": {
+      "featured": "⭐ Notre Sélection",
+      "catalog": "🔍 Tous les Shaders",
+      "installed": "📦 Shaders Installés"
+    },
+    "search_placeholder": "Rechercher un shader sur Modrinth...",
+    "active": "Actif",
+    "activate": "Activer",
+    "deactivate": "Désactiver",
+    "download": "Installer",
+    "delete": "Désinstaller",
+    "installed_badge": "Installé",
+    "no_installed": "Aucun shader installé pour le moment.",
+    "modal": {
+      "by": "Par",
+      "downloads": "téléchargements",
+      "likes": "j'aime",
+      "loading_screenshots": "Chargement des captures HD...",
+      "about": "À propos de ce Shader"
+    }
   }
 }
