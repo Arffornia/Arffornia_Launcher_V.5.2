@@ -88,7 +88,14 @@
             </template>
 
             <template v-else>
-              <button class="btn btn-primary full-width" @click="$emit('install')">
+              <!-- Progress Bar when Downloading -->
+              <div v-if="downloadProgress !== undefined" class="progress-bar-container full-width">
+                <div class="progress-fill" :style="{ width: `${downloadProgress * 100}%` }"></div>
+                <span class="progress-text">{{ Math.floor(downloadProgress * 100) }}%</span>
+              </div>
+
+              <!-- Install Button -->
+              <button v-else class="btn btn-primary full-width" @click="$emit('install')">
                 {{ $t('shaders.download') }}
               </button>
             </template>
@@ -107,7 +114,8 @@ const props = defineProps({
   isOpen: { type: Boolean, default: false },
   shader: { type: Object, default: () => ({}) },
   isInstalled: { type: Boolean, default: false },
-  isActive: { type: Boolean, default: false }
+  isActive: { type: Boolean, default: false },
+  downloadProgress: { type: Number, default: undefined }
 })
 
 const emit = defineEmits(['close', 'install', 'activate', 'deactivate', 'delete'])
@@ -403,4 +411,32 @@ const formatNumber = (num) => !num ? '0' : new Intl.NumberFormat('en-US', { nota
 .btn-secondary { background: #3d2f4e; color: #fff; }
 .btn-danger { background: #c0392b; color: #fff; }
 .full-width { width: 100%; }
+
+.progress-bar-container {
+  position: relative;
+  height: 40px;
+  background: #120b18;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.progress-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: #ff7300;
+  transition: width 0.2s ease;
+}
+
+.progress-text {
+  position: relative;
+  z-index: 1;
+  color: #fff;
+  font-weight: 800;
+  font-size: 14px;
+}
 </style>

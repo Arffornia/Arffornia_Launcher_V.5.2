@@ -64,7 +64,7 @@ export const modrinthApi = {
    * @param {number} [limit=20] - Number of items to retrieve.
    * @returns {Promise<{ hits: Array<Object>, total_hits: number }>}
    */
-  async searchShaders(query = '', offset = 0, limit = 20) {
+  async searchShaders(query = '', offset = 0, limit = 20, sortIndex = 'downloads') {
     try {
       const facets = JSON.stringify([
         ['project_type:shader'],
@@ -77,7 +77,7 @@ export const modrinthApi = {
           facets,
           offset,
           limit,
-          index: 'downloads'
+          index: sortIndex
         }
       })
       return response.data

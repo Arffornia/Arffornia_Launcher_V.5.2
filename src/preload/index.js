@@ -39,6 +39,7 @@ const api = {
   importLocalShader: (sourcePath) => ipcRenderer.invoke('import-local-shader', sourcePath),
   onShaderDownloadProgress: (callback) =>
     ipcRenderer.on('shader-download-progress', (_event, data) => callback(data)),
+  openShaderpacksFolder: () => ipcRenderer.invoke('open-shaderpacks-folder'),
 
   // Metadata cache handlers
   getShaderMetadata: () => ipcRenderer.invoke('get-shader-metadata'),

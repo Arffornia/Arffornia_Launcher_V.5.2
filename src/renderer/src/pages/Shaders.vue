@@ -34,15 +34,33 @@
         </button>
       </div>
 
-      <!-- Search Input -->
-      <div v-if="activeTab === 'catalog'" class="search-box">
-        <input
-          v-model="searchQuery"
-          type="text"
-          :placeholder="$t('shaders.search_placeholder')"
-          @keyup.enter="performSearch(1)"
-        />
-        <button class="btn-search" @click="performSearch(1)">🔍</button>
+      <!-- Search Controls (Catalog Tab) -->
+      <div v-if="activeTab === 'catalog'" class="catalog-controls">
+        <!-- Sort Dropdown -->
+        <div class="select-wrapper">
+          <select v-model="selectedSort" class="sort-select" @change="onSortChange">
+            <option value="downloads">{{ $t('shaders.sort_downloads') }}</option>
+            <option value="follows">{{ $t('shaders.sort_follows') }}</option>
+            <option value="updated">{{ $t('shaders.sort_updated') }}</option>
+          </select>
+        </div>
+
+        <!-- Search Input -->
+        <div class="search-box">
+          <input
+            v-model="searchQuery"
+            type="text"
+            :placeholder="$t('shaders.search_placeholder')"
+          />
+          <button class="btn-search" @click="performSearch(1)">🔍</button>
+        </div>
+      </div>
+
+      <!-- Action Button (Installed Tab) -->
+      <div v-else-if="activeTab === 'installed'">
+        <button class="btn-open-folder" @click="openFolder">
+          {{ $t('shaders.open_folder') }}
+        </button>
       </div>
     </div>
 
@@ -57,13 +75,16 @@
           :description="shader.customDescription || shader.description"
           :image-url="shader.icon_url"
           :badge="shader.badge"
+          :categories="shader.categories"
           :is-installed="isInstalled(shader)"
           :is-active="isActive(shader)"
+          :has-update="!!shaderStore.availableUpdates[shader.slug]"
           :download-progress="getDownloadProgress(shader)"
           @open-modal="openShaderModal(shader)"
           @install="shaderStore.installShader(shader)"
           @activate="activateShaderProject(shader)"
           @deactivate="shaderStore.setActiveShader('OFF')"
+          @update="shaderStore.updateShader(shader.slug)"
         />
       </div>
 
@@ -125,10 +146,12 @@
             :image-url="getShaderIcon(fileName)"
             :is-installed="true"
             :is-active="shaderStore.activeShader === fileName"
+            :has-update="!!shaderStore.availableUpdates[fileName]"
             @open-modal="openInstalledShaderModal(fileName)"
             @activate="shaderStore.setActiveShader(fileName)"
             @deactivate="shaderStore.setActiveShader('OFF')"
             @delete="shaderStore.deleteShader(fileName)"
+            @update="shaderStore.updateShader(fileName)"
           />
         </div>
       </div>
@@ -140,6 +163,7 @@
       :shader="selectedShader"
       :is-installed="isInstalled(selectedShader)"
       :is-active="isActive(selectedShader)"
+      :download-progress="getDownloadProgress(selectedShader)"
       @close="isModalOpen = false"
       @install="shaderStore.installShader(selectedShader)"
       @activate="activateShaderProject(selectedShader)"
@@ -161,12 +185,23 @@ const userStore = useUserStore()
 
 const activeTab = ref('featured')
 const searchQuery = ref('')
+const selectedSort = ref('downloads')
 const isModalOpen = ref(false)
 const selectedShader = ref({})
+let searchDebounceTimeout = null
 
 onMounted(async () => {
   await shaderStore.init()
   await shaderStore.loadFeaturedShaders()
+})
+
+// Debounced Live Search when user types in input
+watch(searchQuery, () => {
+  if (activeTab.value !== 'catalog') return
+  clearTimeout(searchDebounceTimeout)
+  searchDebounceTimeout = setTimeout(() => {
+    performSearch(1)
+  }, 400)
 })
 
 watch(() => userStore.selectedLang, async () => {
@@ -180,7 +215,9 @@ const switchTab = (tab) => {
   }
 }
 
-const performSearch = (page = 1) => shaderStore.searchCatalog(searchQuery.value, page)
+const performSearch = (page = 1) => shaderStore.searchCatalog(searchQuery.value, page, selectedSort.value)
+
+const onSortChange = () => performSearch(1)
 
 const changePage = (newPage) => {
   if (newPage >= 1 && newPage <= shaderStore.totalPages) {
@@ -188,6 +225,8 @@ const changePage = (newPage) => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 }
+
+const openFolder = () => window.api.openShaderpacksFolder()
 
 const normalize = (str) => (str || '').toLowerCase().replace(/[^a-z0-9]/g, '')
 
@@ -351,6 +390,27 @@ const deleteShaderProject = (shader) => {
   color: #fff;
 }
 
+.catalog-controls {
+  display: flex;
+  gap: 12px;
+}
+
+.sort-select {
+  background: #09070a;
+  border: 2px solid #261d31;
+  border-radius: 12px;
+  color: #fff;
+  padding: 10px 16px;
+  font-weight: bold;
+  font-size: 13px;
+  outline: none;
+  cursor: pointer;
+}
+
+.sort-select:hover {
+  border-color: #ff7300;
+}
+
 .search-box {
   display: flex;
   gap: 8px;
@@ -374,6 +434,22 @@ const deleteShaderProject = (shader) => {
   border: none;
   cursor: pointer;
   font-size: 16px;
+}
+
+.btn-open-folder {
+  background: #261d31;
+  border: 2px solid #ff7300;
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-open-folder:hover {
+  background: #ff7300;
 }
 
 .shaders-grid {

@@ -4,7 +4,14 @@
       <img :src="iconUrl" class="cover-image" @error="onImageError" />
       <div class="gradient-overlay"></div>
 
-      <span v-if="badge" class="badge-tag featured">{{ badge }}</span>
+      <!-- Top-Left Performance Tag Badge -->
+      <span v-if="performanceTag" class="badge-tag perf-tag" :class="performanceTag.type">
+        {{ performanceTag.label }}
+      </span>
+
+      <!-- Top-Right Status Badge -->
+      <span v-if="hasUpdate" class="badge-tag update-tag">🔄 UPDATE AVAILABLE</span>
+      <span v-else-if="badge" class="badge-tag featured">{{ badge }}</span>
       <span v-else-if="isActive" class="badge-tag active-tag">● ACTIVE</span>
       <span v-else-if="isInstalled" class="badge-tag installed">INSTALLED</span>
     </div>
@@ -19,7 +26,11 @@
       </div>
 
       <div v-else class="card-footer" @click.stop>
-        <button v-if="!isInstalled" class="btn-action install" @click.stop="$emit('install')">
+        <button v-if="hasUpdate" class="btn-action update-btn" @click.stop="$emit('update')">
+          🔄 Update Now
+        </button>
+
+        <button v-else-if="!isInstalled" class="btn-action install" @click.stop="$emit('install')">
           Install
         </button>
 
@@ -43,18 +54,52 @@ const props = defineProps({
   description: { type: String, default: '' },
   imageUrl: { type: String, default: '' },
   badge: { type: String, default: '' },
+  categories: { type: Array, default: () => [] },
   isInstalled: { type: Boolean, default: false },
   isActive: { type: Boolean, default: false },
+  hasUpdate: { type: Boolean, default: false },
   downloadProgress: { type: Number, default: undefined }
 })
 
-defineEmits(['install', 'activate', 'deactivate', 'delete', 'open-modal'])
+defineEmits(['install', 'activate', 'deactivate', 'delete', 'update', 'open-modal'])
 
 const imageFailed = ref(false)
 const fallbackImage = new URL('../../../../resources/img/bg/mainBG.png', import.meta.url).href
 
 const iconUrl = computed(() => {
   return imageFailed.value || !props.imageUrl ? fallbackImage : props.imageUrl
+})
+
+/**
+ * Analyzes categories, title, and description to categorize GPU intensity.
+ */
+const performanceTag = computed(() => {
+  const text = `${props.title} ${props.description} ${(props.categories || []).join(' ')}`.toLowerCase()
+
+  if (
+    text.includes('rtx') ||
+    text.includes('ptgi') ||
+    text.includes('path tracing') ||
+    text.includes('voxel') ||
+    text.includes('heavy') ||
+    text.includes('ultra') ||
+    text.includes('extreme')
+  ) {
+    return { label: '🔥 Gourmand', type: 'heavy' }
+  }
+
+  if (
+    text.includes('lite') ||
+    text.includes('potato') ||
+    text.includes('low') ||
+    text.includes('fast') ||
+    text.includes('performance') ||
+    text.includes('vanilla')
+  ) {
+    return { label: '⚡ FPS Friendly', type: 'fps' }
+  }
+
+  return { label: '⚖️ Équilibré', type: 'medium' }
 })
 
 const onImageError = () => { imageFailed.value = true }
@@ -109,19 +154,49 @@ const onImageError = () => { imageFailed.value = true }
 
 .badge-tag {
   position: absolute;
-  top: 10px;
-  right: 10px;
   font-size: 11px;
   font-weight: 800;
   padding: 4px 10px;
   border-radius: 20px;
   color: #fff;
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
-.badge-tag.featured { background: #ff7300; }
-.badge-tag.active-tag { background: #27ae60; }
-.badge-tag.installed { background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.4); }
+/* Top Right Badges */
+.badge-tag.featured { top: 10px; right: 10px; background: #ff7300; }
+.badge-tag.active-tag { top: 10px; right: 10px; background: #27ae60; }
+.badge-tag.installed { top: 10px; right: 10px; background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.4); }
+.badge-tag.update-tag { top: 10px; right: 10px; background: #e67e22; animation: pulse 1.5s infinite; }
+
+/* Top Left Performance Tag */
+.badge-tag.perf-tag {
+  top: 10px;
+  left: 10px;
+  font-size: 10px;
+  border-radius: 6px;
+}
+
+.badge-tag.perf-tag.fps {
+  background: rgba(39, 174, 96, 0.85);
+  border: 1px solid rgba(46, 204, 113, 0.6);
+}
+
+.badge-tag.perf-tag.medium {
+  background: rgba(41, 128, 185, 0.85);
+  border: 1px solid rgba(52, 152, 219, 0.6);
+}
+
+.badge-tag.perf-tag.heavy {
+  background: rgba(192, 57, 43, 0.85);
+  border: 1px solid rgba(231, 76, 60, 0.6);
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
 
 .card-content {
   padding: 16px;
@@ -168,6 +243,8 @@ const onImageError = () => { imageFailed.value = true }
 .btn-action.activate { background: #3d2f4e; color: #fff; }
 .btn-action.activate:hover { background: #ff7300; }
 .btn-action.active-btn { background: #27ae60; color: #fff; }
+.btn-action.update-btn { background: #e67e22; color: #fff; }
+.btn-action.update-btn:hover { background: #d35400; }
 
 .progress-container {
   position: relative;

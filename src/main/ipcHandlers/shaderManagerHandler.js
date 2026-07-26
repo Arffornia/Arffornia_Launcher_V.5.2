@@ -1,4 +1,4 @@
-import { ipcMain } from 'electron'
+import { ipcMain, shell } from 'electron'
 import { shaderManager } from '../shaderManager'
 
 export function registerShaderManagerHandlers() {
@@ -18,5 +18,11 @@ export function registerShaderManagerHandlers() {
   })
 
   ipcMain.handle('delete-shader', (_event, fileName) => shaderManager.deleteShader(fileName))
-  ipcMain.handle('import-local-shader', (_event, sourcePath) => shaderManager.importLocalShader(sourcePath))
+
+  /**
+   * Opens the shaderpacks directory in System File Explorer / Finder.
+   */
+  ipcMain.handle('open-shaderpacks-folder', () => {
+    return shell.openPath(shaderManager.shaderpacksDir)
+  })
 }

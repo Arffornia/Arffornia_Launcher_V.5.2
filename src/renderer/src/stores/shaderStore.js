@@ -1,10 +1,8 @@
 import { defineStore } from 'pinia'
 import { modrinthApi } from '../js/modrinthApi'
 import { useUserStore } from './userStore'
+import { useNotificationStore } from './notificationStore'
 
-/**
- * Resolves localized strings or fallback values based on selected language.
- */
 const getLocalizedValue = (field, lang = 'fr') => {
   if (!field) return ''
   if (typeof field === 'string') return field
@@ -21,10 +19,13 @@ export const useShaderStore = defineStore('shader', {
     isSearching: false,
     isLoadingFeatured: false,
     downloadProgress: {},
+    downloadingProjectIds: [],
+    availableUpdates: {}, // { [oldFileName]: { downloadUrl, newFileName, project } }
 
     catalogPage: 1,
     catalogTotalHits: 0,
-    catalogPageSize: 20
+    catalogPageSize: 20,
+    catalogSort: 'downloads'
   }),
 
   getters: {
@@ -43,6 +44,7 @@ export const useShaderStore = defineStore('shader', {
       })
 
       await this.refreshLocalState()
+      this.checkShaderUpdates()
     },
 
     async refreshLocalState() {
@@ -52,6 +54,31 @@ export const useShaderStore = defineStore('shader', {
         this.installedMetadata = (await window.api.getShaderMetadata()) || {}
       } catch (error) {
         window.api.logger('error', `[ShaderStore] Local state refresh failed: ${error.message}`)
+      }
+    },
+
+    /**
+     * Checks Modrinth for newer release files for all installed shaders.
+     */
+    async checkShaderUpdates() {
+      for (const fileName of this.installedShaders) {
+        const meta = this.installedMetadata[fileName]
+        const projectId = meta?.id || meta?.project_id || meta?.slug
+
+        if (!projectId) continue
+
+        try {
+          const latest = await modrinthApi.getLatestReleaseFile(projectId)
+          if (latest.fileName && latest.fileName !== fileName) {
+            this.availableUpdates[fileName] = {
+              downloadUrl: latest.downloadUrl,
+              newFileName: latest.fileName,
+              project: meta
+            }
+          }
+        } catch (err) {
+          // Ignore individual check errors quietly
+        }
       }
     },
 
@@ -89,13 +116,14 @@ export const useShaderStore = defineStore('shader', {
       }
     },
 
-    async searchCatalog(query = '', page = 1) {
+    async searchCatalog(query = '', page = 1, sortIndex = this.catalogSort) {
       this.isSearching = true
       this.catalogPage = page
+      this.catalogSort = sortIndex
       const offset = (page - 1) * this.catalogPageSize
 
       try {
-        const results = await modrinthApi.searchShaders(query, offset, this.catalogPageSize)
+        const results = await modrinthApi.searchShaders(query, offset, this.catalogPageSize, sortIndex)
         this.catalogShaders = results.hits || []
         this.catalogTotalHits = results.total_hits || 0
       } catch (error) {
@@ -122,9 +150,10 @@ export const useShaderStore = defineStore('shader', {
         )
 
       if (match) {
-        this.installedMetadata[fileName] = match
-        await window.api.saveShaderMetadata(fileName, match)
-        return match
+        const plainMatch = JSON.parse(JSON.stringify(match))
+        this.installedMetadata[fileName] = plainMatch
+        await window.api.saveShaderMetadata(fileName, plainMatch)
+        return plainMatch
       }
 
       try {
@@ -135,9 +164,10 @@ export const useShaderStore = defineStore('shader', {
           const resolvedHit = searchRes.hits[0]
           const fullDetails = await modrinthApi.getProjectDetails(resolvedHit.project_id)
 
-          this.installedMetadata[fileName] = fullDetails
-          await window.api.saveShaderMetadata(fileName, fullDetails)
-          return fullDetails
+          const plainDetails = JSON.parse(JSON.stringify(fullDetails))
+          this.installedMetadata[fileName] = plainDetails
+          await window.api.saveShaderMetadata(fileName, plainDetails)
+          return plainDetails
         }
       } catch (err) {
         console.warn(`[ShaderStore] Could not resolve Modrinth metadata for ${fileName}:`, err)
@@ -147,7 +177,12 @@ export const useShaderStore = defineStore('shader', {
     },
 
     async installShader(project) {
-      const projectId = typeof project === 'string' ? project : project.project_id || project.id
+      const notificationStore = useNotificationStore()
+      const projectId = typeof project === 'string' ? project : project.project_id || project.id || project.slug
+
+      if (this.downloadingProjectIds.includes(projectId)) return
+      this.downloadingProjectIds.push(projectId)
+
       try {
         const { downloadUrl, fileName } = await modrinthApi.getLatestReleaseFile(projectId)
 
@@ -159,33 +194,81 @@ export const useShaderStore = defineStore('shader', {
           metadata = await modrinthApi.getProjectDetails(projectId)
         }
 
-        await window.api.saveShaderMetadata(fileName, metadata)
+        const plainMetadata = JSON.parse(JSON.stringify(metadata))
+        await window.api.saveShaderMetadata(fileName, plainMetadata)
         await this.refreshLocalState()
 
-        window.api.logger('info', `[ShaderStore] Installed shader: ${fileName}`)
+        notificationStore.addNotification(`Shader installed successfully!`, 'update')
       } catch (error) {
+        notificationStore.addNotification(`Failed to install shader: ${error.message}`, 'error')
         window.api.logger('error', `[ShaderStore] Installation failed for ${projectId}: ${error.message}`)
-        throw error
+      } finally {
+        this.downloadingProjectIds = this.downloadingProjectIds.filter((id) => id !== projectId)
+      }
+    },
+
+    /**
+     * Updates an installed shader to its latest release and cleans up the old zip file.
+     * @param {string} oldFileName
+     */
+    async updateShader(oldFileName) {
+      const update = this.availableUpdates[oldFileName]
+      if (!update) return
+
+      const notificationStore = useNotificationStore()
+      const wasActive = this.activeShader === oldFileName
+
+      try {
+        this.downloadProgress[update.newFileName] = 0.01
+        await window.api.downloadShader(update.downloadUrl, update.newFileName)
+
+        // Transfer metadata to new filename and save
+        const plainMetadata = JSON.parse(JSON.stringify(update.project))
+        await window.api.saveShaderMetadata(update.newFileName, plainMetadata)
+
+        // Delete old shader zip file
+        await window.api.deleteShader(oldFileName)
+        delete this.availableUpdates[oldFileName]
+
+        // Re-activate new file if old one was active
+        if (wasActive) {
+          await this.setActiveShader(update.newFileName)
+        }
+
+        await this.refreshLocalState()
+        notificationStore.addNotification(`Shader updated to ${update.newFileName}!`, 'update')
+      } catch (err) {
+        notificationStore.addNotification(`Failed to update shader: ${err.message}`, 'error')
       }
     },
 
     async setActiveShader(fileName) {
+      const notificationStore = useNotificationStore()
       try {
         await window.api.setActiveShader(fileName)
         this.activeShader = fileName
+
+        if (fileName === 'OFF') {
+          notificationStore.addNotification('Shaders disabled.', 'msg')
+        } else {
+          notificationStore.addNotification(`Shader activated!`, 'msg')
+        }
       } catch (error) {
-        window.api.logger('error', `[ShaderStore] Failed to activate ${fileName}: ${error.message}`)
+        notificationStore.addNotification(`Failed to change active shader.`, 'error')
       }
     },
 
     async deleteShader(fileName) {
+      const notificationStore = useNotificationStore()
       try {
         const success = await window.api.deleteShader(fileName)
         if (success) {
+          delete this.availableUpdates[fileName]
           await this.refreshLocalState()
+          notificationStore.addNotification(`Shader uninstalled.`, 'msg')
         }
       } catch (error) {
-        window.api.logger('error', `[ShaderStore] Failed to delete ${fileName}: ${error.message}`)
+        notificationStore.addNotification(`Failed to delete shader.`, 'error')
       }
     }
   }
