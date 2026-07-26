@@ -30,6 +30,21 @@ const api = {
 
   addNotification: (callback) => ipcRenderer.on('add-notification', (event, message, type) => callback(message, type)),
 
+  // Shader Management ContextBridge APIs
+  getInstalledShaders: () => ipcRenderer.invoke('get-installed-shaders'),
+  getActiveShader: () => ipcRenderer.invoke('get-active-shader'),
+  setActiveShader: (shaderName) => ipcRenderer.invoke('set-active-shader', shaderName),
+  downloadShader: (downloadUrl, fileName) => ipcRenderer.invoke('download-shader', { downloadUrl, fileName }),
+  deleteShader: (fileName) => ipcRenderer.invoke('delete-shader', fileName),
+  importLocalShader: (sourcePath) => ipcRenderer.invoke('import-local-shader', sourcePath),
+  onShaderDownloadProgress: (callback) =>
+    ipcRenderer.on('shader-download-progress', (_event, data) => callback(data)),
+
+  // Metadata cache handlers
+  getShaderMetadata: () => ipcRenderer.invoke('get-shader-metadata'),
+  saveShaderMetadata: (fileName, metadata) =>
+    ipcRenderer.invoke('save-shader-metadata', { fileName, metadata }),
+
   // Logger
   logger: (logLevel, message) => ipcRenderer.invoke('logger', logLevel, message),
 }

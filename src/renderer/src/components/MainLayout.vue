@@ -25,6 +25,10 @@
         <router-link class="nav-link" to="/notification" exact>
           <img src="@res/img/icon/bell/bell.png" alt="Notification" />
         </router-link>
+
+        <router-link class="nav-link" to="/shaders" exact title="Shaders Manager">
+          <img src="@res/img/icon/shader/shader-icon.png" alt="Shaders" />
+        </router-link>
       </div>
 
       <div class="bottom-nav-link">
@@ -158,8 +162,8 @@ nav a {
 }
 
 nav img {
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   border-radius: 10px;
   transition: transform 0.3s;
   transform: scale(0.85);

@@ -9,6 +9,7 @@ import { registerOtherHandlers } from './ipcHandlers/otherHandlers';
 import { registerGameManagerHandlers } from './ipcHandlers/gameManagerHandlers';
 import { registerUserManagerHandlers } from './ipcHandlers/userManagerHandler';
 import { registerUtilsManagerHandlers } from './ipcHandlers/utilsManagerHandler';
+import { registerShaderManagerHandlers } from './ipcHandlers/shaderManagerHandler';
 
 import { NexusLogger } from '@arffornia/nexus_logger';
 import { launcherSettings } from './launcherSettings'
@@ -70,6 +71,7 @@ app.whenReady().then(() => {
   registerOtherHandlers();
   registerUtilsManagerHandlers();
   registerLoggerHandlers();
+  registerShaderManagerHandlers();
 
   createWindow()
 
