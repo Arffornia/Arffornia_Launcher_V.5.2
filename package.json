@@ -26,7 +26,7 @@
   "dependencies": {
     "@arffornia/nexus_java": "^1.0.4",
     "@arffornia/nexus_logger": "^1.0.2",
-    "@arffornia/nexus_mods": "1.0.10",
+    "@arffornia/nexus_mods": "1.0.12",
     "@arffornia/nexus_saver": "^1.0.1",
     "@electron-toolkit/preload": "^3.0.1",
     "@electron-toolkit/utils": "4.0.0",
@@ -36,22 +36,22 @@
     "msmc": "^5.0.5",
     "pinia": "3.0.3",
     "skinview3d": "^3.0.1",
-    "vue-i18n": "11.1.12",
+    "vue-i18n": "11.4.16",
     "vue-router": "^4.4.0"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config": "2.1.0",
     "@rushstack/eslint-patch": "^1.10.3",
-    "@vitejs/plugin-vue": "6.0.1",
+    "@vitejs/plugin-vue": "6.0.10",
     "@vue/eslint-config-prettier": "10.2.0",
     "electron": "38.0.0",
-    "electron-builder": "26.0.20",
+    "electron-builder": "26.17.0",
     "electron-vite": "4.0.0",
     "eslint": "9.35.0",
-    "eslint-plugin-vue": "10.4.0",
+    "eslint-plugin-vue": "10.11.1",
     "prettier": "^3.3.2",
     "vite": "7.3.7",
-    "vue": "3.5.42"
+    "vue": "3.5.44"
   },
   "overrides": {
     "request": {
