@@ -44,7 +44,7 @@
     "@rushstack/eslint-patch": "^1.10.3",
     "@vitejs/plugin-vue": "6.0.10",
     "@vue/eslint-config-prettier": "10.2.0",
-    "electron": "38.0.0",
+    "electron": "45.0.0",
     "electron-builder": "26.17.0",
     "electron-vite": "4.0.0",
     "eslint": "9.35.0",
