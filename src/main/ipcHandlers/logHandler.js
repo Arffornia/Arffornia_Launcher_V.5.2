@@ -1,8 +1,8 @@
-import { ipcMain } from "electron";
+import { handle } from "../ipc";
 import { logger } from "..";
 
 export function registerLoggerHandlers() {
-  ipcMain.handle('logger', (logLevel, message) => {
+  handle('logger', (logLevel, message) => {
     switch (logLevel) {
       case "info":
         logger.info(message);
