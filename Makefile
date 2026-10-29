@@ -9,8 +9,8 @@ install: ## Install dependencies from the lockfile
 
 check: lint arch test build ## Lint + architecture guards + tests + build (typecheck is N/A: plain JavaScript)
 
-lint: ## ESLint (read-only)
-	npm run lint
+lint: ## ESLint (read-only); FILE=<path> lints one file (used by the agent-kit post-edit hook)
+	$(if $(FILE),npx --no-install eslint --no-warn-ignored $(FILE),npm run lint)
 
 arch: ## Architecture guards: process boundaries (dependency-cruiser) + preload exposes only window.api
 	npm run arch
@@ -24,8 +24,8 @@ test: ## Unit tests (no-op until a test script exists)
 build: ## Bundle main, preload and renderer into out/ (no packaging)
 	npm run build
 
-fmt: ## Format with Prettier
-	npm run format
+fmt: ## Format with Prettier; FILE=<path> formats one file
+	$(if $(FILE),npx --no-install prettier --write --ignore-unknown $(FILE),npm run format)
 
 fmt-check: ## Check formatting with Prettier (not yet part of check, see #43)
 	npm run format:check
