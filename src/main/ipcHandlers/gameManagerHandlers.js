@@ -1,24 +1,25 @@
-import { ipcMain } from "electron";
+import { handle } from "../ipc";
 
-import { launchMC } from "../minecraftManager";
+import { launchMC, registerGameStateHandlers } from "../minecraftManager";
 import { logoutMSAuth, launchMSAuth } from "../msAuthManager";
 
 export function registerGameManagerHandlers() {
+  registerGameStateHandlers();
 
   // Launch the Microsoft login window, then launch the game
-  ipcMain.handle('launch-mc', async () => {
+  handle('launch-mc', async () => {
     await launchMC();
   });
 
-  ipcMain.handle('login-ms', async () => {
+  handle('login-ms', async () => {
     return await launchMSAuth(true) != null;
   });
 
-  ipcMain.handle('login-ms-no-re-ask', async () => {
+  handle('login-ms-no-re-ask', async () => {
     return await launchMSAuth() != null;
   });
 
-  ipcMain.handle('logout-ms', () => {
+  handle('logout-ms', () => {
     logoutMSAuth();
   });
 
