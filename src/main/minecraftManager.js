@@ -7,7 +7,11 @@ import { launcherSettings } from './launcherSettings';
 import { launchMSAuth } from './msAuthManager';
 import { getArchType, getOsType } from './utils';
 import { addNotification, logger, getMainWindow } from '.';
-import { ipcMain } from "electron";
+import { handle } from "./ipc";
+import { createRedactor, authorizationSecrets } from './redact';
+import { computeMemoryOptions } from './memory';
+import { saver } from './ipcHandlers/nexusSaverHandler';
+import os from 'os';
 
 import { handleJavaCallback, handleNexusModLoaderCallback, handleNexusModsCallback, handleMCLCEvent, progressManager, StepName } from './progressManager';
 
@@ -26,9 +30,11 @@ function updateGameState(isRunning) {
   }
 }
 
-ipcMain.handle('is-game-running', () => {
-  return isGameRunning;
-});
+export function registerGameStateHandlers() {
+  handle('is-game-running', () => {
+    return isGameRunning;
+  });
+}
 
 export async function launchMC() {
   if (isGameRunning) {
@@ -40,8 +46,10 @@ export async function launchMC() {
   updateGameState(true);
 
   try {
-    const authToken = launchMSAuth(true);
-    if (authToken == null) {
+    const authToken = await launchMSAuth(true);
+    if (!authToken) {
+      logger.warn("Launch aborted: Microsoft authentication failed or was cancelled.");
+      resetLaunchState();
       return;
     }
 
@@ -80,10 +88,10 @@ export async function launchMC() {
         type: launcherSettings.GAME_VERSION_TYPE,
       },
       forge: neoforgeInstallerPath,
-      memory: {
-        max: '8G',
-        min: '3G',
-      },
+      memory: computeMemoryOptions(
+        await saver.load('allocatedRam'),
+        os.totalmem() / 1024 / 1024 / 1024
+      ),
       overrides: {
         detached: true,
       }
@@ -98,11 +106,14 @@ export async function launchMC() {
 
     await nexusMods.updateMods(true, true);
 
-    logger.info('Starting Minecraft with options:', opts);
-    launcher.launch(opts);
+    logger.info(
+      `Starting Minecraft ${opts.version.number} (forge installer: ${opts.forge}, ` +
+      `memory: ${opts.memory.min}-${opts.memory.max})`
+    );
 
-    launcher.on('debug', (e) => logger.debug(e));
-    launcher.on('data', (e) => logger.info(e));
+    const redact = createRedactor(authorizationSecrets(authToken));
+    launcher.on('debug', (e) => logger.debug(redact(e)));
+    launcher.on('data', (e) => logger.info(redact(e)));
 
     launcher.on('progress', (e) => {
       handleMCLCEvent(e);
@@ -112,9 +123,22 @@ export async function launchMC() {
       updateGameState(false);
       logger.info("Game closed.");
     });
+
+    // MCLC resolves null (often without a 'close' event) when it cannot start the game.
+    const gameProcess = await launcher.launch(opts);
+    if (!gameProcess) {
+      logger.error("LaunchMC error: Minecraft could not be started (see the [MCLC] lines above).");
+      addNotification("An error occur", "error");
+      resetLaunchState();
+    }
   } catch (err) {
     logger.error("LaunchMC error: " + err);
     addNotification("An error occur", "error");
-    updateGameState(false);
+    resetLaunchState();
   }
+}
+
+function resetLaunchState() {
+  progressManager.reset();
+  updateGameState(false);
 }
