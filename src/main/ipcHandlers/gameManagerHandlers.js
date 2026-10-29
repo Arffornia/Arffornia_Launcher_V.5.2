@@ -5,7 +5,7 @@ import { logoutMSAuth, launchMSAuth } from "../msAuthManager";
 
 export function registerGameManagerHandlers() {
 
-  // Launch the MS COnnexion window, then launch the game
+  // Launch the Microsoft login window, then launch the game
   ipcMain.handle('launch-mc', async () => {
     await launchMC();
   });
