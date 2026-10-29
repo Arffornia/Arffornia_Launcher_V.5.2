@@ -1,4 +1,4 @@
-import { saver, saverKeys } from './ipcHandlers/nexusSaverHandler';
+import { secretStore, saverKeys } from './ipcHandlers/nexusSaverHandler';
 
 import { Auth } from 'msmc';
 import currentUser from './user';
@@ -11,7 +11,7 @@ export async function launchMSAuth(reAsk = false) {
     var xboxManager = null;
 
     // Try to connect using refresh token
-    const refreshToken = await saver.load(saverKeys.REFRESH_TOKEN);
+    const refreshToken = await secretStore.get(saverKeys.REFRESH_TOKEN);
 
     if (refreshToken != null && refreshToken != "") {
       // Auth from the refresh token
@@ -26,7 +26,7 @@ export async function launchMSAuth(reAsk = false) {
     }
 
     // Save the new refresh token:
-    saver.save(saverKeys.REFRESH_TOKEN, xboxManager.save());
+    await secretStore.set(saverKeys.REFRESH_TOKEN, xboxManager.save());
 
     // Get token for mc auth
     const token = await xboxManager.getMinecraft();
@@ -43,5 +43,5 @@ export async function launchMSAuth(reAsk = false) {
 
 export function logoutMSAuth() {
   currentUser.setIsAuth(false);
-  saver.delete(saverKeys.REFRESH_TOKEN);
+  secretStore.delete(saverKeys.REFRESH_TOKEN);
 }
