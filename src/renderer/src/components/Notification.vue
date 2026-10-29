@@ -37,7 +37,7 @@ const imageSrc = computed(() => {
   return imageMap[props.type] || imageMap["msg"];
 });
 
-const emit = defineEmits();
+const emit = defineEmits(['close']);
 
 function clickEvent() {
   window.api.logger("info", `Click on the notif !`);
