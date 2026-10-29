@@ -96,7 +96,15 @@ export async function launchMC() {
     await nexusMods.loadExternalFilesFromJsonUrl(launcherSettings.JSON_EXTERNAL_FILES_URL);
     progressManager.updateStep(StepName.FETCHING_MODS, 1);
 
-    await nexusMods.updateMods(true, true);
+    const updateResult = await nexusMods.updateMods(true, true);
+    // Nexus_Mods >= 1.1.0 returns { failures: [...] }; older versions return nothing.
+    const failures = Array.isArray(updateResult?.failures) ? updateResult.failures : [];
+    if (failures.length > 0) {
+      logger.error(`Mod sync failed for ${failures.length} file(s); not launching.`);
+      addNotification(`Could not download ${failures.length} mod file(s). Check your connection and try again.`, "error");
+      updateGameState(false);
+      return;
+    }
 
     logger.info('Starting Minecraft with options:', opts);
     launcher.launch(opts);
