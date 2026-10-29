@@ -1,32 +1,42 @@
-# Review depth by changed paths (read by .github/workflows/claude-review.yml from the base branch).
-# Per file: a deep path is always deep; a light path carves out of standard; anything else is `default`.
-# The PR takes the highest file level; more than escalate.lines_changed changed lines raises it one level.
+# Review depth by path (agent-kit templates/risk.yml schema, version 1). Read by the AI review
+# pipeline (.github/workflows/claude-review.yml, from the base branch), the `review` skill and humans.
+# First matching rule wins (top to bottom). Globs are relative to the repo root.
+# depth: light = skim; standard = every line, tests cover it; deep = every line, trace callers,
+#        try to break it. security: true = deep + threat review (adds the threat-model lens).
+version: 1
 default: standard
-levels:
-  deep:
-    - "src/preload/**"                  # the only bridge between web content and Node
-    - "src/main/ipcHandlers/**"         # untrusted input from the renderer
-    - "src/main/index.js"               # BrowserWindow security options, auto-update
-    - "src/main/msAuthManager.js"       # Microsoft auth, tokens
-    - "src/main/user.js"
-    - "src/main/minecraftManager.js"    # launch arguments, access token
-    - "src/main/neoforgeDownloader.js"  # downloads and integrity
-    - "src/main/shaderManager.js"       # file writes and deletes
-    - "src/renderer/index.html"         # CSP
-    - "electron-builder.yml"
-    - "package.json"
-    - "package-lock.json"
-    - ".github/workflows/**"
-    - ".dependency-cruiser.cjs"
-    - "tools/**"
-  standard:
-    - "src/**"
-  light:
-    - "**/*.md"
-    - "docs/**"
-    - "src/renderer/src/i18n/locales/**"
-    - "src/renderer/src/assets/**"
-    - "resources/**"
-    - "tests/**"
 escalate:
-  lines_changed: 400
+  lines_changed: 400   # a larger PR is raised one level
+
+rules:
+  - name: ci-and-release
+    depth: deep
+    security: true
+    paths: [".github/workflows/**", "electron-builder.yml", "electron.vite.config.mjs", "package.json"]
+  - name: process-boundary
+    depth: deep
+    security: true
+    paths: ["src/preload/**", "src/main/ipcHandlers/**", "src/main/index.js", "src/renderer/index.html"]   # IPC, window options, updater, CSP
+  - name: auth-and-tokens
+    depth: deep
+    security: true
+    paths: ["src/main/msAuthManager.js", "src/main/user.js", "src/main/minecraftManager.js"]
+  - name: downloads-and-files
+    depth: deep
+    security: true
+    paths: ["src/main/neoforgeDownloader.js", "src/main/shaderManager.js", "src/main/**/*ownload*"]
+  - name: architecture-guards
+    depth: deep
+    paths: [".dependency-cruiser.cjs", ".dependency-cruiser-known-violations.json", "tools/**"]
+  - name: generated
+    depth: light
+    paths: ["package-lock.json"]          # review only the packages the PR names (REVIEW.md)
+  - name: assets-and-locales
+    depth: light
+    paths: ["src/renderer/src/i18n/locales/**", "src/renderer/src/assets/**", "resources/**"]
+  - name: tests
+    depth: standard
+    paths: ["tests/**", "test/**", "**/*.test.js", "**/*.spec.js"]
+  - name: docs
+    depth: light
+    paths: ["**/*.md", "docs/**", ".editorconfig", "LICENSE*"]
