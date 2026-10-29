@@ -3,7 +3,7 @@ import { shell } from "electron";
 
 export function registerUtilsManagerHandlers() {
 
-  // Launch the MS COnnexion window, then launch the game
+  // Open the community Discord in the default browser
   ipcMain.handle('open-discord', () => {
     shell.openExternal("https://discord.gg/CWH6w67");
   });
