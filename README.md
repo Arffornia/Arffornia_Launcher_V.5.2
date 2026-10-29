@@ -66,16 +66,19 @@ There are no environment variables or secrets needed for development.
 - Releases ship a separate build per CPU: `*-arm64.dmg` / `*-arm64-mac.zip` for Apple Silicon and
   `*.dmg` / `*-mac.zip` (no arch suffix) for Intel Macs. Both are built by `release.yml` on the arm64
   `macos-latest` runner.
-- The app is **not signed or notarized** (no Apple Developer ID yet). macOS blocks it on first open:
-  open it once, then allow it in System Settings → Privacy & Security → "Open Anyway". Or run
-  `xattr -dr com.apple.quarantine "/Applications/Arffornia Launcher.app"`.
+- The app is **ad-hoc signed, not notarized** (`"identity": "-"`, no Apple Developer ID yet). macOS
+  blocks it on first open: open it once, then allow it in System Settings → Privacy & Security →
+  "Open Anyway". Or run `xattr -dr com.apple.quarantine "/Applications/Arffornia Launcher.app"`.
+  With a Developer ID: remove `identity`, set `CSC_LINK`/`CSC_KEY_PASSWORD` and the notarization
+  secrets in `release.yml`, and drop `disable-library-validation` from
+  `resources/entitlements.mac.plist`.
 - Auto-update needs a signed app on macOS (Squirrel.Mac checks the signature), so unsigned macOS builds
   must be updated by downloading the new release.
 - The launcher downloads an Azul Zulu JRE for the CPU it runs on (`aarch64` on Apple Silicon, also when
   an Intel build runs under Rosetta) through Nexus_Java.
 - Develop on a Mac with the same commands as on Linux (`npm ci`, `make check`, `npm run dev`).
-  `npm run build:mac` packages both architectures locally (unsigned). CI runs `make check` and an
-  unsigned package + launch smoke test on `macos-latest` (job `check-macos`).
+  `npm run build:mac` packages both architectures locally (ad-hoc signed). CI runs `make check` and
+  an ad-hoc signed package + launch smoke test on `macos-latest` (job `check-macos`).
 
 ## Contributing
 

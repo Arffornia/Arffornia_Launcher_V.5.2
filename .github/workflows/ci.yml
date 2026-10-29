@@ -38,9 +38,11 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Package (unsigned arm64 app bundle, no installer)
+      # Ad-hoc signing ("identity": "-" in package.json) needs no certificate or secret, so it is
+      # safe to allow on pull requests.
+      - name: Package (ad-hoc signed arm64 app bundle, no installer)
         env:
-          CSC_IDENTITY_AUTO_DISCOVERY: "false"
+          CSC_FOR_PULL_REQUEST: "true"
         run: npx electron-builder --mac dir --arm64 --publish never
 
       - name: Launch smoke test
@@ -50,8 +52,10 @@ jobs:
           set -- "$app"/Contents/MacOS/*
           exe=$1
           file "$exe"
-          codesign --verify --deep --strict --verbose=2 "$app" \
-            || echo "::warning::the app bundle signature does not verify (unsigned build)"
+          codesign --verify --deep --strict --verbose=2 "$app"
+          codesign --display --entitlements - "$app"
+          spctl --assess --type execute --verbose "$app" \
+            || echo "Gatekeeper rejects it, as expected without a Developer ID"
           data="$HOME/Library/Application Support/Arffornia/.Arffornia_V.5.2"
           (cd / && "$exe" > "$RUNNER_TEMP/launcher.log" 2>&1 &)
           for _ in $(seq 1 30); do

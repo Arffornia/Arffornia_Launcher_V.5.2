@@ -94,7 +94,10 @@
       "icon": "resources/img/Crafting_Table.icns",
       "category": "public.app-category.games",
       "hardenedRuntime": true,
-      "gatekeeperAssess": false
+      "gatekeeperAssess": false,
+      "identity": "-",
+      "entitlements": "resources/entitlements.mac.plist",
+      "entitlementsInherit": "resources/entitlements.mac.plist"
     },
 
     "linux": {
