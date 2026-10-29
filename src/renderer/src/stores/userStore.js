@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { SUPPORTED_LOCALES, resolveLocale } from '../i18n/translator';
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -6,7 +7,7 @@ export const useUserStore = defineStore('user', {
     username: null,
     profileImg: new URL('../../../../resources/img/steve_head.png', import.meta.url).href,
     selectedLang: 'en',
-    availableLangs: ['fr', 'en'],
+    availableLangs: [...SUPPORTED_LOCALES],
   }),
 
   actions: {
@@ -57,22 +58,23 @@ export const useUserStore = defineStore('user', {
     },
 
     async initLang(locale) {
-      const availableLangs = ['fr', 'en'];
-
       const savedLang = await window.api.saverLoad("lang");
 
-      if (savedLang && availableLangs.includes(savedLang)) {
+      if (savedLang && this.availableLangs.includes(savedLang)) {
         this.selectedLang = savedLang;
         locale.value = savedLang;
         return;
       }
 
-      const systemLangRaw = await window.api.getSystemLang();
-      const baseLang = systemLangRaw.split('-')[0]; // en-us cases
+      // No saved choice: follow the OS locale (app.getLocale() in the main process).
+      let systemLangRaw = '';
+      try {
+        systemLangRaw = await window.api.getSystemLang();
+      } catch (error) {
+        window.api.logger("error", `Failed to read the system locale: ${error}`);
+      }
 
-      const langToSet = availableLangs.includes(baseLang) ? baseLang : 'en';
-
-      this.setLang(locale, langToSet);
+      this.setLang(locale, resolveLocale(systemLangRaw));
     },
 
 

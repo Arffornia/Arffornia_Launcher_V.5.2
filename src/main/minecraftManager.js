@@ -32,7 +32,7 @@ ipcMain.handle('is-game-running', () => {
 
 export async function launchMC() {
   if (isGameRunning) {
-    addNotification("The game is already running!", "error");
+    addNotification('notifications.game_already_running', "error");
     return;
   }
 
@@ -114,7 +114,7 @@ export async function launchMC() {
     });
   } catch (err) {
     logger.error("LaunchMC error: " + err);
-    addNotification("An error occur", "error");
+    addNotification('notifications.launch_failed', "error");
     updateGameState(false);
   }
 }

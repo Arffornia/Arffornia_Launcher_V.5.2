@@ -12,7 +12,7 @@
                 <div class="select">
                   <select id="ram-select" v-if="ramOptions.length" v-model="selectedRAM" @change="onRamChangeEvent">
                     <option v-for="ram in ramOptions" :key="ram" :value="ram">
-                      {{ ram }}Go
+                      {{ t('settings.game.ram_value', { amount: ram }) }}
                     </option>
                   </select>
                 </div>
@@ -24,7 +24,7 @@
               <div class="select">
                 <select id="lang-select" v-model="userStore.selectedLang" @change="onLangChangeEvent">
                   <option v-for="lang in userStore.availableLangs" :key="lang" :value="lang">
-                    {{ lang.toUpperCase() }}
+                    {{ t(`languages.${lang}`) }}
                   </option>
                 </select>
               </div>
@@ -51,7 +51,7 @@
 
             <div class="content">
               {{ t('settings.launcher.launcher_version') }}
-              <p id="launcherVersion">Alpha 0.1.15</p>
+              <p id="launcherVersion">{{ t('settings.launcher.version_value', { version: launcherVersion }) }}</p>
             </div>
           </div>
         </div>
@@ -66,8 +66,9 @@ import { useUserStore } from '../stores/userStore';
 
 import { useI18n } from 'vue-i18n';
 
-const { t } = useI18n()
-const { locale } = useI18n();
+const { t, locale } = useI18n();
+
+const launcherVersion = '0.1.15';
 
 const totalRAM = ref(0);
 const ramOptions = ref([]);

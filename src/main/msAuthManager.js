@@ -37,7 +37,7 @@ export async function launchMSAuth(reAsk = false) {
     return token.mclc();
   } catch (err) {
     logger.error(`Error in MS auth: ${err}`);
-    addNotification("Failed to login!", "error");
+    addNotification('notifications.login_failed', "error");
   }
 }
 

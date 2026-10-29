@@ -3,8 +3,8 @@
     <!-- Header -->
     <div class="top-header">
       <div class="title-block">
-        <h1 class="page-title">{{ $t('shaders.title') }}</h1>
-        <p class="subtitle">{{ $t('shaders.subtitle') }}</p>
+        <h1 class="page-title">{{ t('shaders.title') }}</h1>
+        <p class="subtitle">{{ t('shaders.subtitle') }}</p>
       </div>
     </div>
 
@@ -16,21 +16,21 @@
           :class="{ active: activeTab === 'featured' }"
           @click="activeTab = 'featured'"
         >
-          {{ $t('shaders.tabs.featured') }}
+          {{ t('shaders.tabs.featured') }}
         </button>
         <button
           class="pill-btn"
           :class="{ active: activeTab === 'catalog' }"
           @click="switchTab('catalog')"
         >
-          {{ $t('shaders.tabs.catalog') }}
+          {{ t('shaders.tabs.catalog') }}
         </button>
         <button
           class="pill-btn"
           :class="{ active: activeTab === 'installed' }"
           @click="activeTab = 'installed'"
         >
-          {{ $t('shaders.tabs.installed') }} ({{ shaderStore.installedShaders.length }})
+          {{ t('shaders.tabs.installed_count', { count: shaderStore.installedShaders.length }) }}
         </button>
       </div>
 
@@ -39,9 +39,9 @@
         <!-- Sort Dropdown -->
         <div class="select-wrapper">
           <select v-model="selectedSort" class="sort-select" @change="onSortChange">
-            <option value="downloads">{{ $t('shaders.sort_downloads') }}</option>
-            <option value="follows">{{ $t('shaders.sort_follows') }}</option>
-            <option value="updated">{{ $t('shaders.sort_updated') }}</option>
+            <option value="downloads">{{ t('shaders.sort_downloads') }}</option>
+            <option value="follows">{{ t('shaders.sort_follows') }}</option>
+            <option value="updated">{{ t('shaders.sort_updated') }}</option>
           </select>
         </div>
 
@@ -50,16 +50,16 @@
           <input
             v-model="searchQuery"
             type="text"
-            :placeholder="$t('shaders.search_placeholder')"
+            :placeholder="t('shaders.search_placeholder')"
           />
-          <button class="btn-search" @click="performSearch(1)">🔍</button>
+          <button class="btn-search" :title="t('shaders.search_btn')" :aria-label="t('shaders.search_btn')" @click="performSearch(1)">🔍</button>
         </div>
       </div>
 
       <!-- Action Button (Installed Tab) -->
       <div v-else-if="activeTab === 'installed'">
         <button class="btn-open-folder" @click="openFolder">
-          {{ $t('shaders.open_folder') }}
+          {{ t('shaders.open_folder') }}
         </button>
       </div>
     </div>
@@ -114,11 +114,11 @@
             :disabled="shaderStore.catalogPage <= 1"
             @click="changePage(shaderStore.catalogPage - 1)"
           >
-            {{ $t('shaders.prev_page') }}
+            {{ t('shaders.prev_page') }}
           </button>
 
           <span class="page-indicator">
-            {{ $t('shaders.page_indicator', { current: shaderStore.catalogPage, total: shaderStore.totalPages }) }}
+            {{ t('shaders.page_indicator', { current: shaderStore.catalogPage, total: shaderStore.totalPages }) }}
           </span>
 
           <button
@@ -126,7 +126,7 @@
             :disabled="shaderStore.catalogPage >= shaderStore.totalPages"
             @click="changePage(shaderStore.catalogPage + 1)"
           >
-            {{ $t('shaders.next_page') }}
+            {{ t('shaders.next_page') }}
           </button>
         </div>
       </div>
@@ -134,7 +134,7 @@
       <!-- Tab 3: Installed Local Shaders -->
       <div v-else-if="activeTab === 'installed'" class="installed-view">
         <div v-if="shaderStore.installedShaders.length === 0" class="empty-state">
-          {{ $t('shaders.no_installed') }}
+          {{ t('shaders.no_installed') }}
         </div>
 
         <div v-else class="shaders-grid">
@@ -175,11 +175,13 @@
 
 <script setup>
 import { ref, onMounted, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useShaderStore } from '../stores/shaderStore'
 import { useUserStore } from '../stores/userStore'
 import ShaderCard from '../components/ShaderCard.vue'
 import ShaderModal from '../components/ShaderModal.vue'
 
+const { t } = useI18n()
 const shaderStore = useShaderStore()
 const userStore = useUserStore()
 
@@ -244,7 +246,7 @@ const getShaderTitle = (fileName) => {
 
 const getShaderDescription = (fileName) => {
   const meta = shaderStore.installedMetadata[fileName]
-  return meta?.description || `Installed shader pack (${fileName})`
+  return meta?.description || t('shaders.installed_description', { file: fileName })
 }
 
 const getShaderIcon = (fileName) => {
