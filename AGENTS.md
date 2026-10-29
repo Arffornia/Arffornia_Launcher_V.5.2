@@ -34,6 +34,7 @@ make check        # lint + tests + build; must pass before a PR
 make lint         # eslint . (read-only); npm run lint:fix to autofix
 make test         # unit tests
 make build        # electron-vite build -> out/
+make e2e          # Playwright E2E on out/ (xvfb-run -a make e2e when headless)
 make fmt          # prettier --write .
 npm run dev       # run the app (needs a display)
 ```
@@ -68,8 +69,10 @@ Whether to adopt `// @ts-check` + JSDoc or migrate to TypeScript is an open deci
 
 - Unit: Vitest. Main-process modules in the `node` environment with `vi.mock('electron')`; renderer
   stores and components with `happy-dom`. Tests must run offline (mock HTTP).
-- E2E: Playwright for Electron under `xvfb-run`, with mocked endpoints. Never real Microsoft
-  credentials in CI.
+- E2E: Playwright for Electron (`test/e2e/`, `playwright.config.cjs`) on the built app under
+  `xvfb-run`. Every remote endpoint is mocked with page-level routes (`test/e2e/fixtures.cjs`);
+  an unmocked remote request fails the boot test. The app runs in a temp working directory.
+  Never real Microsoft credentials in CI.
 - The game launch itself (Java, NeoForge, MCLC) is verified manually by the maintainer.
 
 ## Gotchas

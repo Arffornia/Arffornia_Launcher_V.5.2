@@ -5,7 +5,7 @@ const skipFormatting = require('@vue/eslint-config-prettier/skip-formatting')
 
 module.exports = [
   {
-    ignores: ['node_modules/**', 'dist/**', 'out/**', 'build/**', 'coverage/**', 'test-results/**']
+    ignores: ['node_modules/**', 'dist/**', 'out/**', 'build/**', 'coverage/**', 'test-results/**', 'playwright-report/**']
   },
   electronToolkit,
   ...pluginVue.configs['flat/recommended'],

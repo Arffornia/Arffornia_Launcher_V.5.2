@@ -8,3 +8,7 @@ dist/
 .minecraft/
 .Arffornia_V.5.2
 java/
+
+test-results/
+playwright-report/
+coverage/

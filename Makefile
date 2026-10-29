@@ -1,5 +1,5 @@
 # Thin wrappers over npm scripts. Run `make help` for the list.
-.PHONY: help install check lint lint-fix test build fmt fmt-check dev clean
+.PHONY: help install check lint lint-fix test e2e build fmt fmt-check dev clean
 
 help: ## Show this help
 	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*## "}; {printf "  %-10s %s\n", $$1, $$2}'
@@ -18,6 +18,9 @@ lint-fix: ## ESLint with autofix
 test: ## Unit tests (no-op until a test script exists)
 	npm test --if-present
 
+e2e: ## Playwright E2E smoke on the built app (needs a display, or: xvfb-run -a make e2e)
+	npm run test:e2e
+
 build: ## Bundle main, preload and renderer into out/ (no packaging)
 	npm run build
 
@@ -31,4 +34,4 @@ dev: ## Run the launcher in dev mode (needs a display)
 	npm run dev
 
 clean: ## Remove build output
-	rm -rf out dist
+	rm -rf out dist test-results playwright-report
