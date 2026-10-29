@@ -7,7 +7,8 @@ import { launcherSettings } from './launcherSettings';
 import { launchMSAuth } from './msAuthManager';
 import { getArchType, getOsType } from './utils';
 import { addNotification, logger, getMainWindow } from '.';
-import { ipcMain } from "electron";
+import { handle } from "./ipc";
+import { createRedactor, authorizationSecrets } from './redact';
 
 import { handleJavaCallback, handleNexusModLoaderCallback, handleNexusModsCallback, handleMCLCEvent, progressManager, StepName } from './progressManager';
 
@@ -26,9 +27,11 @@ function updateGameState(isRunning) {
   }
 }
 
-ipcMain.handle('is-game-running', () => {
-  return isGameRunning;
-});
+export function registerGameStateHandlers() {
+  handle('is-game-running', () => {
+    return isGameRunning;
+  });
+}
 
 export async function launchMC() {
   if (isGameRunning) {
@@ -98,11 +101,16 @@ export async function launchMC() {
 
     await nexusMods.updateMods(true, true);
 
-    logger.info('Starting Minecraft with options:', opts);
-    launcher.launch(opts);
+    logger.info(
+      `Starting Minecraft ${opts.version.number} (forge installer: ${opts.forge}, ` +
+      `memory: ${opts.memory.min}-${opts.memory.max})`
+    );
 
-    launcher.on('debug', (e) => logger.debug(e));
-    launcher.on('data', (e) => logger.info(e));
+    const redact = createRedactor(authorizationSecrets(authToken));
+    launcher.on('debug', (e) => logger.debug(redact(e)));
+    launcher.on('data', (e) => logger.info(redact(e)));
+
+    launcher.launch(opts);
 
     launcher.on('progress', (e) => {
       handleMCLCEvent(e);
