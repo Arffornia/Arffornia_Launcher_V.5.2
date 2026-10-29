@@ -1,6 +1,17 @@
 import { contextBridge, ipcRenderer } from 'electron'
-import { electronAPI } from '@electron-toolkit/preload'
-import { app } from 'electron'
+
+/**
+ * Subscribe to a main -> renderer event and return an unsubscribe function.
+ * The IPC event object is never passed to the renderer.
+ * @param {string} channel
+ * @param {(...args: unknown[]) => void} callback
+ * @returns {() => void}
+ */
+function subscribe(channel, callback) {
+  const listener = (_event, ...args) => callback(...args)
+  ipcRenderer.on(channel, listener)
+  return () => ipcRenderer.removeListener(channel, listener)
+}
 
 // Custom APIs for renderer
 const api = {
@@ -13,6 +24,8 @@ const api = {
   // Game Manager handlers:
   launchMC: () => ipcRenderer.invoke('launch-mc'),
   getIsGameRunning: () => ipcRenderer.invoke('is-game-running'),
+  onGameRunningState: (callback) => subscribe('gameRunningState', callback),
+  onGlobalProgress: (callback) => subscribe('globalProgress', callback),
   loginMS: () => ipcRenderer.invoke('login-ms'),
   loginMSNoReAsk: () => ipcRenderer.invoke('login-ms-no-re-ask'),
   logoutMS: () => ipcRenderer.invoke('logout-ms'),
@@ -28,17 +41,17 @@ const api = {
   openDiscord: () => ipcRenderer.invoke('open-discord'),
   openWebsite: (url) => ipcRenderer.invoke('open-website', url),
 
-  addNotification: (callback) => ipcRenderer.on('add-notification', (event, message, type) => callback(message, type)),
+  addNotification: (callback) => subscribe('add-notification', callback),
 
   // Shader Management ContextBridge APIs
   getInstalledShaders: () => ipcRenderer.invoke('get-installed-shaders'),
   getActiveShader: () => ipcRenderer.invoke('get-active-shader'),
   setActiveShader: (shaderName) => ipcRenderer.invoke('set-active-shader', shaderName),
-  downloadShader: (downloadUrl, fileName) => ipcRenderer.invoke('download-shader', { downloadUrl, fileName }),
+  downloadShader: (downloadUrl, fileName) =>
+    ipcRenderer.invoke('download-shader', { downloadUrl, fileName }),
   deleteShader: (fileName) => ipcRenderer.invoke('delete-shader', fileName),
   importLocalShader: (sourcePath) => ipcRenderer.invoke('import-local-shader', sourcePath),
-  onShaderDownloadProgress: (callback) =>
-    ipcRenderer.on('shader-download-progress', (_event, data) => callback(data)),
+  onShaderDownloadProgress: (callback) => subscribe('shader-download-progress', callback),
   openShaderpacksFolder: () => ipcRenderer.invoke('open-shaderpacks-folder'),
 
   // Metadata cache handlers
@@ -47,20 +60,13 @@ const api = {
     ipcRenderer.invoke('save-shader-metadata', { fileName, metadata }),
 
   // Logger
-  logger: (logLevel, message) => ipcRenderer.invoke('logger', logLevel, message),
+  logger: (logLevel, message) => ipcRenderer.invoke('logger', logLevel, message)
 }
 
-// Use `contextBridge` APIs to expose Electron APIs to
-// renderer only if context isolation is enabled, otherwise
-// just add to the DOM global.
-if (process.contextIsolated) {
-  try {
-    contextBridge.exposeInMainWorld('electron', electronAPI)
-    contextBridge.exposeInMainWorld('api', api)
-  } catch (error) {
-     window.api.logger("error", `Failed in preload script: ${error}`);
-  }
-} else {
-  window.electron = electronAPI
-  window.api = api
+// Only the curated `api` object is exposed. The window always runs with
+// contextIsolation and sandbox enabled (see src/main/index.js).
+try {
+  contextBridge.exposeInMainWorld('api', api)
+} catch (error) {
+  console.error(`Failed in preload script: ${error}`)
 }

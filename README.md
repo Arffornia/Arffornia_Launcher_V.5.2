@@ -1,42 +1,69 @@
-# Arffornia Launcher V.5.2
+# Arffornia Launcher
 
-Official launcher of Arffornia, I'm remaking it, but this time using Electron, Vue.js and Vite.
+The official desktop launcher for the [Arffornia](https://arffornia.com) Minecraft server. It is an
+Electron + Vue 3 app that signs the player in with Microsoft, installs a Java 21 runtime, NeoForge and
+the Arffornia modpack, then starts Minecraft 1.21.1. It also shows shop, podium and highlight data from
+the website API, the server status, and a Modrinth shader browser. Within the Arffornia ecosystem it
+consumes the website API (`Arffornia_Website`), the modpack manifests (`Arffornia_Network`,
+`Arffornia_Provisioning`) and the owner's libraries `@arffornia/nexus_java`, `nexus_logger`,
+`nexus_saver` and `nexus_mods`.
 
-### Website :
+[Architecture docs (coming soon)](https://arffornia.github.io/docs/)
 
-You can keep up to date with the project by visiting our website: [Click me :D !](https://arffornia.com/)
+## Requirements
 
-## Project Setup
+- Node.js 22 LTS and npm 10
+- A desktop session to run the app (Windows, macOS or Linux). On NixOS, `nix-shell electron_env.nix`
+  provides the libraries Electron needs.
 
-### Install
-
-```bash
-$ git clone https://github.com/Arffornia/Arffornia_Launcher_V.5.2
-```
-
-```bash
-$ npm install
-```
-
-### Development
+## Quickstart
 
 ```bash
-$ npm run dev
+git clone https://github.com/Arffornia/Arffornia_Launcher_V.5.2
+cd Arffornia_Launcher_V.5.2
+npm ci
+npm run dev
 ```
 
-### Build
+## Commands
 
-```bash
-# For windows
-$ npm run build:win
+| Command | What it does |
+|---|---|
+| `make check` | Lint, unit tests and build. Run it before every PR (CI runs the same steps). |
+| `make lint` / `npm run lint` | ESLint, read-only. `npm run lint:fix` applies fixes. |
+| `make test` | Unit tests. |
+| `make build` / `npm run build` | Bundle main, preload and renderer into `out/` with electron-vite. |
+| `make fmt` / `npm run format` | Format with Prettier (`npm run format:check` to only check). |
+| `npm run dev` | Run with hot reload. |
+| `npm start` | Preview the built app. |
+| `npm run build:win` / `build:mac` / `build:linux` | Package installers into `dist/` with electron-builder. |
 
-# For macOS
-$ npm run build:mac
+## Configuration
 
-# For Linux
-$ npm run build:linux
-```
+There are no environment variables or secrets needed for development.
+
+- `src/main/launcherSettings.js`: game and loader versions, API endpoint (`https://arffornia.com/api/`),
+  mod list and external-files manifest URLs, game and Java directories.
+- Game data lives in `./.Arffornia_V.5.2` and the Java runtime in `./java`, **relative to the working
+  directory the launcher was started from**. This directory holds `launcherOptions.json` (settings and
+  login session, via Nexus_Saver), `launcher_log.txt`, the game files, `shaderpacks/` and
+  `config/iris.properties`.
+- Packaging is configured by the `build` field of `package.json`. `electron-builder.yml` is not used
+  (see issue #48).
+
+## Release process
+
+1. Bump `version` in `package.json` and merge to `main`.
+2. Push a tag `vX.Y.Z`. `.github/workflows/release.yml` builds Windows, macOS and Linux installers and
+   publishes them to GitHub Releases.
+3. Installed launchers pick up the new release through electron-updater (downloaded in the background,
+   installed on quit).
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) and [AGENTS.md](AGENTS.md). Report security issues privately, see
+[SECURITY.md](SECURITY.md).
 
 ## License
 
-This project is licensed under the MIT licence. You can consult the complete text of the licence in the file [LICENSE](LICENSE).
+MIT, see [LICENSE](LICENSE).

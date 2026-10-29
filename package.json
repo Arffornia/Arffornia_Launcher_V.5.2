@@ -11,7 +11,9 @@
   },
   "scripts": {
     "format": "prettier --write .",
-    "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix",
+    "format:check": "prettier --check .",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "start": "electron-vite preview",
     "dev": "electron-vite dev",
     "build": "electron-vite build",
@@ -28,7 +30,6 @@
     "@arffornia/nexus_logger": "^1.0.2",
     "@arffornia/nexus_mods": "1.0.12",
     "@arffornia/nexus_saver": "^1.0.1",
-    "@electron-toolkit/preload": "^3.0.1",
     "@electron-toolkit/utils": "4.0.0",
     "axios": "1.20.0",
     "electron-updater": "6.8.11",
