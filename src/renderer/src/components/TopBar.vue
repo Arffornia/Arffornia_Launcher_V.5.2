@@ -1,13 +1,16 @@
 <template>
   <div class="info-bar">
-    <img class="info-btn" @click="openWebsite" src="@res/img/icon/internet/internet.png" alt="Arffornia Website" title="Arffornia Website">
-    <img class="info-btn" @click="openDiscord" src="@res/img/icon/discord/discord.png" alt="Discord" title="Discord">
+    <img class="info-btn" @click="openWebsite" src="@res/img/icon/internet/internet.png" :alt="t('nav.website')" :title="t('nav.website')">
+    <img class="info-btn" @click="openDiscord" src="@res/img/icon/discord/discord.png" :alt="t('nav.discord')" :title="t('nav.discord')">
     <ServerStatue/>
   </div>
 </template>
 
 <script setup>
 import ServerStatue from '../components/ServerStatue.vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 function openDiscord() {
   window.api.openDiscord();

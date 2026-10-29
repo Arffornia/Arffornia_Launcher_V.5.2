@@ -15,7 +15,7 @@ lint: ## ESLint (read-only)
 lint-fix: ## ESLint with autofix
 	npm run lint:fix
 
-test: ## Unit tests (no-op until a test script exists)
+test: ## Unit tests (Vitest, offline)
 	npm test --if-present
 
 build: ## Bundle main, preload and renderer into out/ (no packaging)

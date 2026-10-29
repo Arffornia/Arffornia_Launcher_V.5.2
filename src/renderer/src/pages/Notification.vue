@@ -1,11 +1,14 @@
 <template>
   <div class="notification-content">
-    <h2>Notification</h2>
-    <p>This is the notification page content.</p>
+    <h2>{{ t('notifications_page.title') }}</h2>
+    <p>{{ t('notifications_page.empty') }}</p>
   </div>
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 </script>
 
 <style scoped>

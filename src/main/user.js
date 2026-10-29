@@ -2,10 +2,10 @@ import { logger } from ".";
 import { app } from 'electron'
 
 class User {
-  constructor(name) {
+  constructor(name, isAuth = false, lang = 'en') {
     this.name = name;
-    this.isAuth = false;
-    this.lang = 'en';
+    this.isAuth = isAuth;
+    this.lang = lang;
   }
 
   setIsAuth(authStatus) {
@@ -36,11 +36,8 @@ class User {
 }
 
 function detectSystemLang() {
-  const rawLang = app.getLocale();
-  const baseLang = rawLang.split('-')[0];
-
-  const supportedLangs = ['fr', 'en'];
-  return supportedLangs.includes(baseLang) ? baseLang : 'en';
+  const rawLang = app.getLocale() || '';
+  return rawLang.toLowerCase().startsWith('fr') ? 'fr' : 'en';
 }
 
 const currentUser = new User("NoName", false, detectSystemLang());
