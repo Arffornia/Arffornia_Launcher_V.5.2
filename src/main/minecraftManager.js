@@ -7,7 +7,7 @@ import { launcherSettings } from './launcherSettings';
 import { launchMSAuth } from './msAuthManager';
 import { getArchType, getOsType } from './utils';
 import { addNotification, logger, getMainWindow } from '.';
-import { ipcMain } from "electron";
+import { handle } from "./ipc";
 
 import { handleJavaCallback, handleNexusModLoaderCallback, handleNexusModsCallback, handleMCLCEvent, progressManager, StepName } from './progressManager';
 
@@ -26,9 +26,11 @@ function updateGameState(isRunning) {
   }
 }
 
-ipcMain.handle('is-game-running', () => {
-  return isGameRunning;
-});
+export function registerGameStateHandlers() {
+  handle('is-game-running', () => {
+    return isGameRunning;
+  });
+}
 
 export async function launchMC() {
   if (isGameRunning) {
