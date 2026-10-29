@@ -1,5 +1,5 @@
 // Text that arrives as data (Provisioning JSON, Arffornia API) rather than from the locale files.
-// See the docs decision record "Player-visible text in data and APIs" (ADR 0008):
+// See the docs decision record "Player-visible text in data and APIs" (ADR 0009):
 // - free-form content is a localized object { "en": "...", "fr": "..." };
 // - the launcher asks the API for its UI language with Accept-Language.
 import { DEFAULT_LOCALE, SUPPORTED_LOCALES } from './translator'
