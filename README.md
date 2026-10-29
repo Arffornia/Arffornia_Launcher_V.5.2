@@ -45,7 +45,9 @@ There are no environment variables or secrets needed for development.
 - `src/main/launcherSettings.js`: game and loader versions, API endpoint (`https://arffornia.com/api/`),
   mod list and external-files manifest URLs, game and Java directories.
 - Game data lives in `./.Arffornia_V.5.2` and the Java runtime in `./java`, **relative to the working
-  directory the launcher was started from**. This directory holds `launcherOptions.json` (settings and
+  directory the launcher was started from** (Windows, Linux). On macOS both live in
+  `~/Library/Application Support/Arffornia/`, because apps opened from Finder start in `/`, which is
+  read-only. The game directory holds `launcherOptions.json` (settings and
   login session, via Nexus_Saver), `launcher_log.txt`, the game files, `shaderpacks/` and
   `config/iris.properties`.
 - Packaging is configured by the `build` field of `package.json`. `electron-builder.yml` is not used
@@ -58,6 +60,25 @@ There are no environment variables or secrets needed for development.
    publishes them to GitHub Releases.
 3. Installed launchers pick up the new release through electron-updater (downloaded in the background,
    installed on quit).
+
+## macOS
+
+- Releases ship a separate build per CPU: `*-arm64.dmg` / `*-arm64-mac.zip` for Apple Silicon and
+  `*.dmg` / `*-mac.zip` (no arch suffix) for Intel Macs. Both are built by `release.yml` on the arm64
+  `macos-latest` runner.
+- The app is **ad-hoc signed, not notarized** (`"identity": "-"`, no Apple Developer ID yet). macOS
+  blocks it on first open: open it once, then allow it in System Settings → Privacy & Security →
+  "Open Anyway". Or run `xattr -dr com.apple.quarantine "/Applications/Arffornia Launcher.app"`.
+  With a Developer ID: remove `identity`, set `CSC_LINK`/`CSC_KEY_PASSWORD` and the notarization
+  secrets in `release.yml`, and drop `disable-library-validation` from
+  `resources/entitlements.mac.plist`.
+- Auto-update needs a signed app on macOS (Squirrel.Mac checks the signature), so unsigned macOS builds
+  must be updated by downloading the new release.
+- The launcher downloads an Azul Zulu JRE for the CPU it runs on (`aarch64` on Apple Silicon, also when
+  an Intel build runs under Rosetta) through Nexus_Java.
+- Develop on a Mac with the same commands as on Linux (`npm ci`, `make check`, `npm run dev`).
+  `npm run build:mac` packages both architectures locally (ad-hoc signed). CI runs `make check` and
+  an ad-hoc signed package + launch smoke test on `macos-latest` (job `check-macos`).
 
 ## Contributing
 
