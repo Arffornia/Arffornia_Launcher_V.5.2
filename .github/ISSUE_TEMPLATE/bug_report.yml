@@ -1,0 +1,33 @@
+name: Bug report
+description: Something in the launcher does not work as expected.
+labels: ["type: bug", "area: launcher"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What you did, what you expected, and what happened instead.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Launcher version
+      placeholder: "0.1.15"
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options: [Windows, macOS, Linux]
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: >-
+        Relevant lines of `launcher_log.txt` (in the game directory). Remove any token,
+        e-mail or account identifier before pasting.
+      render: text
