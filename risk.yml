@@ -1,0 +1,32 @@
+# Review depth by changed paths (read by .github/workflows/claude-review.yml from the base branch).
+# Per file: a deep path is always deep; a light path carves out of standard; anything else is `default`.
+# The PR takes the highest file level; more than escalate.lines_changed changed lines raises it one level.
+default: standard
+levels:
+  deep:
+    - "src/preload/**"                  # the only bridge between web content and Node
+    - "src/main/ipcHandlers/**"         # untrusted input from the renderer
+    - "src/main/index.js"               # BrowserWindow security options, auto-update
+    - "src/main/msAuthManager.js"       # Microsoft auth, tokens
+    - "src/main/user.js"
+    - "src/main/minecraftManager.js"    # launch arguments, access token
+    - "src/main/neoforgeDownloader.js"  # downloads and integrity
+    - "src/main/shaderManager.js"       # file writes and deletes
+    - "src/renderer/index.html"         # CSP
+    - "electron-builder.yml"
+    - "package.json"
+    - "package-lock.json"
+    - ".github/workflows/**"
+    - ".dependency-cruiser.cjs"
+    - "tools/**"
+  standard:
+    - "src/**"
+  light:
+    - "**/*.md"
+    - "docs/**"
+    - "src/renderer/src/i18n/locales/**"
+    - "src/renderer/src/assets/**"
+    - "resources/**"
+    - "tests/**"
+escalate:
+  lines_changed: 400
