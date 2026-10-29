@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow } from 'electron'
+import { app, BrowserWindow } from 'electron'
 import path, { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { autoUpdater } from 'electron-updater'
@@ -8,12 +8,13 @@ import { registerNexusSaverHandlers } from './ipcHandlers/nexusSaverHandler';
 import { registerOtherHandlers } from './ipcHandlers/otherHandlers';
 import { registerGameManagerHandlers } from './ipcHandlers/gameManagerHandlers';
 import { registerUserManagerHandlers } from './ipcHandlers/userManagerHandler';
-import { registerUtilsManagerHandlers } from './ipcHandlers/utilsManagerHandler';
+import { registerUtilsManagerHandlers, openExternalSafe } from './ipcHandlers/utilsManagerHandler';
 import { registerShaderManagerHandlers } from './ipcHandlers/shaderManagerHandler';
 
 import { NexusLogger } from '@arffornia/nexus_logger';
 import { launcherSettings } from './launcherSettings'
 import { registerLoggerHandlers } from './ipcHandlers/logHandler'
+import { isAllowedNavigation } from './ipc'
 
 export const logger = new NexusLogger(path.join(launcherSettings.GAME_DIR, "launcher_log.txt"), "ArfforniaLogger");
 
@@ -44,8 +45,16 @@ function createWindow() {
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
-    shell.openExternal(details.url)
+    openExternalSafe(details.url)
     return { action: 'deny' }
+  })
+
+  // The renderer is a single-page app: never navigate the main window away from it.
+  mainWindow.webContents.on('will-navigate', (event, url) => {
+    if (!isAllowedNavigation(url, mainWindow.webContents.getURL())) {
+      event.preventDefault()
+      logger.warn(`Blocked navigation to ${String(url).slice(0, 200)}`)
+    }
   })
 
   if (is.dev && process.env[ 'ELECTRON_RENDERER_URL' ]) {
