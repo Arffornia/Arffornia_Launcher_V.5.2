@@ -3,7 +3,7 @@
   <p id="shop-title"></p>
 
   <div class="item-container">
-    <div class="item-title"</div>
+    <div class="item-title"></div>
     <div class="item-description"></div>
   </div>
 </div>

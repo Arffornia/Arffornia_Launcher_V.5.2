@@ -76,7 +76,7 @@ export const useShaderStore = defineStore('shader', {
               project: meta
             }
           }
-        } catch (err) {
+        } catch {
           // Ignore individual check errors quietly
         }
       }
@@ -253,7 +253,7 @@ export const useShaderStore = defineStore('shader', {
         } else {
           notificationStore.addNotification(`Shader activated!`, 'msg')
         }
-      } catch (error) {
+      } catch {
         notificationStore.addNotification(`Failed to change active shader.`, 'error')
       }
     },
@@ -267,7 +267,7 @@ export const useShaderStore = defineStore('shader', {
           await this.refreshLocalState()
           notificationStore.addNotification(`Shader uninstalled.`, 'msg')
         }
-      } catch (error) {
+      } catch {
         notificationStore.addNotification(`Failed to delete shader.`, 'error')
       }
     }
