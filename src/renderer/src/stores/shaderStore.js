@@ -3,12 +3,7 @@ import { modrinthApi } from '../js/modrinthApi'
 import { useUserStore } from './userStore'
 import { useNotificationStore } from './notificationStore'
 import i18n, { DEFAULT_LOCALE } from '../i18n/translator'
-
-const getLocalizedValue = (field, lang = DEFAULT_LOCALE) => {
-  if (!field) return ''
-  if (typeof field === 'string') return field
-  return field[lang] || field[DEFAULT_LOCALE] || Object.values(field).find(Boolean) || ''
-}
+import { localized } from '../i18n/localized'
 
 export const useShaderStore = defineStore('shader', {
   state: () => ({
@@ -106,8 +101,8 @@ export const useShaderStore = defineStore('shader', {
           )
           return {
             ...project,
-            badge: getLocalizedValue(config?.badge, lang) || i18n.global.t('shaders.badge.featured'),
-            customDescription: getLocalizedValue(config?.customDescription, lang) || project.description
+            badge: localized(config?.badge, lang) || i18n.global.t('shaders.badge.featured'),
+            customDescription: localized(config?.customDescription, lang) || project.description
           }
         })
       } catch (error) {
