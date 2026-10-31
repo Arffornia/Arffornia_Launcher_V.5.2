@@ -13,6 +13,65 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # Apple Silicon runner: the same checks as `check`, then an unsigned arm64 app bundle and a launch
+  # smoke test started from "/" like Finder does (the app must start and create its data folder).
+  check-macos:
+    runs-on: macos-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit tests
+        run: npm test --if-present
+
+      - name: Build
+        run: npm run build
+
+      # Ad-hoc signing ("identity": "-" in package.json) needs no certificate or secret, so it is
+      # safe to allow on pull requests.
+      - name: Package (ad-hoc signed arm64 app bundle, no installer)
+        env:
+          CSC_FOR_PULL_REQUEST: "true"
+        run: npx electron-builder --mac dir --arm64 --publish never
+
+      - name: Launch smoke test
+        run: |
+          set -euo pipefail
+          app=$(ls -d "$PWD"/dist/mac-arm64/*.app)
+          set -- "$app"/Contents/MacOS/*
+          exe=$1
+          file "$exe"
+          codesign --verify --deep --strict --verbose=2 "$app"
+          codesign --display --entitlements - "$app"
+          spctl --assess --type execute --verbose "$app" \
+            || echo "Gatekeeper rejects it, as expected without a Developer ID"
+          data="$HOME/Library/Application Support/Arffornia/.Arffornia_V.5.2"
+          (cd / && "$exe" > "$RUNNER_TEMP/launcher.log" 2>&1 &)
+          for _ in $(seq 1 30); do
+            if [ -d "$data/shaderpacks" ]; then break; fi
+            sleep 2
+          done
+          sleep 5
+          if ! pgrep -f "$exe" > /dev/null; then
+            cat "$RUNNER_TEMP/launcher.log"
+            echo "::error::the launcher exited during startup"
+            exit 1
+          fi
+          ls -la "$data"
+          test -d "$data/shaderpacks"
+          pkill -f "$exe" || true
+
   check:
     runs-on: ubuntu-latest
     steps:

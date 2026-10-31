@@ -5,7 +5,8 @@
         v-for="notif in notifications"
         :key="notif.id"
         :id="notif.id"
-        :message="notif.message"
+        :message-key="notif.messageKey"
+        :params="notif.params"
         :type="notif.type"
         @close="removeNotification(notif.id)"
       />

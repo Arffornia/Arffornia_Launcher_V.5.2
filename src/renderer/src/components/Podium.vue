@@ -2,61 +2,58 @@
   <div class="podium">
     <div class="content">
       <div class="p2">
-        <p class="playerName">{{ podiumStore.bestPlayers ? podiumStore.bestPlayers[ 1 ]?.name : 'Chargement...' }}
+        <p class="playerName">{{ podiumStore.bestPlayers ? podiumStore.bestPlayers[ 1 ]?.name : t('common.loading') }}
         </p>
         <div class="player-skin">
           <router-link class="nav-link"
             :to="podiumStore.bestPlayers ? `/profile/${podiumStore.bestPlayers[ 1 ]?.name}` : '#'"
-            title="Show profile" exact>
+            exact :title="t('home.podium.show_profile')">
             <canvas class="skin_viewer" :data-width="skinWidth" :data-height="skinHeight"
               :data-username="podiumStore.bestPlayers ? podiumStore.bestPlayers[ 1 ]?.name : 'MHF_Steve'"></canvas>
           </router-link>
         </div>
         <div class="shape">
           <div class="textContainer">
-            <div class="rank">#2</div>
-            <div class="score">{{ podiumStore.bestPlayers ? `${podiumStore.bestPlayers[ 1 ]?.value}
-              ${podiumUnit}` : '...' }}</div>
+            <div class="rank">{{ t('home.podium.rank', { rank: 2 }) }}</div>
+            <div class="score">{{ podiumStore.bestPlayers ? t('home.podium.score', { value: podiumStore.bestPlayers[ 1 ]?.value, unit: podiumUnit }) : '...' }}</div>
           </div>
         </div>
       </div>
 
       <div class="p1">
-        <p class="playerName">{{ podiumStore.bestPlayers ? podiumStore.bestPlayers[ 0 ]?.name : 'Chargement...' }}
+        <p class="playerName">{{ podiumStore.bestPlayers ? podiumStore.bestPlayers[ 0 ]?.name : t('common.loading') }}
         </p>
         <div class="player-skin">
           <router-link class="nav-link"
             :to="podiumStore.bestPlayers ? `/profile/${podiumStore.bestPlayers[ 0 ]?.name}` : '#'"
-            title="Show profile" exact>
+            exact :title="t('home.podium.show_profile')">
             <canvas class="skin_viewer" :data-width="skinWidth" :data-height="skinHeight"
               :data-username="podiumStore.bestPlayers ? podiumStore.bestPlayers[ 0 ]?.name : 'MHF_Steve'"></canvas>
           </router-link>
         </div>
         <div class="shape">
           <div class="textContainer">
-            <div class="rank">#1</div>
-            <div class="score">{{ podiumStore.bestPlayers ? `${podiumStore.bestPlayers[ 0 ]?.value}
-              ${podiumUnit}` : '...' }}</div>
+            <div class="rank">{{ t('home.podium.rank', { rank: 1 }) }}</div>
+            <div class="score">{{ podiumStore.bestPlayers ? t('home.podium.score', { value: podiumStore.bestPlayers[ 0 ]?.value, unit: podiumUnit }) : '...' }}</div>
           </div>
         </div>
       </div>
 
       <div class="p3">
-        <p class="playerName">{{ podiumStore.bestPlayers ? podiumStore.bestPlayers[ 2 ]?.name : 'Chargement...' }}
+        <p class="playerName">{{ podiumStore.bestPlayers ? podiumStore.bestPlayers[ 2 ]?.name : t('common.loading') }}
         </p>
         <div class="player-skin">
           <router-link class="nav-link"
             :to="podiumStore.bestPlayers ? `/profile/${podiumStore.bestPlayers[ 2 ]?.name}` : '#'"
-            title="Show profile" exact>
+            exact :title="t('home.podium.show_profile')">
             <canvas class="skin_viewer" :data-width="skinWidth" :data-height="skinHeight"
               :data-username="podiumStore.bestPlayers ? podiumStore.bestPlayers[ 2 ]?.name : 'MHF_Steve'"></canvas>
           </router-link>
         </div>
         <div class="shape">
           <div class="textContainer">
-            <div class="rank">#3</div>
-            <div class="score">{{ podiumStore.bestPlayers ? `${podiumStore.bestPlayers[ 2 ]?.value}
-              ${podiumUnit}` : '...' }}</div>
+            <div class="rank">{{ t('home.podium.rank', { rank: 3 }) }}</div>
+            <div class="score">{{ podiumStore.bestPlayers ? t('home.podium.score', { value: podiumStore.bestPlayers[ 2 ]?.value, unit: podiumUnit }) : '...' }}</div>
           </div>
         </div>
       </div>

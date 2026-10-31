@@ -18,6 +18,7 @@ const api = {
 
   //Other handlers:
   getTotalRAM: () => ipcRenderer.invoke('get-total-ram'),
+  getMaxAllocatableRAM: () => ipcRenderer.invoke('get-max-allocatable-ram'),
   openLocalGameFile: () => ipcRenderer.invoke('open-local-game-file'),
 
   // Nexus Savers
@@ -27,7 +28,8 @@ const api = {
   openDiscord: () => ipcRenderer.invoke('open-discord'),
   openWebsite: (url) => ipcRenderer.invoke('open-website', url),
 
-  addNotification: (callback) => ipcRenderer.on('add-notification', (event, message, type) => callback(message, type)),
+  addNotification: (callback) =>
+    ipcRenderer.on('add-notification', (event, messageKey, type, params) => callback(messageKey, type, params)),
 
   // Shader Management ContextBridge APIs
   getInstalledShaders: () => ipcRenderer.invoke('get-installed-shaders'),

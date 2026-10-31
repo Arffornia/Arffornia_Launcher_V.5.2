@@ -18,7 +18,7 @@ arch: ## Architecture guards: process boundaries (dependency-cruiser) + preload 
 lint-fix: ## ESLint with autofix
 	npm run lint:fix
 
-test: ## Unit tests (no-op until a test script exists)
+test: ## Unit tests (Vitest, offline)
 	npm test --if-present
 
 build: ## Bundle main, preload and renderer into out/ (no packaging)

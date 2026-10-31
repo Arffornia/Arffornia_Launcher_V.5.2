@@ -16,6 +16,8 @@
     "lint:fix": "eslint . --fix",
     "arch": "depcruise src --config .dependency-cruiser.cjs --ignore-known --output-type err-long && node tools/check-preload-exposure.mjs",
     "arch:baseline": "depcruise src --config .dependency-cruiser.cjs --output-type baseline --output-to .dependency-cruiser-known-violations.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "start": "electron-vite preview",
     "dev": "electron-vite dev",
     "build": "electron-vite build",
@@ -56,6 +58,7 @@
     "eslint-plugin-vue": "10.11.1",
     "prettier": "^3.3.2",
     "vite": "7.3.7",
+    "vitest": "5.0.5",
     "vue": "3.5.44"
   },
   "overrides": {
@@ -65,7 +68,6 @@
   },
   "build": {
     "files": [
-      "dist/**/*",
       "out/**/*",
       "node_modules/**/*",
       "package.json"
@@ -80,7 +82,9 @@
     "asar": true,
     "win": {
       "icon": "resources/img/Crafting_Table.ico",
-      "target": ["nsis"]
+      "target": [
+        "nsis"
+      ]
     },
     "nsis": {
       "oneClick": false,
@@ -90,20 +94,27 @@
       "shortcutName": "Arffornia Launcher"
     },
     "mac": {
-      "target": ["dmg", "zip"],
+      "target": [
+        { "target": "dmg", "arch": ["arm64", "x64"] },
+        { "target": "zip", "arch": ["arm64", "x64"] }
+      ],
       "icon": "resources/img/Crafting_Table.icns",
       "category": "public.app-category.games",
       "hardenedRuntime": true,
-      "gatekeeperAssess": false
+      "gatekeeperAssess": false,
+      "identity": "-",
+      "entitlements": "resources/entitlements.mac.plist",
+      "entitlementsInherit": "resources/entitlements.mac.plist"
     },
-
     "linux": {
-      "target": ["AppImage", "deb"],
+      "target": [
+        "AppImage",
+        "deb"
+      ],
       "icon": "resources/img/Crafting_Table.png",
       "category": "Game",
-        "maintainer": "thegostsniperfr <arffornia@gmail.com>"
+      "maintainer": "thegostsniperfr <arffornia@gmail.com>"
     },
-
     "publish": [
       {
         "provider": "github",
