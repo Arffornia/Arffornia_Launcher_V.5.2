@@ -114,7 +114,8 @@
       "game_file": "Fichiers du jeu",
       "game_file_btn": "Ouvrir",
       "launcher_version": "Version du launcher :",
-      "version_value": "Alpha {version}"
+      "version_value": "Alpha {version}",
+      "disclaimer": "PRODUIT MINECRAFT NON OFFICIEL. NON APPROUVÉ PAR MOJANG OU MICROSOFT ET SANS LIEN AVEC EUX."
     }
   },
   "shaders": {
