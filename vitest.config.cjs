@@ -1,4 +1,4 @@
-// Unit tests run in Node, offline. See test/unit/.
+// Unit tests run in Node with Electron mocked. See test/unit/.
 const { defineConfig } = require('vitest/config')
 const { resolve } = require('path')
 

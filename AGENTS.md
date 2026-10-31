@@ -32,7 +32,7 @@ Electron desktop launcher for the Arffornia Minecraft server: Microsoft login (m
 npm ci            # install (postinstall runs electron-builder install-app-deps)
 make check        # lint + tests + build; must pass before a PR
 make lint         # eslint . (read-only); npm run lint:fix to autofix
-make test         # unit tests
+make test         # unit tests (Vitest, test/unit/)
 make build        # electron-vite build -> out/
 make fmt          # prettier --write .
 npm run dev       # run the app (needs a display)

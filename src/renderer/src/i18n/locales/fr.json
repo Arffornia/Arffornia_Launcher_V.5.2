@@ -68,6 +68,7 @@
   "notifications": {
     "game_already_running": "Le jeu est déjà lancé !",
     "launch_failed": "Impossible de lancer le jeu. Consultez les journaux pour plus de détails.",
+    "mod_sync_failed": "Impossible de télécharger {count} fichier(s) de mod. Vérifiez votre connexion et réessayez.",
     "login_failed": "Échec de la connexion !",
     "update_downloaded": "Mise à jour {version} téléchargée !\nElle sera installée au prochain démarrage.",
     "update_downloaded_unknown": "Une mise à jour du launcher a été téléchargée !\nElle sera installée au prochain démarrage.",

@@ -68,6 +68,7 @@
   "notifications": {
     "game_already_running": "The game is already running!",
     "launch_failed": "The game could not be launched. Check the logs for details.",
+    "mod_sync_failed": "Could not download {count} mod file(s). Check your connection and try again.",
     "login_failed": "Failed to log in!",
     "update_downloaded": "Update {version} downloaded!\nIt will be installed at the next start-up.",
     "update_downloaded_unknown": "A launcher update was downloaded!\nIt will be installed at the next start-up.",

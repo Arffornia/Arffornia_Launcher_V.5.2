@@ -18,6 +18,7 @@ const api = {
 
   //Other handlers:
   getTotalRAM: () => ipcRenderer.invoke('get-total-ram'),
+  getMaxAllocatableRAM: () => ipcRenderer.invoke('get-max-allocatable-ram'),
   openLocalGameFile: () => ipcRenderer.invoke('open-local-game-file'),
 
   // Nexus Savers
