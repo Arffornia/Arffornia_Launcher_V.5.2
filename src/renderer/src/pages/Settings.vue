@@ -54,6 +54,7 @@
               <p id="launcherVersion">{{ t('settings.launcher.version_value', { version: launcherVersion }) }}</p>
             </div>
           </div>
+          <p id="minecraftDisclaimer">{{ t('settings.launcher.disclaimer') }}</p>
         </div>
       </div>
     </div>
@@ -165,6 +166,12 @@ select {
   margin: 0%;
   margin-top: 60px;
   margin: 60px 0px 10px 0px;
+}
+
+#minecraftDisclaimer {
+  margin-top: 12px;
+  font-size: 0.75em;
+  opacity: 0.7;
 }
 
 #launcherVersion {
