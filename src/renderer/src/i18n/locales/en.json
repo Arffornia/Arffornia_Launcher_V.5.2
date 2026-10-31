@@ -113,7 +113,8 @@
       "game_file": "Game files",
       "game_file_btn": "Open",
       "launcher_version": "Launcher version:",
-      "version_value": "Alpha {version}"
+      "version_value": "Alpha {version}",
+      "disclaimer": "NOT AN OFFICIAL MINECRAFT PRODUCT. NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT."
     }
   },
   "shaders": {
