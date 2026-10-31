@@ -3,6 +3,8 @@ import { handle } from "../ipc";
 
 import currentUser from "../user";
 
+const SUPPORTED_LANGS = ["en", "fr"];
+
 export function registerUserManagerHandlers() {
 
   handle('is-auth', () => {
@@ -13,7 +15,11 @@ export function registerUserManagerHandlers() {
     return currentUser.getName();
   });
 
-  handle('set-lang', (lang) => {
+  // The first argument of an ipcMain handler is always the IPC event.
+  handle('set-lang', (_event, lang) => {
+    if (!SUPPORTED_LANGS.includes(lang)) {
+      throw new Error(`Unsupported language: ${String(lang).slice(0, 20)}`);
+    }
     currentUser.setLang(lang);
   });
 
