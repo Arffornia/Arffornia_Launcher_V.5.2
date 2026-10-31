@@ -30,7 +30,7 @@ Electron desktop launcher for the Arffornia Minecraft server: Microsoft login (m
 
 ```bash
 npm ci            # install (postinstall runs electron-builder install-app-deps)
-make check        # lint + tests + build; must pass before a PR
+make check        # lint + arch + tests + build; must pass before a PR
 make lint         # eslint . (read-only); npm run lint:fix to autofix
 make test         # unit tests (Vitest, test/unit/)
 make build        # electron-vite build -> out/
@@ -84,6 +84,13 @@ Whether to adopt `// @ts-check` + JSDoc or migrate to TypeScript is an open deci
 - The mod list (`Arffornia_Network`) and external files (`Arffornia_Provisioning`) are fetched from
   mutable `main` branches on raw.githubusercontent.
 - The Nexus libraries come from the public npm registry, not from git.
+
+## AI harness (agent-kit v2)
+- `.claude/settings.json` (agent-kit plugin: hooks for fmt, `make check` and the end-of-task review gate; deny rules; sandbox), `.claude/rules/vue-electron.md`. Harness friction or corrections → `/arffornia:harness-feedback`.
+- `REVIEW.md` + `risk.yml` drive the depth of the end-of-task review (`/arffornia:review`, in the session; no AI review in CI); `GOLDEN_PRINCIPLES.md`; `PROGRESS.md` is the session handoff.
+- `make arch` (part of `make check`): dependency-cruiser process boundaries (`.dependency-cruiser.cjs`) and
+  `tools/check-preload-exposure.mjs`. Existing debt is in `.dependency-cruiser-known-violations.json` and
+  `tools/preload-exposure-known.json`; both may only shrink.
 
 ## Related repos
 
