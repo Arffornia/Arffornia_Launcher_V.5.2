@@ -43,8 +43,10 @@ export async function launchMC() {
   updateGameState(true);
 
   try {
-    const authToken = launchMSAuth(true);
-    if (authToken == null) {
+    const authToken = await launchMSAuth(true);
+    if (!authToken) {
+      logger.warn("Launch aborted: Microsoft authentication failed or was cancelled.");
+      resetLaunchState();
       return;
     }
 
@@ -110,8 +112,6 @@ export async function launchMC() {
     launcher.on('debug', (e) => logger.debug(redact(e)));
     launcher.on('data', (e) => logger.info(redact(e)));
 
-    launcher.launch(opts);
-
     launcher.on('progress', (e) => {
       handleMCLCEvent(e);
     });
@@ -120,9 +120,22 @@ export async function launchMC() {
       updateGameState(false);
       logger.info("Game closed.");
     });
+
+    // MCLC resolves null (often without a 'close' event) when it cannot start the game.
+    const gameProcess = await launcher.launch(opts);
+    if (!gameProcess) {
+      logger.error("LaunchMC error: Minecraft could not be started (see the [MCLC] lines above).");
+      addNotification("An error occur", "error");
+      resetLaunchState();
+    }
   } catch (err) {
     logger.error("LaunchMC error: " + err);
     addNotification("An error occur", "error");
-    updateGameState(false);
+    resetLaunchState();
   }
+}
+
+function resetLaunchState() {
+  progressManager.reset();
+  updateGameState(false);
 }
