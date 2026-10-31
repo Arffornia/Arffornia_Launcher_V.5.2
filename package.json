@@ -79,7 +79,9 @@
     "asar": true,
     "win": {
       "icon": "resources/img/Crafting_Table.ico",
-      "target": ["nsis"]
+      "target": [
+        "nsis"
+      ]
     },
     "nsis": {
       "oneClick": false,
@@ -101,14 +103,15 @@
       "entitlements": "resources/entitlements.mac.plist",
       "entitlementsInherit": "resources/entitlements.mac.plist"
     },
-
     "linux": {
-      "target": ["AppImage", "deb"],
+      "target": [
+        "AppImage",
+        "deb"
+      ],
       "icon": "resources/img/Crafting_Table.png",
       "category": "Game",
-        "maintainer": "thegostsniperfr <arffornia@gmail.com>"
+      "maintainer": "thegostsniperfr <arffornia@gmail.com>"
     },
-
     "publish": [
       {
         "provider": "github",

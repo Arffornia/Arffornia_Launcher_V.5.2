@@ -38,7 +38,7 @@ export function registerGameStateHandlers() {
 
 export async function launchMC() {
   if (isGameRunning) {
-    addNotification("The game is already running!", "error");
+    addNotification('notifications.game_already_running', "error");
     return;
   }
 
@@ -109,7 +109,7 @@ export async function launchMC() {
     const failures = Array.isArray(updateResult?.failures) ? updateResult.failures : [];
     if (failures.length > 0) {
       logger.error(`Mod sync failed for ${failures.length} file(s); not launching.`);
-      addNotification(`Could not download ${failures.length} mod file(s). Check your connection and try again.`, "error");
+      addNotification('notifications.mod_sync_failed', "error", { count: failures.length });
       updateGameState(false);
       return;
     }
@@ -136,12 +136,12 @@ export async function launchMC() {
     const gameProcess = await launcher.launch(opts);
     if (!gameProcess) {
       logger.error("LaunchMC error: Minecraft could not be started (see the [MCLC] lines above).");
-      addNotification("An error occur", "error");
+      addNotification('notifications.launch_failed', "error");
       resetLaunchState();
     }
   } catch (err) {
     logger.error("LaunchMC error: " + err);
-    addNotification("An error occur", "error");
+    addNotification('notifications.launch_failed', "error");
     resetLaunchState();
   }
 }

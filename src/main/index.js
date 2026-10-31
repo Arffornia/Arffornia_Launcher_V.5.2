@@ -107,17 +107,27 @@ autoUpdater.on('update-available', () => {
 });
 
 autoUpdater.on('update-downloaded', (info) => {
-  const versionInfo = info.version || 'No version available';
-  logger.info(`Update downloaded: ${versionInfo}`);
+  logger.info(`Update downloaded: ${info.version || 'unknown version'}`);
   if (mainWindow) {
-    addNotification(`Update downloaded: ${versionInfo} !\n It will be installed at the next start-up.`, "update");
+    if (info.version) {
+      addNotification('notifications.update_downloaded', "update", { version: info.version });
+    } else {
+      addNotification('notifications.update_downloaded_unknown', "update");
+    }
   }
 });
 
-export function addNotification(message, type) {
+/**
+ * Shows a notification in the renderer. The main process never sends display text:
+ * `messageKey` is a key of src/renderer/src/i18n/locales/*.json, translated by the renderer.
+ * @param {string} messageKey e.g. 'notifications.login_failed'
+ * @param {'msg' | 'update' | 'error'} type
+ * @param {Record<string, string | number>} [params] named interpolation values
+ */
+export function addNotification(messageKey, type, params = {}) {
   if (mainWindow && mainWindow.webContents) {
-      mainWindow.webContents.send('add-notification', message, type);
-      logger.info(`Add Notification: [${type}] Message: ${message}`);
+      mainWindow.webContents.send('add-notification', messageKey, type, params);
+      logger.info(`Add Notification: [${type}] Key: ${messageKey}`);
   }
 }
 

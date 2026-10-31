@@ -1,38 +1,120 @@
 {
+  "common": {
+    "loading": "Loading...",
+    "close": "Close"
+  },
+  "languages": {
+    "en": "English",
+    "fr": "Français"
+  },
+  "nav": {
+    "profile": "Profile",
+    "login": "Log in",
+    "home": "Home",
+    "highlight": "Highlights",
+    "notifications": "Notifications",
+    "shaders": "Shaders Manager",
+    "settings": "Settings",
+    "website": "Arffornia website",
+    "discord": "Discord"
+  },
+  "server_status": {
+    "offline": "Offline",
+    "players": "{online} / {max}"
+  },
   "home": {
     "playbox": {
       "title": "ARFFORNIA",
       "description1": "+ 33 Mods",
-      "description2": "+ 25 Progression stages"
+      "description2": "+ 25 Progression stages",
+      "play": "Play",
+      "running": "Running..."
     },
     "shop": {
       "arrivals": "Arrivals: ",
-      "weeks_deels": "This Week's Deals: ",
-      "best_sellers": "Best Sellers: "
+      "weeks_deals": "This Week's Deals: ",
+      "best_sellers": "Best Sellers: ",
+      "see_on_website": "See on the website"
     },
-      "podium": {
+    "podium": {
       "best_voters": "Best Voters",
       "best_players": "Best Players",
       "votes_unit": "votes",
       "points_unit": "points",
       "switch_to_players": "Switch to best players",
-      "switch_to_voters": "Switch to best voters"
+      "switch_to_voters": "Switch to best voters",
+      "show_profile": "Show profile",
+      "rank": "#{rank}",
+      "score": "{value} {unit}"
+    }
+  },
+  "player_card": {
+    "streak_alt": "Day streak"
+  },
+  "highlight": {
+    "loading": "Loading highlights...",
+    "empty": "No highlights to display at the moment.",
+    "image_alt": "Launcher highlight",
+    "previous": "Previous highlight",
+    "next": "Next highlight"
+  },
+  "notifications_page": {
+    "title": "Notifications",
+    "empty": "You have no notifications."
+  },
+  "notification": {
+    "icon_alt": "Notification icon"
+  },
+  "notifications": {
+    "game_already_running": "The game is already running!",
+    "launch_failed": "The game could not be launched. Check the logs for details.",
+    "mod_sync_failed": "Could not download {count} mod file(s). Check your connection and try again.",
+    "login_failed": "Failed to log in!",
+    "update_downloaded": "Update {version} downloaded!\nIt will be installed at the next start-up.",
+    "update_downloaded_unknown": "A launcher update was downloaded!\nIt will be installed at the next start-up.",
+    "shader_installed": "Shader installed successfully!",
+    "shader_install_failed": "Failed to install shader: {error}",
+    "shader_updated": "Shader updated to {file}!",
+    "shader_update_failed": "Failed to update shader: {error}",
+    "shaders_disabled": "Shaders disabled.",
+    "shader_activated": "Shader activated!",
+    "shader_activate_failed": "Failed to change the active shader.",
+    "shader_uninstalled": "Shader uninstalled.",
+    "shader_uninstall_failed": "Failed to uninstall the shader."
+  },
+  "progress": {
+    "status": "{label} - {percent}%",
+    "mod": "{name} ({index}/{total})",
+    "steps": {
+      "IDLE": "Idle",
+      "PREPARING": "Preparing files",
+      "CHECK_JAVA": "Checking Java",
+      "INSTALL_JAVA": "Installing Java",
+      "CHECK_MODLOADER": "Checking NeoForge",
+      "DOWNLOAD_MODLOADER": "Downloading NeoForge",
+      "FETCHING_MODS": "Fetching mods info",
+      "UPDATING_MODS": "Updating mods",
+      "DOWNLOAD_MC": "Downloading Minecraft",
+      "DOWNLOAD_ASSETS": "Downloading assets",
+      "LAUNCHING": "Launching"
     }
   },
   "settings": {
     "title": "Settings: ",
     "game": {
       "title": "Game settings: ",
-      "ram": "Allocated Ram:",
+      "ram": "Allocated RAM:",
+      "ram_value": "{amount} GB",
       "language": "Launcher language:",
-      "logout": "Logout from your Minecraft Account:",
-      "logout_btn": "Logout"
+      "logout": "Log out from your Minecraft account:",
+      "logout_btn": "Log out"
     },
     "launcher": {
       "title": "Launcher settings: ",
       "game_file": "Game files",
       "game_file_btn": "Open",
-      "launcher_version": "Launcher version:"
+      "launcher_version": "Launcher version:",
+      "version_value": "Alpha {version}"
     }
   },
   "shaders": {
@@ -50,7 +132,8 @@
     "tabs": {
       "featured": "⭐ Our Selection",
       "catalog": "🔍 All Shaders",
-      "installed": "📦 Installed Shaders"
+      "installed": "📦 Installed Shaders",
+      "installed_count": "📦 Installed Shaders ({count})"
     },
     "search_placeholder": "Search shaders on Modrinth...",
     "active": "Active",
@@ -58,14 +141,31 @@
     "deactivate": "Deactivate",
     "download": "Install",
     "delete": "Uninstall",
+    "update_now": "🔄 Update Now",
+    "active_check": "Active ✓",
     "installed_badge": "Installed",
+    "badge": {
+      "update_available": "🔄 UPDATE AVAILABLE",
+      "active": "● ACTIVE",
+      "installed": "INSTALLED",
+      "featured": "Featured"
+    },
+    "perf": {
+      "heavy": "🔥 Demanding",
+      "fps": "⚡ FPS Friendly",
+      "balanced": "⚖️ Balanced"
+    },
+    "installed_description": "Installed shader pack ({file})",
     "no_installed": "No shaders installed yet.",
     "modal": {
       "by": "By",
-      "downloads": "downloads",
-      "likes": "likes",
+      "unknown_author": "Modrinth creator",
+      "downloads": "📥 {count} downloads",
+      "likes": "⭐ {count} likes",
       "loading_screenshots": "Loading HD screenshots...",
-      "about": "About this Shader"
+      "about": "About this Shader",
+      "previous_image": "Previous image",
+      "next_image": "Next image"
     }
   }
 }

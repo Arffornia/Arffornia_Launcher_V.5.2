@@ -2,11 +2,12 @@ import { defineStore } from 'pinia'
 import { modrinthApi } from '../js/modrinthApi'
 import { useUserStore } from './userStore'
 import { useNotificationStore } from './notificationStore'
+import i18n, { DEFAULT_LOCALE } from '../i18n/translator'
 
-const getLocalizedValue = (field, lang = 'fr') => {
+const getLocalizedValue = (field, lang = DEFAULT_LOCALE) => {
   if (!field) return ''
   if (typeof field === 'string') return field
-  return field[lang] || field['en'] || field['fr'] || ''
+  return field[lang] || field[DEFAULT_LOCALE] || Object.values(field).find(Boolean) || ''
 }
 
 export const useShaderStore = defineStore('shader', {
@@ -85,7 +86,7 @@ export const useShaderStore = defineStore('shader', {
     async loadFeaturedShaders() {
       this.isLoadingFeatured = true
       const userStore = useUserStore()
-      const lang = userStore.selectedLang || 'fr'
+      const lang = userStore.selectedLang || DEFAULT_LOCALE
 
       try {
         const featuredConfig = await modrinthApi.fetchFeaturedConfig()
@@ -105,7 +106,7 @@ export const useShaderStore = defineStore('shader', {
           )
           return {
             ...project,
-            badge: getLocalizedValue(config?.badge, lang) || 'Featured',
+            badge: getLocalizedValue(config?.badge, lang) || i18n.global.t('shaders.badge.featured'),
             customDescription: getLocalizedValue(config?.customDescription, lang) || project.description
           }
         })
@@ -198,9 +199,9 @@ export const useShaderStore = defineStore('shader', {
         await window.api.saveShaderMetadata(fileName, plainMetadata)
         await this.refreshLocalState()
 
-        notificationStore.addNotification(`Shader installed successfully!`, 'update')
+        notificationStore.addNotification('notifications.shader_installed', 'update')
       } catch (error) {
-        notificationStore.addNotification(`Failed to install shader: ${error.message}`, 'error')
+        notificationStore.addNotification('notifications.shader_install_failed', 'error', { error: error.message })
         window.api.logger('error', `[ShaderStore] Installation failed for ${projectId}: ${error.message}`)
       } finally {
         this.downloadingProjectIds = this.downloadingProjectIds.filter((id) => id !== projectId)
@@ -236,9 +237,9 @@ export const useShaderStore = defineStore('shader', {
         }
 
         await this.refreshLocalState()
-        notificationStore.addNotification(`Shader updated to ${update.newFileName}!`, 'update')
+        notificationStore.addNotification('notifications.shader_updated', 'update', { file: update.newFileName })
       } catch (err) {
-        notificationStore.addNotification(`Failed to update shader: ${err.message}`, 'error')
+        notificationStore.addNotification('notifications.shader_update_failed', 'error', { error: err.message })
       }
     },
 
@@ -249,12 +250,12 @@ export const useShaderStore = defineStore('shader', {
         this.activeShader = fileName
 
         if (fileName === 'OFF') {
-          notificationStore.addNotification('Shaders disabled.', 'msg')
+          notificationStore.addNotification('notifications.shaders_disabled', 'msg')
         } else {
-          notificationStore.addNotification(`Shader activated!`, 'msg')
+          notificationStore.addNotification('notifications.shader_activated', 'msg')
         }
       } catch {
-        notificationStore.addNotification(`Failed to change active shader.`, 'error')
+        notificationStore.addNotification('notifications.shader_activate_failed', 'error')
       }
     },
 
@@ -265,10 +266,10 @@ export const useShaderStore = defineStore('shader', {
         if (success) {
           delete this.availableUpdates[fileName]
           await this.refreshLocalState()
-          notificationStore.addNotification(`Shader uninstalled.`, 'msg')
+          notificationStore.addNotification('notifications.shader_uninstalled', 'msg')
         }
       } catch {
-        notificationStore.addNotification(`Failed to delete shader.`, 'error')
+        notificationStore.addNotification('notifications.shader_uninstall_failed', 'error')
       }
     }
   }
