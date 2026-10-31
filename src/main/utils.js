@@ -1,6 +1,5 @@
 import { ArchType, OsType } from '@arffornia/nexus_java';
 import os from 'os';
-import { logger } from '.';
 
 
 export function getArchType()  {
