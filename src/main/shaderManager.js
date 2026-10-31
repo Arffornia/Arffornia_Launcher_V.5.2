@@ -18,6 +18,23 @@ export class ShaderManager {
     this.ensureDirectories()
   }
 
+  /**
+   * Resolve a shader file name inside the shaderpacks directory.
+   * Throws if the result would escape it.
+   * @param {string} fileName
+   * @returns {string}
+   */
+  resolveShaderPath(fileName) {
+    if (typeof fileName !== 'string' || fileName.length === 0) {
+      throw new Error('Invalid shader file name')
+    }
+    const targetPath = path.resolve(this.shaderpacksDir, fileName)
+    if (path.dirname(targetPath) !== path.resolve(this.shaderpacksDir)) {
+      throw new Error('Shader path escapes the shaderpacks directory')
+    }
+    return targetPath
+  }
+
   ensureDirectories() {
     if (!fs.existsSync(this.gameDir)) {
       fs.mkdirSync(this.gameDir, { recursive: true })
@@ -147,7 +164,7 @@ export class ShaderManager {
 
   async downloadShader(downloadUrl, fileName, progressCallback) {
     this.ensureDirectories()
-    const targetPath = path.join(this.shaderpacksDir, fileName)
+    const targetPath = this.resolveShaderPath(fileName)
 
     try {
       const response = await axios({
@@ -187,7 +204,7 @@ export class ShaderManager {
   }
 
   deleteShader(fileName) {
-    const targetPath = path.join(this.shaderpacksDir, fileName)
+    const targetPath = this.resolveShaderPath(fileName)
     if (fs.existsSync(targetPath)) {
       fs.rmSync(targetPath, { recursive: true, force: true })
 
