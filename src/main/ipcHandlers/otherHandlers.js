@@ -16,7 +16,8 @@ export function registerOtherHandlers() {
 
   handle('open-local-game-file', () => {
     const launcherRoot = path.dirname(app.getPath("exe"));
-    const gameDir = path.join(launcherRoot, launcherSettings.GAME_DIR);
+    // resolve, not join: GAME_DIR is absolute on macOS
+    const gameDir = path.resolve(launcherRoot, launcherSettings.GAME_DIR);
     return shell.openPath(gameDir);
   });
 }

@@ -1,8 +1,10 @@
 
+import { resolveDataDir } from './dataDir';
+
 export const launcherSettings = {
   GAME_NAME: "Arffornia",
-  GAME_DIR: "./.Arffornia_V.5.2",
-  JAVA_DIR: "./java",
+  GAME_DIR: resolveDataDir("./.Arffornia_V.5.2"),
+  JAVA_DIR: resolveDataDir("./java"),
   // ARFFORNIA_API_ENDPOINT: "http://localhost:8000/api/",
   ARFFORNIA_API_ENDPOINT: "https://arffornia.com/api/",
 
