@@ -80,13 +80,15 @@ onMounted(async () => {
 });
 
 async function initRam() {
-  const savedSelectedRam = await window.api.saverLoad("allocatedRam");
-  if (savedSelectedRam !== '') {
-    selectedRAM.value = savedSelectedRam;
-  }
+  const savedSelectedRam = Number(await window.api.saverLoad("allocatedRam"));
 
   totalRAM.value = await window.api.getTotalRAM();
-  ramOptions.value = Array.from({ length: totalRAM.value }, (_, i) => i + 1);
+  const maxRAM = await window.api.getMaxAllocatableRAM();
+  ramOptions.value = Array.from({ length: maxRAM }, (_, i) => i + 1);
+
+  // Same rule as the main process: saved value (or default), capped by what the system allows.
+  const wanted = Number.isInteger(savedSelectedRam) && savedSelectedRam >= 1 ? savedSelectedRam : selectedRAM.value;
+  selectedRAM.value = Math.min(wanted, maxRAM);
 }
 
 const onLangChangeEvent = () => {

@@ -9,7 +9,9 @@ const m = vi.hoisted(() => ({
   downloadAndExtract: vi.fn(),
   updateMods: vi.fn(),
   sent: [],
-  notifications: []
+  notifications: [],
+  allocatedRam: '',
+  totalGb: 16
 }))
 
 vi.mock('../../src/main/index.js', () => ({
@@ -18,6 +20,14 @@ vi.mock('../../src/main/index.js', () => ({
   getMainWindow: () => ({ webContents: { send: (channel, data) => m.sent.push({ channel, data }) } })
 }))
 vi.mock('../../src/main/ipc', () => ({ handle: vi.fn() }))
+vi.mock('../../src/main/ipcHandlers/nexusSaverHandler', () => ({
+  saver: { load: vi.fn(async (key) => (key === 'allocatedRam' ? m.allocatedRam : '')) }
+}))
+vi.mock('os', async (importOriginal) => {
+  const real = await importOriginal()
+  const totalmem = () => m.totalGb * 1024 ** 3
+  return { ...real, totalmem, default: { ...real, totalmem } }
+})
 vi.mock('../../src/main/msAuthManager', () => ({ launchMSAuth: m.launchMSAuth }))
 vi.mock('../../src/main/neoforgeDownloader', () => ({ downloadNeoforge: m.downloadNeoforge }))
 vi.mock('../../src/main/utils', () => ({ getArchType: () => 'x64', getOsType: () => 'linux' }))
@@ -70,6 +80,8 @@ beforeEach(async () => {
   m.sent.length = 0
   m.notifications.length = 0
   m.launchResult = null
+  m.allocatedRam = ''
+  m.totalGb = 16
   m.launchMSAuth.mockReset()
   m.downloadNeoforge.mockClear()
   m.updateMods.mockClear()
@@ -136,5 +148,22 @@ describe('launchMC', () => {
     const line = logger.debug.mock.calls.at(-1)[0]
     expect(line).not.toContain(auth.access_token)
     expect(line).not.toContain('1234567')
+  })
+
+  it('uses the saved RAM setting', async () => {
+    m.launchMSAuth.mockResolvedValue(auth)
+    m.launchResult = { pid: 1 }
+    m.allocatedRam = '6'
+    await launchMC()
+    expect(m.clients[0].opts.memory).toEqual({ max: '6G', min: '2G' })
+  })
+
+  it('caps the RAM setting below total memory', async () => {
+    m.launchMSAuth.mockResolvedValue(auth)
+    m.launchResult = { pid: 1 }
+    m.allocatedRam = 8
+    m.totalGb = 8
+    await launchMC()
+    expect(m.clients[0].opts.memory).toEqual({ max: '6G', min: '2G' })
   })
 })

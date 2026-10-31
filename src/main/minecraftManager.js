@@ -9,6 +9,9 @@ import { getArchType, getOsType } from './utils';
 import { addNotification, logger, getMainWindow } from '.';
 import { handle } from "./ipc";
 import { createRedactor, authorizationSecrets } from './redact';
+import { computeMemoryOptions } from './memory';
+import { saver } from './ipcHandlers/nexusSaverHandler';
+import os from 'os';
 
 import { handleJavaCallback, handleNexusModLoaderCallback, handleNexusModsCallback, handleMCLCEvent, progressManager, StepName } from './progressManager';
 
@@ -85,10 +88,10 @@ export async function launchMC() {
         type: launcherSettings.GAME_VERSION_TYPE,
       },
       forge: neoforgeInstallerPath,
-      memory: {
-        max: '8G',
-        min: '3G',
-      },
+      memory: computeMemoryOptions(
+        await saver.load('allocatedRam'),
+        os.totalmem() / 1024 / 1024 / 1024
+      ),
       overrides: {
         detached: true,
       }
