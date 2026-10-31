@@ -14,6 +14,6 @@ export const launcherSettings = {
   GAME_VERSION_TYPE: "release",
 
   MOD_LOADER_VERSION: "21.1.172",
-  JSON_MOD_LIST_URL: "https://raw.githubusercontent.com/Arffornia/Arffornia_Network/refs/heads/main/config/launcher/modList.json",
+  JSON_MOD_LIST_URL: "https://raw.githubusercontent.com/Arffornia/Arffornia_Provisioning/refs/heads/main/config/launcher/modList.json",
   JSON_EXTERNAL_FILES_URL: "https://raw.githubusercontent.com/Arffornia/Arffornia_Provisioning/refs/heads/main/config/launcher/",
 };
