@@ -1,0 +1,25 @@
+name: nix
+
+on:
+  pull_request:
+    paths: ["flake.nix", "flake.lock", "nix/**", ".github/workflows/nix.yml"]
+  push:
+    branches: [main]
+    paths: ["flake.nix", "flake.lock", "nix/**", ".github/workflows/nix.yml"]
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: cachix/install-nix-action@v31
+      - run: nix flake check
+      - run: nix build .#default --print-build-logs
+      - name: Desktop entry and icon are installed
+        run: |
+          test -x result/bin/arffornia-launcher
+          test -f result/share/applications/arffornia-launcher.desktop
+          test -f result/share/icons/hicolor/512x512/apps/arffornia-launcher.png

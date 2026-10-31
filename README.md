@@ -85,6 +85,29 @@ There are no environment variables or secrets needed for development.
 See [CONTRIBUTING.md](CONTRIBUTING.md) and [AGENTS.md](AGENTS.md). Report security issues privately, see
 [SECURITY.md](SECURITY.md).
 
+## Install on NixOS / with Nix
+
+No AppImage runner needed. Run it once:
+
+```bash
+nix run github:Arffornia/Arffornia_Launcher_V.5.2
+```
+
+Or install it, with a menu entry and icon (KDE, GNOME, ...), in your NixOS flake:
+
+```nix
+# flake.nix inputs
+arffornia.url = "github:Arffornia/Arffornia_Launcher_V.5.2";
+
+# configuration.nix (or home-manager home.packages)
+environment.systemPackages = [ inputs.arffornia.packages.x86_64-linux.default ];
+```
+
+The package wraps the released AppImage in an FHS sandbox, so the Java runtime and the
+Minecraft libraries the launcher downloads work as on any Linux. It updates with
+`nix flake update`, not with the in-app updater. Maintainers: after a release, run
+`nix/update.sh` (or `nix/update.sh v0.1.16`) and commit `nix/release.json`.
+
 ## License
 
 MIT, see [LICENSE](LICENSE).
