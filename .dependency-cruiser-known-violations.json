@@ -14,34 +14,6 @@
     }
   },
   {
-    "type": "dependency",
-    "from": "src/renderer/src/js/arfforniaApi.js",
-    "to": "src/main/launcherSettings.js",
-    "unresolvedTo": "../../../main/launcherSettings",
-    "dependencyTypes": [
-      "local",
-      "import"
-    ],
-    "rule": {
-      "severity": "error",
-      "name": "renderer-not-to-main"
-    }
-  },
-  {
-    "type": "dependency",
-    "from": "src/renderer/src/js/modrinthApi.js",
-    "to": "src/main/launcherSettings.js",
-    "unresolvedTo": "../../../main/launcherSettings",
-    "dependencyTypes": [
-      "local",
-      "import"
-    ],
-    "rule": {
-      "severity": "error",
-      "name": "renderer-not-to-main"
-    }
-  },
-  {
     "type": "cycle",
     "from": "src/main/index.js",
     "to": "src/main/ipcHandlers/gameManagerHandlers.js",

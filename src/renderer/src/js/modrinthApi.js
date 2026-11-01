@@ -1,8 +1,8 @@
 import axios from 'axios'
-import { launcherSettings } from '../../../main/launcherSettings'
+import { JSON_EXTERNAL_FILES_URL } from '../../../shared/endpoints'
 
 const MODRINTH_BASE_URL = 'https://api.modrinth.com/v2'
-const FEATURED_SHADERS_URL = `${launcherSettings.JSON_EXTERNAL_FILES_URL}featuredShaders.json`
+const FEATURED_SHADERS_URL = `${JSON_EXTERNAL_FILES_URL}featuredShaders.json`
 
 /**
  * Modrinth API and Featured Shaders Data Service.
