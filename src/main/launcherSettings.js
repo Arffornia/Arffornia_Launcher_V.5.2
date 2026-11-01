@@ -1,11 +1,15 @@
 
 import { resolveDataDir } from './dataDir';
+import { dataDirs } from '../shared/channel';
 import { ARFFORNIA_API_ENDPOINT, JSON_EXTERNAL_FILES_URL, JSON_MOD_LIST_URL } from '../shared/endpoints';
+
+// Prod: ./.Arffornia_V.5.2 and ./java. Beta: ./.Arffornia_beta/<env> and ./.Arffornia_beta/java.
+const dirs = dataDirs();
 
 export const launcherSettings = {
   GAME_NAME: "Arffornia",
-  GAME_DIR: resolveDataDir("./.Arffornia_V.5.2"),
-  JAVA_DIR: resolveDataDir("./java"),
+  GAME_DIR: resolveDataDir(dirs.gameDir),
+  JAVA_DIR: resolveDataDir(dirs.javaDir),
   ARFFORNIA_API_ENDPOINT,
 
   CUSTOM_SAVER_FILE_NAME: "",

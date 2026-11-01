@@ -115,7 +115,16 @@
       "game_file_btn": "Open",
       "launcher_version": "Launcher version:",
       "version_value": "Alpha {version}",
-      "disclaimer": "NOT AN OFFICIAL MINECRAFT PRODUCT. NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT."
+      "disclaimer": "NOT AN OFFICIAL MINECRAFT PRODUCT. NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT.",
+      "version_value_beta": "Beta {version}"
+    },
+    "environment": {
+      "title": "Environment: ",
+      "label": "Game environment:",
+      "hint": "Staging and Test slot arrive with the staging server.",
+      "production": "Production",
+      "staging": "Staging",
+      "slot": "Test slot"
     }
   },
   "shaders": {

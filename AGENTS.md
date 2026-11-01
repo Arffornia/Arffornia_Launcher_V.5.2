@@ -23,8 +23,9 @@ Electron desktop launcher for the Arffornia Minecraft server: Microsoft login (m
 | `src/preload/index.js` | `contextBridge` API exposed as `window.api` |
 | `src/renderer/src/` | Vue 3 app: `pages/`, `components/`, `stores/` (Pinia), `js/` (HTTP clients), `i18n/` |
 | `resources/` | Icons bundled with the app |
-| `package.json#build` | electron-builder config (the real one; `electron-builder.yml` is ignored) |
-| `.github/workflows/` | `ci.yml` (PR checks), `release.yml` (tag -> installers), `security.yml` (Trivy) |
+| `package.json#build` | electron-builder config, the live one (electron-builder ignores a config file when this key exists) |
+| `electron-builder.beta.cjs`, `src/shared/channel.js` | "Arffornia Launcher Beta" (spec 016): beta app id, data folder `.Arffornia_beta/`, `beta` update channel; built by `beta.yml` |
+| `.github/workflows/` | `ci.yml` (PR checks), `release.yml` (tag -> installers), `beta.yml` (rolling `beta` pre-release + PR artifacts), `security.yml` (Trivy) |
 
 ## Commands
 

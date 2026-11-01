@@ -61,6 +61,29 @@ There are no environment variables or secrets needed for development.
 3. Installed launchers pick up the new release through electron-updater (downloaded in the background,
    installed on quit).
 
+## Beta launcher (testers)
+
+Every push to `main` builds **Arffornia Launcher Beta** (`.github/workflows/beta.yml`) and publishes
+it to the rolling [`beta` pre-release](https://github.com/Arffornia/Arffornia_Launcher_V.5.2/releases/tag/beta).
+It is not for players:
+
+- it installs next to the normal launcher (app id `fr.arffornia.launcher.beta`, its own install
+  folder, shortcut and badged icon) and keeps its data in `.Arffornia_beta/` instead of `.Arffornia_V.5.2`;
+- it updates only from the `beta` pre-release (`beta.yml`, `beta-linux.yml`). The normal launcher
+  updates from `releases/latest`, which never returns a pre-release; a guard job checks it after
+  every publish;
+- Settings → Environment picks the game environment (Production only until the staging server exists).
+
+Downloads: `Arffornia-Launcher-Beta-Setup-<version>.exe` on Windows (unsigned: SmartScreen →
+*More info* → *Run anyway*), `Arffornia-Launcher-Beta-<version>.AppImage` on Linux
+(`nix run nixpkgs#appimage-run -- <file>` on NixOS). Each pull request also gets the beta build as
+Actions artifacts (`launcher-pr-<n>-windows`, `launcher-pr-<n>-linux`), with self-update off.
+No macOS beta for now.
+
+The flavour comes from one build-time constant, `ARFFORNIA_CHANNEL=beta`
+(`src/shared/channel.js`, `electron-builder.beta.cjs`). A build without it is the prod launcher,
+unchanged.
+
 ## macOS
 
 - Releases ship a separate build per CPU: `*-arm64.dmg` / `*-arm64-mac.zip` for Apple Silicon and
