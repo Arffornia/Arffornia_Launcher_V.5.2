@@ -7,15 +7,17 @@
       Content Security Policy. Keep the host lists in sync with src/renderer/src/js/*.js and
       the image sources (website API, Modrinth CDN, avatar/skin services).
       style-src needs 'unsafe-inline' for Vue scoped styles in dev and static style attributes.
+      staging.arffornia.com: the beta launcher's Staging and Test slot environments (spec 016) read
+      the staging website API and its images.
     -->
     <meta
       http-equiv="Content-Security-Policy"
       content="default-src 'self';
         script-src 'self';
         style-src 'self' 'unsafe-inline';
-        img-src 'self' data: blob: https://arffornia.com https://www.arffornia.com https://cdn.modrinth.com https://minotar.net https://mineskin.eu;
+        img-src 'self' data: blob: https://arffornia.com https://www.arffornia.com https://staging.arffornia.com https://cdn.modrinth.com https://minotar.net https://mineskin.eu;
         font-src 'self' data:;
-        connect-src 'self' https://arffornia.com https://www.arffornia.com https://api.mcstatus.io https://api.modrinth.com https://raw.githubusercontent.com https://mineskin.eu;
+        connect-src 'self' https://arffornia.com https://www.arffornia.com https://staging.arffornia.com https://api.mcstatus.io https://api.modrinth.com https://raw.githubusercontent.com https://mineskin.eu;
         media-src 'self';
         object-src 'none';
         frame-src 'none';
