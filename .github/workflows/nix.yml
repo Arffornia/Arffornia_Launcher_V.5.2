@@ -2,10 +2,10 @@ name: nix
 
 on:
   pull_request:
-    paths: ["flake.nix", "flake.lock", "nix/**", ".github/workflows/nix.yml"]
+    paths: ["flake.nix", "flake.lock", "nix/**", "resources/img/beta/**", ".github/workflows/nix.yml"]
   push:
     branches: [main]
-    paths: ["flake.nix", "flake.lock", "nix/**", ".github/workflows/nix.yml"]
+    paths: ["flake.nix", "flake.lock", "nix/**", "resources/img/beta/**", ".github/workflows/nix.yml"]
 
 permissions:
   contents: read
@@ -23,3 +23,26 @@ jobs:
           test -x result/bin/arffornia-launcher
           test -f result/share/applications/arffornia-launcher.desktop
           test -f result/share/icons/hicolor/512x512/apps/arffornia-launcher.png
+
+      # .#beta (spec 016): a runner for the rolling `beta` pre-release.
+      - run: nix build .#beta --print-build-logs --out-link result-beta
+      - name: Beta runner, desktop entry and icon are installed
+        run: |
+          test -x result-beta/bin/arffornia-launcher-beta
+          test -f result-beta/share/applications/arffornia-launcher-beta.desktop
+          test -f result-beta/share/icons/hicolor/512x512/apps/arffornia-launcher-beta.png
+      # Downloads the current beta AppImage, checks its sha512 against beta-linux.yml, runs nothing.
+      - name: Beta runner fetches and verifies the current beta
+        run: |
+          set -euo pipefail
+          url=https://github.com/Arffornia/Arffornia_Launcher_V.5.2/releases/download/beta/beta-linux.yml
+          if ! curl -fsIL -o /dev/null "$url"; then
+            echo "::warning::no beta pre-release yet (beta.yml publishes it on the first push to main); fetch not tested"
+            exit 0
+          fi
+          app=$(nix run .#beta -- --fetch-only)
+          echo "$app"
+          test -x "$app"
+          case "$(basename "$app")" in Arffornia-Launcher-Beta-*.AppImage) ;; *) exit 1 ;; esac
+          # Cached: a second run downloads nothing and returns the same file.
+          test "$(nix run .#beta -- --fetch-only 2>&1)" = "$app"
