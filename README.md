@@ -75,8 +75,8 @@ It is not for players:
 - Settings → Environment picks the game environment (Production only until the staging server exists).
 
 Downloads: `Arffornia-Launcher-Beta-Setup-<version>.exe` on Windows (unsigned: SmartScreen →
-*More info* → *Run anyway*), `Arffornia-Launcher-Beta-<version>.AppImage` on Linux
-(`nix run nixpkgs#appimage-run -- <file>` on NixOS). Each pull request also gets the beta build as
+*More info* → *Run anyway*), `Arffornia-Launcher-Beta-<version>.AppImage` on Linux.
+On NixOS, one command runs the newest beta (see below). Each pull request also gets the beta build as
 Actions artifacts (`launcher-pr-<n>-windows`, `launcher-pr-<n>-linux`), with self-update off.
 No macOS beta for now.
 
@@ -125,6 +125,18 @@ arffornia.url = "github:Arffornia/Arffornia_Launcher_V.5.2";
 # configuration.nix (or home-manager home.packages)
 environment.systemPackages = [ inputs.arffornia.packages.x86_64-linux.default ];
 ```
+
+Testers: the **beta** (newest build of `main`, side by side with the stable launcher, data in
+`~/.Arffornia_beta`):
+
+```bash
+nix run github:Arffornia/Arffornia_Launcher_V.5.2#beta
+```
+
+At each start it reads `beta-linux.yml` from the `beta` pre-release, downloads the AppImage into
+`~/.cache/arffornia-beta` when it changed, checks its sha512, and runs it with the same libraries
+as the stable package. Offline, it runs the cached beta. `packages.x86_64-linux.beta` installs it
+with a menu entry.
 
 The package wraps the released AppImage in an FHS sandbox, so the Java runtime and the
 Minecraft libraries the launcher downloads work as on any Linux. It updates with

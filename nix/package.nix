@@ -46,24 +46,7 @@ appimageTools.wrapType2 {
   inherit pname version src;
 
   # Libraries for the game itself (the JRE and LWJGL natives are downloaded by the launcher).
-  extraPkgs =
-    pkgs: with pkgs; [
-      libGL
-      glfw
-      openal
-      libpulseaudio
-      alsa-lib
-      flite # in-game narrator
-      udev
-      libx11
-      libxext
-      libxcursor
-      libxrandr
-      libxxf86vm
-      libxi
-      libxkbcommon
-      wayland
-    ];
+  extraPkgs = import ./game-libs.nix;
 
   # The launcher keeps its data in the working directory until
   # https://github.com/Arffornia/Arffornia_Launcher_V.5.2/issues/42 moves it to the user data

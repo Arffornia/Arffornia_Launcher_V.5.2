@@ -15,12 +15,19 @@
       packages = forAll (pkgs: rec {
         arffornia-launcher = pkgs.callPackage ./nix/package.nix { };
         default = arffornia-launcher;
+        # Arffornia Launcher Beta (spec 016): runs the newest build of the rolling `beta`
+        # pre-release, side by side with the stable launcher. Not for players.
+        beta = pkgs.callPackage ./nix/beta.nix { };
       });
 
       apps = forAll (pkgs: {
         default = {
           type = "app";
           program = "${self.packages.${pkgs.stdenv.hostPlatform.system}.default}/bin/arffornia-launcher";
+        };
+        beta = {
+          type = "app";
+          program = "${self.packages.${pkgs.stdenv.hostPlatform.system}.beta}/bin/arffornia-launcher-beta";
         };
       });
 

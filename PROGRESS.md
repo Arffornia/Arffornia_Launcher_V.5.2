@@ -6,7 +6,7 @@ finished multi-session work to `docs/exec-plans/completed/`.
 ## Now
 - Spec 016 phase 1 (testable build): beta launcher (`beta.yml`, `src/shared/channel.js`,
   `electron-builder.beta.cjs`); `release.yml` guard is a separate, held PR (#82); `.#beta` flake
-  output follows once the first `beta` pre-release exists.
+  output (`nix/beta.nix`, a runner for the rolling pre-release) stacked on it.
 - Harness v2 pilot (`chore/harness-v2`, stacked on the foundation PR #54): agent-kit settings,
   Vue/Electron rules, REVIEW.md, risk.yml, golden principles, dependency-cruiser + preload guards in `make check`.
 
