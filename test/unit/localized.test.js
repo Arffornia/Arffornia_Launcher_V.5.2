@@ -1,12 +1,11 @@
 // Data text (Provisioning JSON, Arffornia API): localized objects and the API locale header.
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { AxiosHeaders } from 'axios'
 import featuredShaders from '../fixtures/featuredShaders.json'
 import { acceptLanguage, localized } from '../../src/renderer/src/i18n/localized.js'
 import i18n from '../../src/renderer/src/i18n/translator.js'
 import { withUiLocale } from '../../src/renderer/src/js/arfforniaApi.js'
 
-vi.mock('../../src/main/launcherSettings', () => ({ launcherSettings: { ARFFORNIA_API_ENDPOINT: 'http://api.test/' } }))
 
 describe('localized()', () => {
   const field = { fr: 'Recommandé', en: 'Recommended' }
