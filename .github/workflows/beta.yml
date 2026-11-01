@@ -104,7 +104,9 @@ jobs:
           chmod +x "$app"
           home=$(mktemp -d)
           cd "$home"
-          APPIMAGE_EXTRACT_AND_RUN=1 xvfb-run -a "$app" --no-sandbox > "$RUNNER_TEMP/launcher.log" 2>&1 &
+          # ELECTRON_ENABLE_LOGGING prints the renderer console, so a page that throws while loading
+          # (a blank window) fails here too.
+          ELECTRON_ENABLE_LOGGING=1 APPIMAGE_EXTRACT_AND_RUN=1 xvfb-run -a "$app" --no-sandbox > "$RUNNER_TEMP/launcher.log" 2>&1 &
           for _ in $(seq 1 30); do
             if [ -d "$home/.Arffornia_beta/production/shaderpacks" ]; then break; fi
             sleep 2
@@ -118,6 +120,10 @@ jobs:
           fi
           test -d "$home/.Arffornia_beta/production/shaderpacks"
           test ! -e "$home/.Arffornia_V.5.2"
+          if grep -E 'Uncaught (ReferenceError|TypeError|SyntaxError)' "$RUNNER_TEMP/launcher.log"; then
+            echo "::error::the renderer threw while loading (blank window)"
+            exit 1
+          fi
           pkill -f arffornia-launcher-beta || true
 
       # Silent per-user install, then a start from an empty folder.
