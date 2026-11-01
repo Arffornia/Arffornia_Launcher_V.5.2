@@ -1,21 +1,28 @@
 <template>
   <div @click="clickEvent" class="notification-content">
-    <a @click.stop="closeEvent" class="close-btn">x</a>
-    <img class="image" :src="imageSrc" alt="Close" title="Close"/>
-    <p class="title">{{ props.message }}</p>
+    <a @click.stop="closeEvent" class="close-btn" :title="t('common.close')">×</a>
+    <img class="image" :src="imageSrc" :alt="t('notification.icon_alt')"/>
+    <p class="title">{{ t(props.messageKey, props.params) }}</p>
     <p class="time">{{ notifTime }}</p>
   </div>
 </template>
 
 <script setup>
 import { computed, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const notifTime = ref(getCurrentTime());
 
 const props = defineProps({
-  message: {
+  messageKey: {
     type: String,
     required: true,
+  },
+  params: {
+    type: Object,
+    default: () => ({}),
   },
   type: {
     type: String,
@@ -37,7 +44,7 @@ const imageSrc = computed(() => {
   return imageMap[props.type] || imageMap["msg"];
 });
 
-const emit = defineEmits();
+const emit = defineEmits(['close']);
 
 function clickEvent() {
   window.api.logger("info", `Click on the notif !`);

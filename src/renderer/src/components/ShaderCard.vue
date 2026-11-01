@@ -1,19 +1,19 @@
 <template>
   <div class="shader-card" :class="{ 'is-active': isActive }" @click="$emit('open-modal')">
     <div class="cover-wrapper">
-      <img :src="iconUrl" class="cover-image" @error="onImageError" />
+      <img :src="iconUrl" class="cover-image" :alt="title" @error="onImageError" />
       <div class="gradient-overlay"></div>
 
       <!-- Top-Left Performance Tag Badge -->
       <span v-if="performanceTag" class="badge-tag perf-tag" :class="performanceTag.type">
-        {{ performanceTag.label }}
+        {{ t(performanceTag.labelKey) }}
       </span>
 
       <!-- Top-Right Status Badge -->
-      <span v-if="hasUpdate" class="badge-tag update-tag">🔄 UPDATE AVAILABLE</span>
+      <span v-if="hasUpdate" class="badge-tag update-tag">{{ t('shaders.badge.update_available') }}</span>
       <span v-else-if="badge" class="badge-tag featured">{{ badge }}</span>
-      <span v-else-if="isActive" class="badge-tag active-tag">● ACTIVE</span>
-      <span v-else-if="isInstalled" class="badge-tag installed">INSTALLED</span>
+      <span v-else-if="isActive" class="badge-tag active-tag">{{ t('shaders.badge.active') }}</span>
+      <span v-else-if="isInstalled" class="badge-tag installed">{{ t('shaders.badge.installed') }}</span>
     </div>
 
     <div class="card-content">
@@ -27,19 +27,19 @@
 
       <div v-else class="card-footer" @click.stop>
         <button v-if="hasUpdate" class="btn-action update-btn" @click.stop="$emit('update')">
-          🔄 Update Now
+          {{ t('shaders.update_now') }}
         </button>
 
         <button v-else-if="!isInstalled" class="btn-action install" @click.stop="$emit('install')">
-          Install
+          {{ t('shaders.download') }}
         </button>
 
         <button v-else-if="!isActive" class="btn-action activate" @click.stop="$emit('activate')">
-          Activate
+          {{ t('shaders.activate') }}
         </button>
 
         <button v-else class="btn-action active-btn" @click.stop="$emit('deactivate')">
-          Active ✓
+          {{ t('shaders.active_check') }}
         </button>
       </div>
     </div>
@@ -48,6 +48,9 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const props = defineProps({
   title: { type: String, required: true },
@@ -85,7 +88,7 @@ const performanceTag = computed(() => {
     text.includes('ultra') ||
     text.includes('extreme')
   ) {
-    return { label: '🔥 Gourmand', type: 'heavy' }
+    return { labelKey: 'shaders.perf.heavy', type: 'heavy' }
   }
 
   if (
@@ -96,10 +99,10 @@ const performanceTag = computed(() => {
     text.includes('performance') ||
     text.includes('vanilla')
   ) {
-    return { label: '⚡ FPS Friendly', type: 'fps' }
+    return { labelKey: 'shaders.perf.fps', type: 'fps' }
   }
 
-  return { label: '⚖️ Équilibré', type: 'medium' }
+  return { labelKey: 'shaders.perf.balanced', type: 'medium' }
 })
 
 const onImageError = () => { imageFailed.value = true }

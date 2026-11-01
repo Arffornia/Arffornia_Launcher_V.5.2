@@ -1,7 +1,7 @@
 <template>
   <div class="highlight-content">
     <div v-if="isLoading" class="loading-container">
-      <p>Loading highlights...</p>
+      <p>{{ t('highlight.loading') }}</p>
     </div>
 
     <div v-else-if="highlights.length > 0" class="slideshow-container">
@@ -10,7 +10,7 @@
         :style="{ transform: `translateX(-${currentIndex * 100}%)` }"
       >
         <div v-for="item in highlights" :key="item.path" class="slide">
-          <img :src="item.path" alt="Launcher Highlight" />
+          <img :src="item.path" :alt="t('highlight.image_alt')" />
         </div>
       </div>
 
@@ -18,6 +18,8 @@
         <button
           @click="navigate('prev')"
           class="nav-button prev"
+          :title="t('highlight.previous')"
+          :aria-label="t('highlight.previous')"
         >
           &#10094;
         </button>
@@ -36,6 +38,8 @@
         <button
           @click="navigate('next')"
           class="nav-button next"
+          :title="t('highlight.next')"
+          :aria-label="t('highlight.next')"
         >
           &#10095;
         </button>
@@ -43,7 +47,7 @@
     </div>
 
     <div v-else class="no-images-container">
-      <p>No highlights to display at the moment.</p>
+      <p>{{ t('highlight.empty') }}</p>
     </div>
   </div>
 </template>
@@ -52,6 +56,9 @@
 import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { fetchLauncherImages } from '../js/arfforniaApi.js';
 import PlayerCard from '../components/PlayerCard.vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const highlights = ref([]);
 const currentIndex = ref(0);

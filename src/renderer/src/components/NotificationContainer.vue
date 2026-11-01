@@ -5,7 +5,8 @@
         v-for="notif in notifications"
         :key="notif.id"
         :id="notif.id"
-        :message="notif.message"
+        :message-key="notif.messageKey"
+        :params="notif.params"
         :type="notif.type"
         @close="removeNotification(notif.id)"
       />
@@ -14,24 +15,15 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
 import { useNotificationStore } from '../stores/notificationStore';
 import Notification from '../components/Notification.vue';
 
 const notificationStore = useNotificationStore();
 const notifications = notificationStore.notifications;
 
-function addNotif(message, type) {
-  notificationStore.addNotification(message, type);
-}
-
 function removeNotification(id) {
   notificationStore.removeNotification(id);
 }
-
-onMounted(() => {
-  // addNotif("Test add notif", "update");
-});
 </script>
 
 <style scoped>

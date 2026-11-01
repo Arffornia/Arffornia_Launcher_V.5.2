@@ -1,0 +1,354 @@
+[
+  {
+    "type": "dependency",
+    "from": "src/preload/index.js",
+    "to": "node_modules/@electron-toolkit/preload/dist/index.mjs",
+    "unresolvedTo": "@electron-toolkit/preload",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "preload-minimal-imports"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/renderer/src/js/arfforniaApi.js",
+    "to": "src/main/launcherSettings.js",
+    "unresolvedTo": "../../../main/launcherSettings",
+    "dependencyTypes": [
+      "local",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "renderer-not-to-main"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/renderer/src/js/modrinthApi.js",
+    "to": "src/main/launcherSettings.js",
+    "unresolvedTo": "../../../main/launcherSettings",
+    "dependencyTypes": [
+      "local",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "renderer-not-to-main"
+    }
+  },
+  {
+    "type": "cycle",
+    "from": "src/main/index.js",
+    "to": "src/main/ipcHandlers/gameManagerHandlers.js",
+    "unresolvedTo": "./ipcHandlers/gameManagerHandlers",
+    "dependencyTypes": [
+      "local",
+      "import"
+    ],
+    "rule": {
+      "severity": "warn",
+      "name": "no-circular"
+    },
+    "cycle": [
+      {
+        "name": "src/main/ipcHandlers/gameManagerHandlers.js",
+        "dependencyTypes": [
+          "local",
+          "import"
+        ]
+      },
+      {
+        "name": "src/main/minecraftManager.js",
+        "dependencyTypes": [
+          "local",
+          "import"
+        ]
+      },
+      {
+        "name": "src/main/index.js",
+        "dependencyTypes": [
+          "local",
+          "import"
+        ]
+      }
+    ]
+  },
+  {
+    "type": "cycle",
+    "from": "src/main/index.js",
+    "to": "src/main/ipcHandlers/logHandler.js",
+    "unresolvedTo": "./ipcHandlers/logHandler",
+    "dependencyTypes": [
+      "local",
+      "import"
+    ],
+    "rule": {
+      "severity": "warn",
+      "name": "no-circular"
+    },
+    "cycle": [
+      {
+        "name": "src/main/ipcHandlers/logHandler.js",
+        "dependencyTypes": [
+          "local",
+          "import"
+        ]
+      },
+      {
+        "name": "src/main/index.js",
+        "dependencyTypes": [
+          "local",
+          "import"
+        ]
+      }
+    ]
+  },
+  {
+    "type": "cycle",
+    "from": "src/main/index.js",
+    "to": "src/main/ipcHandlers/shaderManagerHandler.js",
+    "unresolvedTo": "./ipcHandlers/shaderManagerHandler",
+    "dependencyTypes": [
+      "local",
+      "import"
+    ],
+    "rule": {
+      "severity": "warn",
+      "name": "no-circular"
+    },
+    "cycle": [
+      {
+        "name": "src/main/ipcHandlers/shaderManagerHandler.js",
+        "dependencyTypes": [
+          "local",
+          "import"
+        ]
+      },
+      {
+        "name": "src/main/shaderManager.js",
+        "dependencyTypes": [
+          "local",
+          "import"
+        ]
+      },
+      {
+        "name": "src/main/index.js",
+        "dependencyTypes": [
+          "local",
+          "import"
+        ]
+      }
+    ]
+  },
+  {
+    "type": "cycle",
+    "from": "src/main/index.js",
+    "to": "src/main/ipcHandlers/userManagerHandler.js",
+    "unresolvedTo": "./ipcHandlers/userManagerHandler",
+    "dependencyTypes": [
+      "local",
+      "import"
+    ],
+    "rule": {
+      "severity": "warn",
+      "name": "no-circular"
+    },
+    "cycle": [
+      {
+        "name": "src/main/ipcHandlers/userManagerHandler.js",
+        "dependencyTypes": [
+          "local",
+          "import"
+        ]
+      },
+      {
+        "name": "src/main/user.js",
+        "dependencyTypes": [
+          "local",
+          "import"
+        ]
+      },
+      {
+        "name": "src/main/index.js",
+        "dependencyTypes": [
+          "local",
+          "import"
+        ]
+      }
+    ]
+  },
+  {
+    "type": "cycle",
+    "from": "src/main/ipcHandlers/gameManagerHandlers.js",
+    "to": "src/main/msAuthManager.js",
+    "unresolvedTo": "../msAuthManager",
+    "dependencyTypes": [
+      "local",
+      "import"
+    ],
+    "rule": {
+      "severity": "warn",
+      "name": "no-circular"
+    },
+    "cycle": [
+      {
+        "name": "src/main/msAuthManager.js",
+        "dependencyTypes": [
+          "local",
+          "import"
+        ]
+      },
+      {
+        "name": "src/main/index.js",
+        "dependencyTypes": [
+          "local",
+          "import"
+        ]
+      },
+      {
+        "name": "src/main/ipcHandlers/gameManagerHandlers.js",
+        "dependencyTypes": [
+          "local",
+          "import"
+        ]
+      }
+    ]
+  },
+  {
+    "type": "cycle",
+    "from": "src/main/minecraftManager.js",
+    "to": "src/main/msAuthManager.js",
+    "unresolvedTo": "./msAuthManager",
+    "dependencyTypes": [
+      "local",
+      "import"
+    ],
+    "rule": {
+      "severity": "warn",
+      "name": "no-circular"
+    },
+    "cycle": [
+      {
+        "name": "src/main/msAuthManager.js",
+        "dependencyTypes": [
+          "local",
+          "import"
+        ]
+      },
+      {
+        "name": "src/main/index.js",
+        "dependencyTypes": [
+          "local",
+          "import"
+        ]
+      },
+      {
+        "name": "src/main/ipcHandlers/gameManagerHandlers.js",
+        "dependencyTypes": [
+          "local",
+          "import"
+        ]
+      },
+      {
+        "name": "src/main/minecraftManager.js",
+        "dependencyTypes": [
+          "local",
+          "import"
+        ]
+      }
+    ]
+  },
+  {
+    "type": "cycle",
+    "from": "src/main/minecraftManager.js",
+    "to": "src/main/progressManager.js",
+    "unresolvedTo": "./progressManager",
+    "dependencyTypes": [
+      "local",
+      "import"
+    ],
+    "rule": {
+      "severity": "warn",
+      "name": "no-circular"
+    },
+    "cycle": [
+      {
+        "name": "src/main/progressManager.js",
+        "dependencyTypes": [
+          "local",
+          "import"
+        ]
+      },
+      {
+        "name": "src/main/index.js",
+        "dependencyTypes": [
+          "local",
+          "import"
+        ]
+      },
+      {
+        "name": "src/main/ipcHandlers/gameManagerHandlers.js",
+        "dependencyTypes": [
+          "local",
+          "import"
+        ]
+      },
+      {
+        "name": "src/main/minecraftManager.js",
+        "dependencyTypes": [
+          "local",
+          "import"
+        ]
+      }
+    ]
+  },
+  {
+    "type": "cycle",
+    "from": "src/main/msAuthManager.js",
+    "to": "src/main/user.js",
+    "unresolvedTo": "./user",
+    "dependencyTypes": [
+      "local",
+      "import"
+    ],
+    "rule": {
+      "severity": "warn",
+      "name": "no-circular"
+    },
+    "cycle": [
+      {
+        "name": "src/main/user.js",
+        "dependencyTypes": [
+          "local",
+          "import"
+        ]
+      },
+      {
+        "name": "src/main/index.js",
+        "dependencyTypes": [
+          "local",
+          "import"
+        ]
+      },
+      {
+        "name": "src/main/ipcHandlers/gameManagerHandlers.js",
+        "dependencyTypes": [
+          "local",
+          "import"
+        ]
+      },
+      {
+        "name": "src/main/msAuthManager.js",
+        "dependencyTypes": [
+          "local",
+          "import"
+        ]
+      }
+    ]
+  }
+]

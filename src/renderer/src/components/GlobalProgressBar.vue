@@ -14,16 +14,19 @@
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t, te } = useI18n()
 
 const progress = ref(0)
-const label = ref('')
+const stepName = ref('')
 const modName = ref('')
 const modIndex = ref(0)
 const totalMods = ref(0)
 
 const handler = (_event, data) => {
   progress.value = data.value
-  label.value = data.label
+  stepName.value = data.stepName || ''
   modName.value = data.modName || ''
   modIndex.value = data.modIndex || 0
   totalMods.value = data.totalMods || 0
@@ -38,12 +41,15 @@ onBeforeUnmount(() => {
 })
 
 const overallStatusText = computed(() => {
-  return `${label.value} - ${Math.floor(progress.value * 100)}%`;
+  // Step labels live in the locale files (progress.steps.<STEP_NAME>); main only sends the step name.
+  const stepKey = `progress.steps.${stepName.value}`;
+  const label = te(stepKey) ? t(stepKey) : stepName.value;
+  return t('progress.status', { label, percent: Math.floor(progress.value * 100) });
 });
 
 const modStatusText = computed(() => {
   if (modName.value && totalMods.value > 0) {
-    return `${modName.value} (${modIndex.value}/${totalMods.value})`;
+    return t('progress.mod', { name: modName.value, index: modIndex.value, total: totalMods.value });
   }
   return '';
 });

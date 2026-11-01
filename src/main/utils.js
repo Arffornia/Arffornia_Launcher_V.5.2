@@ -1,10 +1,14 @@
 import { ArchType, OsType } from '@arffornia/nexus_java';
 import os from 'os';
-import { logger } from '.';
+import { app } from 'electron';
 
 
-export function getArchType()  {
-  const arch = os.arch();
+// `translated`: true when an x64 build runs under Rosetta 2 on Apple Silicon. os.arch() then
+// reports "x64", but a native arm64 Java runs the game much faster, so ask for aarch64.
+export function getArchType(arch = os.arch(), platform = os.platform(), translated = app?.runningUnderARM64Translation)  {
+  if (platform === 'darwin' && arch === 'x64' && translated) {
+      return ArchType.AARCH64;
+  }
   switch (arch) {
       case "x64":
           return ArchType.X64;
