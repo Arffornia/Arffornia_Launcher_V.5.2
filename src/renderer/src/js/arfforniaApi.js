@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-import { launcherSettings } from '../../../main/launcherSettings';
+import { ARFFORNIA_API_ENDPOINT } from '../../../shared/endpoints';
 import i18n from '../i18n/translator';
 import { acceptLanguage } from '../i18n/localized';
 
-const ENDPOINT = launcherSettings.ARFFORNIA_API_ENDPOINT;
+const ENDPOINT = ARFFORNIA_API_ENDPOINT;
 
 /**
  * Asks the API for text in the launcher's UI language (not the OS language Chromium would send).
