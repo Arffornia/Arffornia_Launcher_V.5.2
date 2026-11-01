@@ -3,25 +3,25 @@
     <transition name="fade">
       <div v-if="isOpen" class="modal-backdrop" @click.self="close">
         <div class="modal-window">
-          <button class="btn-close" @click="close">✕</button>
+          <button class="btn-close" :title="t('common.close')" :aria-label="t('common.close')" @click="close">✕</button>
 
           <!-- Header Section -->
           <div class="modal-header">
             <img :src="iconUrl" class="shader-icon" @error="onIconError" />
             <div class="header-info">
               <h2 class="shader-title">{{ displayShader.title }}</h2>
-              <p class="shader-author">{{ $t('shaders.modal.by') }} <span>{{ displayShader.author || 'Modrinth Creator' }}</span></p>
+              <p class="shader-author">{{ t('shaders.modal.by') }} <span>{{ displayShader.author || t('shaders.modal.unknown_author') }}</span></p>
 
               <div class="stats-row">
-                <span v-if="displayShader.downloads" class="stat-item">📥 {{ formatNumber(displayShader.downloads) }} {{ $t('shaders.modal.downloads') }}</span>
-                <span v-if="displayShader.followers" class="stat-item">⭐ {{ formatNumber(displayShader.followers) }} {{ $t('shaders.modal.likes') }}</span>
+                <span v-if="displayShader.downloads" class="stat-item">{{ t('shaders.modal.downloads', { count: formatNumber(displayShader.downloads) }) }}</span>
+                <span v-if="displayShader.followers" class="stat-item">{{ t('shaders.modal.likes', { count: formatNumber(displayShader.followers) }) }}</span>
               </div>
             </div>
           </div>
 
           <!-- Gallery Screenshots Carousel -->
           <div v-if="isLoadingDetails" class="gallery-loading">
-            <span>{{ $t('shaders.modal.loading_screenshots') }}</span>
+            <span>{{ t('shaders.modal.loading_screenshots') }}</span>
           </div>
 
           <div v-else-if="galleryImages.length > 0" class="gallery-section">
@@ -29,7 +29,7 @@
               <button
                 v-if="galleryImages.length > 1"
                 class="nav-arrow prev"
-                title="Previous image"
+                :title="t('shaders.modal.previous_image')"
                 @click="prevImage"
               >
                 ‹
@@ -40,7 +40,7 @@
               <button
                 v-if="galleryImages.length > 1"
                 class="nav-arrow next"
-                title="Next image"
+                :title="t('shaders.modal.next_image')"
                 @click="nextImage"
               >
                 ›
@@ -61,7 +61,7 @@
 
           <!-- Description -->
           <div class="description-section">
-            <h3>{{ $t('shaders.modal.about') }}</h3>
+            <h3>{{ t('shaders.modal.about') }}</h3>
             <p class="description-text">{{ displayShader.description || displayShader.customDescription }}</p>
           </div>
 
@@ -73,17 +73,17 @@
                 class="btn btn-secondary"
                 @click="$emit('deactivate')"
               >
-                {{ $t('shaders.deactivate') }}
+                {{ t('shaders.deactivate') }}
               </button>
               <button
                 v-else
                 class="btn btn-primary"
                 @click="$emit('activate')"
               >
-                {{ $t('shaders.activate') }}
+                {{ t('shaders.activate') }}
               </button>
               <button class="btn btn-danger" @click="$emit('delete')">
-                {{ $t('shaders.delete') }}
+                {{ t('shaders.delete') }}
               </button>
             </template>
 
@@ -96,7 +96,7 @@
 
               <!-- Install Button -->
               <button v-else class="btn btn-primary full-width" @click="$emit('install')">
-                {{ $t('shaders.download') }}
+                {{ t('shaders.download') }}
               </button>
             </template>
           </div>
@@ -108,7 +108,10 @@
 
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { modrinthApi } from '../js/modrinthApi'
+
+const { t, locale } = useI18n()
 
 const props = defineProps({
   isOpen: { type: Boolean, default: false },
@@ -217,7 +220,7 @@ const onPreviewError = () => {
   }
 }
 
-const formatNumber = (num) => !num ? '0' : new Intl.NumberFormat('en-US', { notation: 'compact' }).format(num)
+const formatNumber = (num) => !num ? '0' : new Intl.NumberFormat(locale.value, { notation: 'compact' }).format(num)
 </script>
 
 <style scoped>

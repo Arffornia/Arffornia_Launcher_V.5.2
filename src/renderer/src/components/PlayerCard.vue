@@ -6,11 +6,11 @@
         <div class="player-details">
           <div class="day-streak">
             {{ playerProfile ? playerProfile.day_streak : '0' }}
-            <img :src="streakImgSrc" id="streak-img" alt="Streak Image">
+            <img :src="streakImgSrc" id="streak-img" :alt="t('player_card.streak_alt')">
           </div>
           <span class="v-separator"></span>
           <div class="player-grade">
-            {{ playerProfile ? playerProfile.grade : 'Loading...' }}
+            {{ playerProfile ? playerProfile.grade : t('common.loading') }}
           </div>
         </div>
       </div>
@@ -26,12 +26,14 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { initializeSkinViewers } from '../js/skinviewer.js';
 import { fetchPlayerProfile } from '../js/arfforniaApi.js';
 
 import firesImg from '@res/img/icon/fire/fires.png';
 import noFiresImg from '@res/img/icon/fire/no-fires.png';
 
+const { t } = useI18n();
 const props = defineProps(['username']);
 
 const playerProfile = ref(null);

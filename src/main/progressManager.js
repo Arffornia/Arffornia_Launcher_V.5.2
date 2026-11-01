@@ -14,34 +14,8 @@ export const StepName = Object.freeze({
   LAUNCHING: 'LAUNCHING'
 });
 
-const labels = {
-  en: {
-    IDLE: 'Idle',
-    PREPARING: 'Preparing files',
-    CHECK_JAVA: 'Checking Java',
-    INSTALL_JAVA: 'Installing Java',
-    CHECK_MODLOADER: 'Checking NeoForge',
-    DOWNLOAD_MODLOADER: 'Downloading NeoForge',
-    FETCHING_MODS: 'Fetching Mods Info',
-    UPDATING_MODS: 'Updating Mods',
-    DOWNLOAD_MC: 'Downloading Minecraft',
-    DOWNLOAD_ASSETS: 'Downloading Assets',
-    LAUNCHING: 'LAUNCHING'
-  },
-  fr: {
-    IDLE: 'Inactif',
-    PREPARING: 'Préparation',
-    CHECK_JAVA: 'Vérification de Java',
-    INSTALL_JAVA: 'Installation de Java',
-    CHECK_MODLOADER: 'Vérification de NeoForge',
-    DOWNLOAD_MODLOADER: 'Téléchargement de NeoForge',
-    FETCHING_MODS: 'Vérification des mods',
-    UPDATING_MODS: 'Mise à jour des mods',
-    DOWNLOAD_MC: 'Téléchargement de Minecraft',
-    DOWNLOAD_ASSETS: 'Téléchargement des assets',
-    LAUNCHING: 'Lancement'
-  }
-};
+// Display labels for each step live in the renderer locale files under `progress.steps.<StepName>`
+// (src/renderer/src/i18n/locales/{en,fr}.json). Only the step name is sent to the renderer.
 
 const stepsConfig = [
   { name: StepName.IDLE, weight: 0 },
@@ -56,10 +30,6 @@ const stepsConfig = [
   { name: StepName.DOWNLOAD_ASSETS, weight: 27 },
   { name: StepName.LAUNCHING, weight: 3 },
 ];
-
-function getStepLabel(stepName, lang = 'en') {
-  return labels[lang]?.[stepName] ?? stepName;
-}
 
 class ProgressManager {
   constructor(steps, emitCallback) {
@@ -105,9 +75,7 @@ class ProgressManager {
       this.lastEmittedPercent = currentPercent;
       this.lastEmittedModName = this.currentModName;
 
-      const label = getStepLabel(name, 'en');
-
-      this.emitCallback(current, name, label, {
+      this.emitCallback(current, name, {
         modName: this.currentModName,
         modIndex: this.currentModIndex,
         totalMods: this.totalMods,
@@ -135,7 +103,7 @@ class ProgressManager {
   }
 }
 
-export const progressManager = new ProgressManager(stepsConfig, (value, stepName, label, extra) => {
+export const progressManager = new ProgressManager(stepsConfig, (value, stepName, extra) => {
   logger.info(`Global Progress [${stepName}] (${extra.modName || ''}): ${value}`);
 
   const mainWindow = getMainWindow();
@@ -143,7 +111,6 @@ export const progressManager = new ProgressManager(stepsConfig, (value, stepName
     mainWindow.webContents.send('globalProgress', {
       value,
       stepName,
-      label,
       modName: extra.modName,
       modIndex: extra.modIndex,
       totalMods: extra.totalMods,

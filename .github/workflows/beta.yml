@@ -1,0 +1,264 @@
+name: beta
+
+# "Arffornia Launcher Beta" (spec 016, phase 1), never what players get:
+# - push to main: Windows NSIS + Linux AppImage, published to the rolling `beta` PRE-release
+#   (players update from releases/latest, which never returns a pre-release), then a guard
+#   checks that releases/latest is still the newest stable release.
+# - pull_request: the same beta flavour as Actions artifacts only (launcher-pr-<n>-<os>), with
+#   self-update off so a PR build is never replaced by the main beta while it is tested.
+# - workflow_dispatch: a manual rebuild (publishes only from main).
+# No macOS beta for now (Brian's answer "Skip Mac"); ci.yml still smoke-tests the Mac build.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: beta-${{ github.event_name == 'pull_request' && github.event.number || github.ref }}
+  # PR runs are superseded by newer pushes; main runs queue so the release is never half-written.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  ARFFORNIA_CHANNEL: beta
+
+jobs:
+  version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.v.outputs.version }}
+      stable: ${{ steps.v.outputs.stable }}
+    steps:
+      # <next patch of the latest stable release>-beta.<run>, e.g. 0.1.16-beta.12.
+      # PR builds: 0.1.16-pr65.<run>.
+      - id: v
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.number }}
+          RUN: ${{ github.run_number }}
+        run: |
+          set -euo pipefail
+          stable=$(gh api "repos/$GITHUB_REPOSITORY/releases/latest" -q .tag_name)
+          if ! [[ "$stable" =~ ^v([0-9]+)\.([0-9]+)\.([0-9]+)$ ]]; then
+            echo "::error::releases/latest is not a stable tag: $stable"
+            exit 1
+          fi
+          next="${BASH_REMATCH[1]}.${BASH_REMATCH[2]}.$((BASH_REMATCH[3] + 1))"
+          if [ -n "$PR" ]; then version="$next-pr$PR.$RUN"; else version="$next-beta.$RUN"; fi
+          echo "stable=$stable" >> "$GITHUB_OUTPUT"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "Beta version $version (latest stable $stable)"
+
+  build:
+    needs: version
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            name: linux
+            target: --linux AppImage
+          - os: windows-latest
+            name: windows
+            target: --win nsis
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    env:
+      ARFFORNIA_UPDATES: ${{ github.event_name == 'pull_request' && '0' || '1' }}
+      VERSION: ${{ needs.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Only in this checkout: the version shown in Settings and written into beta*.yml.
+      - name: Set the beta version
+        run: npm pkg set "version=$VERSION"
+
+      - name: Build (ARFFORNIA_CHANNEL=beta)
+        run: npm run build
+
+      - name: Package
+        run: npx electron-builder --config electron-builder.beta.cjs ${{ matrix.target }} --x64 --publish never
+
+      # Started from an empty folder like a desktop launch: the beta must start, create its own
+      # .Arffornia_beta/production folder and never touch the prod launcher's .Arffornia_V.5.2.
+      - name: Launch smoke test (Linux AppImage)
+        if: matrix.name == 'linux'
+        run: |
+          set -euo pipefail
+          app=$(ls "$PWD"/dist/Arffornia-Launcher-Beta-*.AppImage)
+          chmod +x "$app"
+          home=$(mktemp -d)
+          cd "$home"
+          APPIMAGE_EXTRACT_AND_RUN=1 xvfb-run -a "$app" --no-sandbox > "$RUNNER_TEMP/launcher.log" 2>&1 &
+          for _ in $(seq 1 30); do
+            if [ -d "$home/.Arffornia_beta/production/shaderpacks" ]; then break; fi
+            sleep 2
+          done
+          sleep 5
+          ls -la "$home" "$home/.Arffornia_beta" || true
+          if ! pgrep -f arffornia-launcher-beta > /dev/null; then
+            cat "$RUNNER_TEMP/launcher.log"
+            echo "::error::the beta launcher exited during startup"
+            exit 1
+          fi
+          test -d "$home/.Arffornia_beta/production/shaderpacks"
+          test ! -e "$home/.Arffornia_V.5.2"
+          pkill -f arffornia-launcher-beta || true
+
+      # Silent per-user install, then a start from an empty folder.
+      - name: Install and launch smoke test (Windows NSIS)
+        if: matrix.name == 'windows'
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $setup = Get-ChildItem dist/Arffornia-Launcher-Beta-Setup-*.exe | Select-Object -First 1
+          Start-Process -FilePath $setup.FullName -ArgumentList '/S' -Wait
+          $exe = Get-ChildItem "$env:LOCALAPPDATA\Programs" -Recurse -Filter 'Arffornia Launcher Beta.exe' | Select-Object -First 1
+          if (-not $exe) { throw 'the installer did not install "Arffornia Launcher Beta.exe"' }
+          Write-Host "Installed: $($exe.FullName)"
+          $home_ = New-Item -ItemType Directory -Path (Join-Path $env:RUNNER_TEMP 'beta-home')
+          $p = Start-Process -FilePath $exe.FullName -WorkingDirectory $home_.FullName -PassThru
+          $data = Join-Path $home_.FullName '.Arffornia_beta\production\shaderpacks'
+          for ($i = 0; $i -lt 30 -and -not (Test-Path $data); $i++) { Start-Sleep -Seconds 2 }
+          Start-Sleep -Seconds 5
+          Get-ChildItem -Force $home_.FullName | Format-Table Name
+          if ($p.HasExited) { throw "the beta launcher exited during startup (code $($p.ExitCode))" }
+          if (-not (Test-Path $data)) { throw "no $data" }
+          if (Test-Path (Join-Path $home_.FullName '.Arffornia_V.5.2')) { throw 'the beta wrote the prod data folder' }
+          Stop-Process -Id $p.Id -Force
+
+      - uses: actions/upload-artifact@v5
+        with:
+          name: ${{ github.event_name == 'pull_request' && format('launcher-pr-{0}-{1}', github.event.number, matrix.name) || format('launcher-beta-{0}', matrix.name) }}
+          path: |
+            dist/*.AppImage
+            dist/*.exe
+            dist/*.blockmap
+            dist/beta*.yml
+          if-no-files-found: error
+          retention-days: 30
+
+  publish:
+    needs: [version, build]
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # the rolling `beta` pre-release
+    concurrency:
+      group: beta-publish
+      cancel-in-progress: false
+    env:
+      GH_TOKEN: ${{ github.token }}
+      VERSION: ${{ needs.version.outputs.version }}
+      STABLE: ${{ needs.version.outputs.stable }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - uses: actions/download-artifact@v5
+        with:
+          pattern: launcher-beta-*
+          merge-multiple: true
+          path: upload
+
+      - name: Checksums and release notes
+        run: |
+          set -euo pipefail
+          (cd upload && sha256sum -- * > SHA256SUMS && cat SHA256SUMS)
+          {
+            echo "**Arffornia Launcher Beta $VERSION**, built from \`main\` at ${GITHUB_SHA}."
+            echo
+            echo "Not for players: it installs next to the normal launcher, keeps its data in \`.Arffornia_beta/\`"
+            echo "and updates only from this pre-release. Players keep getting [the latest stable release](https://github.com/${GITHUB_REPOSITORY}/releases/latest)."
+            echo "The \`beta\` tag is only an anchor; the commit above is what was built."
+            echo
+            echo "- Windows: \`Arffornia-Launcher-Beta-Setup-$VERSION.exe\` (unsigned: SmartScreen → More info → Run anyway)"
+            echo "- Linux: \`Arffornia-Launcher-Beta-$VERSION.AppImage\`; NixOS: \`nix run github:${GITHUB_REPOSITORY}#beta\`"
+            echo
+            echo "### Pull requests merged since $STABLE"
+            git log --merges --format='%s' "$STABLE..$GITHUB_SHA" \
+              | sed -n 's/^Merge pull request #\([0-9]*\) from .*/- #\1/p'
+          } > notes.md
+          cat notes.md
+
+      - name: Create or update the beta pre-release
+        run: |
+          set -euo pipefail
+          if gh release view beta > /dev/null 2>&1; then
+            gh release edit beta --prerelease --latest=false --title "Arffornia Launcher Beta $VERSION" --notes-file notes.md
+          else
+            gh release create beta --prerelease --latest=false --target "$GITHUB_SHA" \
+              --title "Arffornia Launcher Beta $VERSION" --notes-file notes.md
+          fi
+          # Must still be a pre-release: the stable launcher must never see it.
+          test "$(gh release view beta --json isPrerelease -q .isPrerelease)" = "true"
+
+      # Installers first, update files last: a launcher that reads beta*.yml mid-upload finds
+      # either the previous version or a complete new one. Then the stale assets go.
+      - name: Upload assets
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          gh release upload beta --clobber upload/*.exe upload/*.AppImage upload/*.blockmap
+          gh release upload beta --clobber upload/beta*.yml upload/SHA256SUMS
+          keep=$(cd upload && ls)
+          gh release view beta --json assets -q '.assets[].name' | while read -r name; do
+            if ! grep -qxF "$name" <<< "$keep"; then
+              echo "Deleting stale asset $name"
+              gh release delete-asset beta "$name" --yes
+            fi
+          done
+
+  # After every publish: players must still get the newest stable version.
+  guard:
+    needs: publish
+    if: always() && github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      - name: releases/latest is the newest stable release
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node tools/check-stable-latest.mjs "$GITHUB_REPOSITORY"
+
+      - name: The beta release is still a pre-release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view beta > /dev/null 2>&1; then
+            test "$(gh release view beta --json isPrerelease -q .isPrerelease)" = "true"
+          fi
+
+      - name: Open an issue
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          gh issue create --repo "$GITHUB_REPOSITORY" \
+            --title "Beta guard failed: players may not get the stable launcher" \
+            --body "The post-publish check failed after the beta build of ${GITHUB_SHA}: ${RUN_URL}. Check releases/latest and the beta pre-release before anything else is published."

@@ -4,36 +4,36 @@
       <!-- Profile btn management section -->
       <div class="top-nav-link">
         <router-link v-if="userStore.isAuth && userStore.username" class="nav-link" :to="`/profile/${userStore.username}`" exact>
-          <img :src="userStore.profileImg" alt="Profile">
+          <img :src="userStore.profileImg" :alt="t('nav.profile')" :title="t('nav.profile')">
         </router-link>
 
         <a v-else class="nav-link" @click.prevent="userStore.login">
-          <img :src="userStore.profileImg" alt="Login">
+          <img :src="userStore.profileImg" :alt="t('nav.login')" :title="t('nav.login')">
         </a>
       </div>
       <!-- End profile btn management section -->
 
       <div class="middle-nav-link">
-        <router-link class="nav-link" to="/" exact>
-          <img src="@res/img/Crafting_Table.png" alt="Home" />
+        <router-link class="nav-link" to="/" exact :title="t('nav.home')">
+          <img src="@res/img/Crafting_Table.png" :alt="t('nav.home')" />
         </router-link>
 
-        <router-link class="nav-link" to="/highlight" exact>
-          <img src="@res/img/icon/photo/photo.png" alt="Highlight" />
+        <router-link class="nav-link" to="/highlight" exact :title="t('nav.highlight')">
+          <img src="@res/img/icon/photo/photo.png" :alt="t('nav.highlight')" />
         </router-link>
 
-        <router-link class="nav-link" to="/notification" exact>
-          <img src="@res/img/icon/bell/bell.png" alt="Notification" />
+        <router-link class="nav-link" to="/notification" exact :title="t('nav.notifications')">
+          <img src="@res/img/icon/bell/bell.png" :alt="t('nav.notifications')" />
         </router-link>
 
-        <router-link class="nav-link" to="/shaders" exact title="Shaders Manager">
-          <img src="@res/img/icon/shader/shader-icon.png" alt="Shaders" />
+        <router-link class="nav-link" to="/shaders" exact :title="t('nav.shaders')">
+          <img src="@res/img/icon/shader/shader-icon.png" :alt="t('nav.shaders')" />
         </router-link>
       </div>
 
       <div class="bottom-nav-link">
-        <router-link class="nav-link" to="/settings" exact>
-          <img src="@res/img/icon/settings/labour-day.png" alt="Settings" />
+        <router-link class="nav-link" to="/settings" exact :title="t('nav.settings')">
+          <img src="@res/img/icon/settings/labour-day.png" :alt="t('nav.settings')" />
         </router-link>
       </div>
     </nav>
@@ -60,6 +60,9 @@ import NotificationContainer from './NotificationContainer.vue';
 import { useNotificationStore } from '../stores/notificationStore';
 import TopBar from './TopBar.vue';
 import GlobalProgressBar from './GlobalProgressBar.vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const userStore = useUserStore();
 const notificationStore = useNotificationStore();
@@ -76,8 +79,9 @@ const handleKeydown = (event) => {
 onMounted(() => {
   userStore.loginNoReAsk();
 
-  window.api.addNotification((message, type) => {
-    notificationStore.addNotification(message, type)
+  // The main process sends translation keys + params, never display strings.
+  window.api.addNotification((messageKey, type, params) => {
+    notificationStore.addNotification(messageKey, type, params)
   });
 
   window.addEventListener('keydown', handleKeydown);

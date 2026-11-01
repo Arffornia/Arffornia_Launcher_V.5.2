@@ -23,7 +23,7 @@
         <p class="section-title">{{ t('home.shop.arrivals') }}</p>
         <div class="items-container">
           <a v-for="item in newestItems" :key="item.id" @click.prevent="redirect_item_shop(item)"
-            class="shop-item" title="See on Website">
+            class="shop-item" :title="t('home.shop.see_on_website')">
             <div class="item-container">
               <img class="item-icon" :src="item.img_url" :alt="item.name" />
               <p class="item-title">{{ item.name }}</p>
@@ -31,10 +31,10 @@
             </div>
           </a>
         </div>
-        <p class="section-title">{{ t('home.shop.weeks_deels') }}</p>
+        <p class="section-title">{{ t('home.shop.weeks_deals') }}</p>
         <div class="items-container">
           <a v-for="item in saleItems" :key="item.id" @click.prevent="redirect_item_shop(item)"
-            class="shop-item" title="See on Website">
+            class="shop-item" :title="t('home.shop.see_on_website')">
             <div class="item-container">
               <img class="item-icon" :src="item.img_url" :alt="item.name" />
               <p class="item-title">{{ item.name }}</p>
@@ -50,7 +50,7 @@
         <p class="section-title">{{ t('home.shop.best_sellers') }}</p>
         <div class="items-container">
           <a v-for="item in bestSellerItems" :key="item.id" @click.prevent="redirect_item_shop(item)"
-            class="shop-item" title="See on Website">
+            class="shop-item" :title="t('home.shop.see_on_website')">
             <div class="item-container">
               <img class="item-icon" :src="item.img_url" :alt="item.name" />
               <p class="item-title">{{ item.name }}</p>
@@ -106,8 +106,7 @@ onMounted(async () => {
 });
 
 const playLabel = computed(() =>
-  // gameRunning.value ? (userStore.lang === 'fr' ? 'En cours...' : 'Launching...') : (userStore.lang === 'fr' ? 'Jouer' : 'Play')
-  gameRunning.value ? 'Running...' : 'Play'
+  gameRunning.value ? t('home.playbox.running') : t('home.playbox.play')
 );
 
 onBeforeUnmount(() => {

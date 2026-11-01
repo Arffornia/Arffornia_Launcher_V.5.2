@@ -1,22 +1,102 @@
 {
+  "common": {
+    "loading": "Chargement...",
+    "close": "Fermer"
+  },
+  "languages": {
+    "en": "English",
+    "fr": "Français"
+  },
+  "nav": {
+    "profile": "Profil",
+    "login": "Se connecter",
+    "home": "Accueil",
+    "highlight": "À la une",
+    "notifications": "Notifications",
+    "shaders": "Gestionnaire de shaders",
+    "settings": "Paramètres",
+    "website": "Site d'Arffornia",
+    "discord": "Discord"
+  },
+  "server_status": {
+    "offline": "Hors ligne",
+    "players": "{online} / {max}"
+  },
   "home": {
     "playbox": {
       "title": "ARFFORNIA",
-      "description1": "+ 33 Mods",
-      "description2": "+ 25 Paliers de progression"
+      "description1": "+ 33 mods",
+      "description2": "+ 25 paliers de progression",
+      "play": "Jouer",
+      "running": "En cours..."
     },
     "shop": {
       "arrivals": "Nouveautés : ",
-      "weeks_deels": "Offres de la semaine : ",
-      "best_sellers": "Meilleures ventes : "
+      "weeks_deals": "Offres de la semaine : ",
+      "best_sellers": "Meilleures ventes : ",
+      "see_on_website": "Voir sur le site"
     },
     "podium": {
-      "best_voters": "Meilleurs Voteurs",
-      "best_players": "Meilleurs Joueurs",
+      "best_voters": "Meilleurs voteurs",
+      "best_players": "Meilleurs joueurs",
       "votes_unit": "votes",
       "points_unit": "points",
-      "switch_to_players": "Passer aux meilleurs joueurs",
-      "switch_to_voters": "Passer aux meilleurs voteurs"
+      "switch_to_players": "Afficher les meilleurs joueurs",
+      "switch_to_voters": "Afficher les meilleurs voteurs",
+      "show_profile": "Voir le profil",
+      "rank": "#{rank}",
+      "score": "{value} {unit}"
+    }
+  },
+  "player_card": {
+    "streak_alt": "Série de jours"
+  },
+  "highlight": {
+    "loading": "Chargement des captures à la une...",
+    "empty": "Aucune capture à afficher pour le moment.",
+    "image_alt": "Capture à la une",
+    "previous": "Capture précédente",
+    "next": "Capture suivante"
+  },
+  "notifications_page": {
+    "title": "Notifications",
+    "empty": "Vous n'avez aucune notification."
+  },
+  "notification": {
+    "icon_alt": "Icône de notification"
+  },
+  "notifications": {
+    "game_already_running": "Le jeu est déjà lancé !",
+    "launch_failed": "Impossible de lancer le jeu. Consultez les journaux pour plus de détails.",
+    "mod_sync_failed": "Impossible de télécharger {count} fichier(s) de mod. Vérifiez votre connexion et réessayez.",
+    "login_failed": "Échec de la connexion !",
+    "update_downloaded": "Mise à jour {version} téléchargée !\nElle sera installée au prochain démarrage.",
+    "update_downloaded_unknown": "Une mise à jour du launcher a été téléchargée !\nElle sera installée au prochain démarrage.",
+    "shader_installed": "Shader installé avec succès !",
+    "shader_install_failed": "Échec de l'installation du shader : {error}",
+    "shader_updated": "Shader mis à jour vers {file} !",
+    "shader_update_failed": "Échec de la mise à jour du shader : {error}",
+    "shaders_disabled": "Shaders désactivés.",
+    "shader_activated": "Shader activé !",
+    "shader_activate_failed": "Impossible de changer le shader actif.",
+    "shader_uninstalled": "Shader désinstallé.",
+    "shader_uninstall_failed": "Impossible de désinstaller le shader."
+  },
+  "progress": {
+    "status": "{label} - {percent} %",
+    "mod": "{name} ({index}/{total})",
+    "steps": {
+      "IDLE": "Inactif",
+      "PREPARING": "Préparation des fichiers",
+      "CHECK_JAVA": "Vérification de Java",
+      "INSTALL_JAVA": "Installation de Java",
+      "CHECK_MODLOADER": "Vérification de NeoForge",
+      "DOWNLOAD_MODLOADER": "Téléchargement de NeoForge",
+      "FETCHING_MODS": "Récupération des mods",
+      "UPDATING_MODS": "Mise à jour des mods",
+      "DOWNLOAD_MC": "Téléchargement de Minecraft",
+      "DOWNLOAD_ASSETS": "Téléchargement des ressources",
+      "LAUNCHING": "Lancement"
     }
   },
   "settings": {
@@ -24,33 +104,46 @@
     "game": {
       "title": "Paramètres du jeu : ",
       "ram": "Mémoire RAM allouée :",
+      "ram_value": "{amount} Go",
       "language": "Langue du launcher :",
       "logout": "Se déconnecter de votre compte Minecraft :",
-      "logout_btn": "Déconnection"
+      "logout_btn": "Se déconnecter"
     },
     "launcher": {
       "title": "Paramètres du launcher : ",
       "game_file": "Fichiers du jeu",
       "game_file_btn": "Ouvrir",
-      "launcher_version": "Version du launcher :"
+      "launcher_version": "Version du launcher :",
+      "version_value": "Alpha {version}",
+      "disclaimer": "PRODUIT MINECRAFT NON OFFICIEL. NON APPROUVÉ PAR MOJANG OU MICROSOFT ET SANS LIEN AVEC EUX.",
+      "version_value_beta": "Bêta {version}"
+    },
+    "environment": {
+      "title": "Environnement : ",
+      "label": "Environnement de jeu :",
+      "hint": "Staging et Serveur de test arrivent avec le serveur de staging.",
+      "production": "Production",
+      "staging": "Staging",
+      "slot": "Serveur de test"
     }
   },
   "shaders": {
-    "title": "Gestionnaire de Shaders",
-    "subtitle": "Personnalisez vos graphismes avec des shaders haute performance",
+    "title": "Gestionnaire de shaders",
+    "subtitle": "Personnalisez vos graphismes avec des shaders performants",
     "open_folder": "📂 Ouvrir le dossier",
     "sort_label": "Trier par :",
     "sort_downloads": "🔥 Les plus populaires",
-    "sort_follows": "⭐ Les mieux notés",
-    "sort_updated": "🕒 Récemment mis à jour",
+    "sort_follows": "⭐ Les plus appréciés",
+    "sort_updated": "🕒 Mis à jour récemment",
     "search_btn": "Rechercher",
     "prev_page": "‹ Précédent",
     "next_page": "Suivant ›",
     "page_indicator": "Page {current} sur {total}",
     "tabs": {
-      "featured": "⭐ Notre Sélection",
-      "catalog": "🔍 Tous les Shaders",
-      "installed": "📦 Shaders Installés"
+      "featured": "⭐ Notre sélection",
+      "catalog": "🔍 Tous les shaders",
+      "installed": "📦 Shaders installés",
+      "installed_count": "📦 Shaders installés ({count})"
     },
     "search_placeholder": "Rechercher un shader sur Modrinth...",
     "active": "Actif",
@@ -58,14 +151,31 @@
     "deactivate": "Désactiver",
     "download": "Installer",
     "delete": "Désinstaller",
+    "update_now": "🔄 Mettre à jour",
+    "active_check": "Actif ✓",
     "installed_badge": "Installé",
+    "badge": {
+      "update_available": "🔄 MISE À JOUR DISPONIBLE",
+      "active": "● ACTIF",
+      "installed": "INSTALLÉ",
+      "featured": "En vedette"
+    },
+    "perf": {
+      "heavy": "🔥 Gourmand",
+      "fps": "⚡ Léger",
+      "balanced": "⚖️ Équilibré"
+    },
+    "installed_description": "Pack de shaders installé ({file})",
     "no_installed": "Aucun shader installé pour le moment.",
     "modal": {
       "by": "Par",
-      "downloads": "téléchargements",
-      "likes": "j'aime",
+      "unknown_author": "Créateur Modrinth",
+      "downloads": "📥 {count} téléchargements",
+      "likes": "⭐ {count} j'aime",
       "loading_screenshots": "Chargement des captures HD...",
-      "about": "À propos de ce Shader"
+      "about": "À propos de ce shader",
+      "previous_image": "Image précédente",
+      "next_image": "Image suivante"
     }
   }
 }

@@ -12,3 +12,4 @@ java/
 test-results/
 playwright-report/
 coverage/
+!tools/*.mjs

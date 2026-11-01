@@ -23,16 +23,17 @@ Electron desktop launcher for the Arffornia Minecraft server: Microsoft login (m
 | `src/preload/index.js` | `contextBridge` API exposed as `window.api` |
 | `src/renderer/src/` | Vue 3 app: `pages/`, `components/`, `stores/` (Pinia), `js/` (HTTP clients), `i18n/` |
 | `resources/` | Icons bundled with the app |
-| `package.json#build` | electron-builder config (the real one; `electron-builder.yml` is ignored) |
-| `.github/workflows/` | `ci.yml` (PR checks), `release.yml` (tag -> installers), `security.yml` (Trivy) |
+| `package.json#build` | electron-builder config, the live one (electron-builder ignores a config file when this key exists) |
+| `electron-builder.beta.cjs`, `src/shared/channel.js` | "Arffornia Launcher Beta" (spec 016): beta app id, data folder `.Arffornia_beta/`, `beta` update channel; built by `beta.yml` |
+| `.github/workflows/` | `ci.yml` (PR checks), `release.yml` (tag -> installers), `beta.yml` (rolling `beta` pre-release + PR artifacts), `security.yml` (Trivy) |
 
 ## Commands
 
 ```bash
 npm ci            # install (postinstall runs electron-builder install-app-deps)
-make check        # lint + tests + build; must pass before a PR
+make check        # lint + arch + tests + build; must pass before a PR
 make lint         # eslint . (read-only); npm run lint:fix to autofix
-make test         # unit tests
+make test         # unit tests (Vitest, test/unit/)
 make build        # electron-vite build -> out/
 make e2e          # Playwright E2E on out/ (xvfb-run -a make e2e when headless)
 make fmt          # prettier --write .
@@ -87,6 +88,13 @@ Whether to adopt `// @ts-check` + JSDoc or migrate to TypeScript is an open deci
 - The mod list (`Arffornia_Network`) and external files (`Arffornia_Provisioning`) are fetched from
   mutable `main` branches on raw.githubusercontent.
 - The Nexus libraries come from the public npm registry, not from git.
+
+## AI harness (agent-kit v2)
+- `.claude/settings.json` (agent-kit plugin: hooks for fmt, `make check` and the end-of-task review gate; deny rules; sandbox), `.claude/rules/vue-electron.md`. Harness friction or corrections → `/arffornia:harness-feedback`.
+- `REVIEW.md` + `risk.yml` drive the depth of the end-of-task review (`/arffornia:review`, in the session; no AI review in CI); `GOLDEN_PRINCIPLES.md`; `PROGRESS.md` is the session handoff.
+- `make arch` (part of `make check`): dependency-cruiser process boundaries (`.dependency-cruiser.cjs`) and
+  `tools/check-preload-exposure.mjs`. Existing debt is in `.dependency-cruiser-known-violations.json` and
+  `tools/preload-exposure-known.json`; both may only shrink.
 
 ## Related repos
 

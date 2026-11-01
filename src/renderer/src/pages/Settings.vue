@@ -12,7 +12,7 @@
                 <div class="select">
                   <select id="ram-select" v-if="ramOptions.length" v-model="selectedRAM" @change="onRamChangeEvent">
                     <option v-for="ram in ramOptions" :key="ram" :value="ram">
-                      {{ ram }}Go
+                      {{ t('settings.game.ram_value', { amount: ram }) }}
                     </option>
                   </select>
                 </div>
@@ -24,7 +24,7 @@
               <div class="select">
                 <select id="lang-select" v-model="userStore.selectedLang" @change="onLangChangeEvent">
                   <option v-for="lang in userStore.availableLangs" :key="lang" :value="lang">
-                    {{ lang.toUpperCase() }}
+                    {{ t(`languages.${lang}`) }}
                   </option>
                 </select>
               </div>
@@ -51,9 +51,31 @@
 
             <div class="content">
               {{ t('settings.launcher.launcher_version') }}
-              <p id="launcherVersion">Alpha 0.1.15</p>
+              <p v-if="beta" id="launcherVersion">{{ t('settings.launcher.version_value_beta', { version: launcherVersion }) }}</p>
+              <p v-else id="launcherVersion">{{ t('settings.launcher.version_value', { version: launcherVersion }) }}</p>
             </div>
           </div>
+          <p id="minecraftDisclaimer">{{ t('settings.launcher.disclaimer') }}</p>
+        </div>
+      </div>
+
+      <!-- Beta builds only (spec 016): which server, website API and mod list the game uses. -->
+      <div v-if="beta" class="section-box">
+        <p class="title">{{ t('settings.environment.title') }}</p>
+        <div class="info">
+          <div class="info-list">
+            <div class="content">
+              {{ t('settings.environment.label') }}
+              <div class="select">
+                <select id="env-select" v-model="selectedEnvironment">
+                  <option v-for="env in ENVIRONMENTS" :key="env.id" :value="env.id" :disabled="!env.enabled">
+                    {{ t(`settings.environment.${env.id}`) }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <p id="environmentHint">{{ t('settings.environment.hint') }}</p>
         </div>
       </div>
     </div>
@@ -65,9 +87,13 @@ import { ref, onMounted } from 'vue';
 import { useUserStore } from '../stores/userStore';
 
 import { useI18n } from 'vue-i18n';
+import { ENVIRONMENTS, DEFAULT_ENVIRONMENT, buildVersion, isBeta } from '../../../shared/channel';
 
-const { t } = useI18n()
-const { locale } = useI18n();
+const { t, locale } = useI18n();
+
+const launcherVersion = buildVersion();
+const beta = isBeta();
+const selectedEnvironment = ref(DEFAULT_ENVIRONMENT);
 
 const totalRAM = ref(0);
 const ramOptions = ref([]);
@@ -80,13 +106,15 @@ onMounted(async () => {
 });
 
 async function initRam() {
-  const savedSelectedRam = await window.api.saverLoad("allocatedRam");
-  if (savedSelectedRam !== '') {
-    selectedRAM.value = savedSelectedRam;
-  }
+  const savedSelectedRam = Number(await window.api.saverLoad("allocatedRam"));
 
   totalRAM.value = await window.api.getTotalRAM();
-  ramOptions.value = Array.from({ length: totalRAM.value }, (_, i) => i + 1);
+  const maxRAM = await window.api.getMaxAllocatableRAM();
+  ramOptions.value = Array.from({ length: maxRAM }, (_, i) => i + 1);
+
+  // Same rule as the main process: saved value (or default), capped by what the system allows.
+  const wanted = Number.isInteger(savedSelectedRam) && savedSelectedRam >= 1 ? savedSelectedRam : selectedRAM.value;
+  selectedRAM.value = Math.min(wanted, maxRAM);
 }
 
 const onLangChangeEvent = () => {
@@ -164,6 +192,17 @@ select {
   margin: 0%;
   margin-top: 60px;
   margin: 60px 0px 10px 0px;
+}
+
+#minecraftDisclaimer {
+  margin-top: 12px;
+  font-size: 0.75em;
+  opacity: 0.7;
+}
+
+#environmentHint {
+  opacity: 0.7;
+  font-size: 0.85em;
 }
 
 #launcherVersion {
