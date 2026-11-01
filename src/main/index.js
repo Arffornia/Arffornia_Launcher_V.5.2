@@ -2,7 +2,8 @@ import { app, BrowserWindow } from 'electron'
 import path, { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { autoUpdater } from 'electron-updater'
-import icon from '../../resources/img/Crafting_Table.png?asset'
+import prodIcon from '../../resources/img/Crafting_Table.png?asset'
+import betaIcon from '../../resources/img/beta/Crafting_Table.png?asset'
 
 import { registerNexusSaverHandlers } from './ipcHandlers/nexusSaverHandler';
 import { registerOtherHandlers } from './ipcHandlers/otherHandlers';
@@ -15,11 +16,26 @@ import { NexusLogger } from '@arffornia/nexus_logger';
 import { launcherSettings } from './launcherSettings'
 import { registerLoggerHandlers } from './ipcHandlers/logHandler'
 import { isAllowedNavigation } from './ipc'
+import { appUserModelId, isBeta, updaterOptions } from '../shared/channel'
+
+const icon = isBeta() ? betaIcon : prodIcon
 
 export const logger = new NexusLogger(path.join(launcherSettings.GAME_DIR, "launcher_log.txt"), "ArfforniaLogger");
 
 autoUpdater.autoDownload = true;
 autoUpdater.autoInstallOnAppQuit = true;
+
+// Prod: null, the embedded app-update.yml (GitHub releases/latest) is used unchanged.
+// Beta: the rolling `beta` pre-release only (src/shared/channel.js).
+const betaUpdater = updaterOptions();
+if (betaUpdater) {
+  autoUpdater.setFeedURL(betaUpdater.feed);
+  autoUpdater.channel = betaUpdater.channel;
+  autoUpdater.allowPrerelease = betaUpdater.allowPrerelease;
+  autoUpdater.allowDowngrade = betaUpdater.allowDowngrade;
+  autoUpdater.disableDifferentialDownload = betaUpdater.disableDifferentialDownload;
+}
+const updatesEnabled = betaUpdater ? betaUpdater.enabled : true;
 
 let mainWindow;
 
@@ -63,11 +79,13 @@ function createWindow() {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
 
-  autoUpdater.checkForUpdates();
+  if (updatesEnabled) {
+    autoUpdater.checkForUpdates();
+  }
 }
 
 app.whenReady().then(() => {
-  electronApp.setAppUserModelId('com.electron')
+  electronApp.setAppUserModelId(appUserModelId())
 
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)

@@ -10,6 +10,7 @@ import en from '../../src/renderer/src/i18n/locales/en.json'
 import fr from '../../src/renderer/src/i18n/locales/fr.json'
 import { StepName } from '../../src/main/progressManager.js'
 import { SUPPORTED_LOCALES, resolveLocale } from '../../src/renderer/src/i18n/translator.js'
+import { ENVIRONMENTS } from '../../src/shared/channel.js'
 
 // progressManager imports the Electron entry point; only its StepName enum is needed here.
 vi.mock('../../src/main/index.js', () => ({ getMainWindow: () => null, logger: { info() {} } }))
@@ -81,6 +82,7 @@ describe('launcher i18n', () => {
   it('every t()/$t() call uses a literal key or a known dynamic prefix', () => {
     const allowedDynamic = [
       'languages.', // Settings.vue: t(`languages.${lang}`)
+      'settings.environment.', // Settings.vue: t(`settings.environment.${env.id}`), checked below
       'stepKey', // GlobalProgressBar.vue: `progress.steps.${stepName}`, covered by the step test
       'performanceTag.labelKey', // ShaderCard.vue: literal keys checked above
       'props.messageKey' // Notification.vue: keys from addNotification, checked above
@@ -94,6 +96,14 @@ describe('launcher i18n', () => {
       }
     }
     expect(offenders).toEqual([])
+  })
+
+  it('has a label for every beta environment', () => {
+    for (const { id } of ENVIRONMENTS) {
+      for (const locale of Object.keys(LOCALES)) {
+        expect(flat[locale][`settings.environment.${id}`], `${locale}: settings.environment.${id}`).toBeTruthy()
+      }
+    }
   })
 
   it('has a label for every progress step and every supported locale', () => {

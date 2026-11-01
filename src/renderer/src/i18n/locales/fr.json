@@ -115,7 +115,16 @@
       "game_file_btn": "Ouvrir",
       "launcher_version": "Version du launcher :",
       "version_value": "Alpha {version}",
-      "disclaimer": "PRODUIT MINECRAFT NON OFFICIEL. NON APPROUVÉ PAR MOJANG OU MICROSOFT ET SANS LIEN AVEC EUX."
+      "disclaimer": "PRODUIT MINECRAFT NON OFFICIEL. NON APPROUVÉ PAR MOJANG OU MICROSOFT ET SANS LIEN AVEC EUX.",
+      "version_value_beta": "Bêta {version}"
+    },
+    "environment": {
+      "title": "Environnement : ",
+      "label": "Environnement de jeu :",
+      "hint": "Staging et Serveur de test arrivent avec le serveur de staging.",
+      "production": "Production",
+      "staging": "Staging",
+      "slot": "Serveur de test"
     }
   },
   "shaders": {

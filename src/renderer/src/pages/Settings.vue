@@ -51,10 +51,31 @@
 
             <div class="content">
               {{ t('settings.launcher.launcher_version') }}
-              <p id="launcherVersion">{{ t('settings.launcher.version_value', { version: launcherVersion }) }}</p>
+              <p v-if="beta" id="launcherVersion">{{ t('settings.launcher.version_value_beta', { version: launcherVersion }) }}</p>
+              <p v-else id="launcherVersion">{{ t('settings.launcher.version_value', { version: launcherVersion }) }}</p>
             </div>
           </div>
           <p id="minecraftDisclaimer">{{ t('settings.launcher.disclaimer') }}</p>
+        </div>
+      </div>
+
+      <!-- Beta builds only (spec 016): which server, website API and mod list the game uses. -->
+      <div v-if="beta" class="section-box">
+        <p class="title">{{ t('settings.environment.title') }}</p>
+        <div class="info">
+          <div class="info-list">
+            <div class="content">
+              {{ t('settings.environment.label') }}
+              <div class="select">
+                <select id="env-select" v-model="selectedEnvironment">
+                  <option v-for="env in ENVIRONMENTS" :key="env.id" :value="env.id" :disabled="!env.enabled">
+                    {{ t(`settings.environment.${env.id}`) }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <p id="environmentHint">{{ t('settings.environment.hint') }}</p>
         </div>
       </div>
     </div>
@@ -66,10 +87,13 @@ import { ref, onMounted } from 'vue';
 import { useUserStore } from '../stores/userStore';
 
 import { useI18n } from 'vue-i18n';
+import { ENVIRONMENTS, DEFAULT_ENVIRONMENT, buildVersion, isBeta } from '../../../shared/channel';
 
 const { t, locale } = useI18n();
 
-const launcherVersion = '0.1.15';
+const launcherVersion = buildVersion();
+const beta = isBeta();
+const selectedEnvironment = ref(DEFAULT_ENVIRONMENT);
 
 const totalRAM = ref(0);
 const ramOptions = ref([]);
@@ -174,6 +198,11 @@ select {
   margin-top: 12px;
   font-size: 0.75em;
   opacity: 0.7;
+}
+
+#environmentHint {
+  opacity: 0.7;
+  font-size: 0.85em;
 }
 
 #launcherVersion {
