@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHashHistory } from 'vue-router';
 import MainLayout from '../components/MainLayout.vue';
 import Home from '../pages/Home.vue';
 import Settings from '../pages/Settings.vue';
@@ -23,7 +23,8 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
+  // Hash history: the app is loaded from file://, where a path-based URL breaks on reload.
+  history: createWebHashHistory(),
   routes
 });
 

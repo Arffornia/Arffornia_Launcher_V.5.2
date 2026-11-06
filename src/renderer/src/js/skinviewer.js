@@ -30,13 +30,20 @@ export async function initializeSkinViewers() {
       username = "Steve";
     }
 
-    const viewer = new skinview3d.SkinViewer({
-      canvas: element,
-      width: overrideWidth || 200,
-      height: overrideHeight || 300,
-      skin: `https://mineskin.eu/skin/${username}`,
-      enableControls: true
-    });
+    let viewer;
+    try {
+      viewer = new skinview3d.SkinViewer({
+        canvas: element,
+        width: overrideWidth || 200,
+        height: overrideHeight || 300,
+        skin: `https://mineskin.eu/skin/${username}`,
+        enableControls: true
+      });
+    } catch (error) {
+      // No WebGL (old GPU, disabled hardware acceleration, headless CI): the podium stays without 3D skins.
+      window.api.logger("warn", `Skin viewer unavailable: ${error}`);
+      return;
+    }
 
     viewer.animation = new skinview3d.WalkingAnimation();
     viewer.animation.speed = rdFromRange(0.35, 0.6);

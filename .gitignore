@@ -9,3 +9,7 @@ dist/
 .Arffornia_V.5.2
 java/
 !tools/*.mjs
+
+test-results/
+playwright-report/
+coverage/

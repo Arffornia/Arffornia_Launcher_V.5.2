@@ -1,3 +1,4 @@
+import { dataDirMigrations } from './migrateDataDirs'
 import { app, BrowserWindow } from 'electron'
 import path, { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
@@ -21,6 +22,10 @@ import { appUserModelId, isBeta, updaterOptions } from '../shared/channel'
 const icon = isBeta() ? betaIcon : prodIcon
 
 export const logger = new NexusLogger(path.join(launcherSettings.GAME_DIR, "launcher_log.txt"), "ArfforniaLogger");
+for (const m of dataDirMigrations) {
+  if (m.error) logger.warn(`Could not move ${m.from} to ${m.to}: ${m.error}`);
+  else logger.info(`Moved ${m.from} to ${m.to}`);
+}
 
 autoUpdater.autoDownload = true;
 autoUpdater.autoInstallOnAppQuit = true;
@@ -49,10 +54,9 @@ function createWindow() {
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
-      sandbox: false,
-      webSecurity: false,
-      // nodeIntegration: true,
-      // contextIsolation: false
+      sandbox: true,
+      contextIsolation: true,
+      nodeIntegration: false
     }
   })
 

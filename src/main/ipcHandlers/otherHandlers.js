@@ -1,8 +1,7 @@
-import { app, shell } from "electron";
+import { shell } from "electron";
 import { handle } from "../ipc";
 import os from 'os';
 import { launcherSettings } from "../launcherSettings";
-import path from "path";
 import { maxAllocatableRamGb } from "../memory";
 
 export function registerOtherHandlers() {
@@ -14,10 +13,5 @@ export function registerOtherHandlers() {
     return maxAllocatableRamGb(os.totalmem() / 1024 / 1024 / 1024);
   });
 
-  handle('open-local-game-file', () => {
-    const launcherRoot = path.dirname(app.getPath("exe"));
-    // resolve, not join: GAME_DIR is absolute on macOS
-    const gameDir = path.resolve(launcherRoot, launcherSettings.GAME_DIR);
-    return shell.openPath(gameDir);
-  });
+  handle('open-local-game-file', () => shell.openPath(launcherSettings.GAME_DIR));
 }

@@ -95,7 +95,8 @@ jobs:
         run: npx electron-builder --config electron-builder.beta.cjs ${{ matrix.target }} --x64 --publish never
 
       # Started from an empty folder like a desktop launch: the beta must start, create its own
-      # .Arffornia_beta/production folder and never touch the prod launcher's .Arffornia_V.5.2.
+      # <data root>/beta/production folder, never touch the prod launcher's <data root>/game and
+      # write nothing in the working directory.
       - name: Launch smoke test (Linux AppImage)
         if: matrix.name == 'linux'
         run: |
@@ -103,23 +104,25 @@ jobs:
           app=$(ls "$PWD"/dist/Arffornia-Launcher-Beta-*.AppImage)
           chmod +x "$app"
           home=$(mktemp -d)
+          export XDG_DATA_HOME="$home/share"
           cd "$home"
           # ELECTRON_ENABLE_LOGGING prints the renderer console, so a page that throws while loading
           # (a blank window) fails here too.
           ELECTRON_ENABLE_LOGGING=1 APPIMAGE_EXTRACT_AND_RUN=1 xvfb-run -a "$app" --no-sandbox > "$RUNNER_TEMP/launcher.log" 2>&1 &
           for _ in $(seq 1 30); do
-            if [ -d "$home/.Arffornia_beta/production/shaderpacks" ]; then break; fi
+            if [ -d "$XDG_DATA_HOME/arffornia/beta/production/shaderpacks" ]; then break; fi
             sleep 2
           done
           sleep 5
-          ls -la "$home" "$home/.Arffornia_beta" || true
+          ls -la "$home" "$XDG_DATA_HOME/arffornia" || true
           if ! pgrep -f arffornia-launcher-beta > /dev/null; then
             cat "$RUNNER_TEMP/launcher.log"
             echo "::error::the beta launcher exited during startup"
             exit 1
           fi
-          test -d "$home/.Arffornia_beta/production/shaderpacks"
-          test ! -e "$home/.Arffornia_V.5.2"
+          test -d "$XDG_DATA_HOME/arffornia/beta/production/shaderpacks"
+          test ! -e "$XDG_DATA_HOME/arffornia/game"
+          test -z "$(ls -A "$home" | grep -v '^share$')"
           if grep -E 'Uncaught (ReferenceError|TypeError|SyntaxError)' "$RUNNER_TEMP/launcher.log"; then
             echo "::error::the renderer threw while loading (blank window)"
             exit 1
@@ -138,14 +141,16 @@ jobs:
           if (-not $exe) { throw 'the installer did not install "Arffornia Launcher Beta.exe"' }
           Write-Host "Installed: $($exe.FullName)"
           $home_ = New-Item -ItemType Directory -Path (Join-Path $env:RUNNER_TEMP 'beta-home')
+          $env:LOCALAPPDATA = (New-Item -ItemType Directory -Path (Join-Path $env:RUNNER_TEMP 'beta-localappdata')).FullName
           $p = Start-Process -FilePath $exe.FullName -WorkingDirectory $home_.FullName -PassThru
-          $data = Join-Path $home_.FullName '.Arffornia_beta\production\shaderpacks'
+          $data = Join-Path $env:LOCALAPPDATA 'Arffornia\beta\production\shaderpacks'
           for ($i = 0; $i -lt 30 -and -not (Test-Path $data); $i++) { Start-Sleep -Seconds 2 }
           Start-Sleep -Seconds 5
           Get-ChildItem -Force $home_.FullName | Format-Table Name
           if ($p.HasExited) { throw "the beta launcher exited during startup (code $($p.ExitCode))" }
           if (-not (Test-Path $data)) { throw "no $data" }
-          if (Test-Path (Join-Path $home_.FullName '.Arffornia_V.5.2')) { throw 'the beta wrote the prod data folder' }
+          if (Test-Path (Join-Path $env:LOCALAPPDATA 'Arffornia\game')) { throw 'the beta wrote the prod data folder' }
+          if (Get-ChildItem -Force $home_.FullName) { throw 'the beta wrote in its working directory' }
           Stop-Process -Id $p.Id -Force
 
       - uses: actions/upload-artifact@v5
@@ -190,7 +195,7 @@ jobs:
           {
             echo "**Arffornia Launcher Beta $VERSION**, built from \`main\` at ${GITHUB_SHA}."
             echo
-            echo "Not for players: it installs next to the normal launcher, keeps its data in \`.Arffornia_beta/\`"
+            echo "Not for players: it installs next to the normal launcher, keeps its data in \`beta/\` under the Arffornia data folder"
             echo "and updates only from this pre-release. Players keep getting [the latest stable release](https://github.com/${GITHUB_REPOSITORY}/releases/latest)."
             echo "The \`beta\` tag is only an anchor; the commit above is what was built."
             echo

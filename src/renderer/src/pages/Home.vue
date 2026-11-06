@@ -64,7 +64,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
 import Podium from '../components/Podium.vue';
 import { useUserStore } from '../stores/userStore';
 import { fetchBestSellers, fetchNewestItems, fetchSaleItems } from '../js/arfforniaApi.js';
@@ -79,8 +79,10 @@ const saleItems = ref([]);
 const showPodium = ref(false);
 const gameRunning = ref(false);
 
+let unsubscribeGameRunningState = null;
+
 onMounted(async () => {
-  window.electron.ipcRenderer.on('gameRunningState', handleGameRunningState);
+  unsubscribeGameRunningState = window.api.onGameRunningState(handleGameRunningState);
 
   try {
     const isRunning = await window.api.getIsGameRunning();
@@ -107,7 +109,11 @@ const playLabel = computed(() =>
   gameRunning.value ? t('home.playbox.running') : t('home.playbox.play')
 );
 
-const handleGameRunningState = (_event, data) => {
+onBeforeUnmount(() => {
+  unsubscribeGameRunningState?.();
+});
+
+const handleGameRunningState = (data) => {
   gameRunning.value = data.isRunning;
 };
 

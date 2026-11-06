@@ -1,9 +1,9 @@
-
 import { resolveDataDir } from './dataDir';
 import { dataDirs } from '../shared/channel';
 import { ARFFORNIA_API_ENDPOINT, JSON_EXTERNAL_FILES_URL, JSON_MOD_LIST_URL } from '../shared/endpoints';
 
-// Prod: ./.Arffornia_V.5.2 and ./java. Beta: ./.Arffornia_beta/<env> and ./.Arffornia_beta/java.
+// Absolute, per-user folders (src/main/dataDir.js). Prod: <root>/game and <root>/java.
+// Beta: <root>/beta/<env> and <root>/beta/java.
 const dirs = dataDirs();
 
 export const launcherSettings = {

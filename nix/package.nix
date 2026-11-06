@@ -48,10 +48,8 @@ appimageTools.wrapType2 {
   # Libraries for the game itself (the JRE and LWJGL natives are downloaded by the launcher).
   extraPkgs = import ./game-libs.nix;
 
-  # The launcher keeps its data in the working directory until
-  # https://github.com/Arffornia/Arffornia_Launcher_V.5.2/issues/42 moves it to the user data
-  # folder. Start from $HOME so `nix run` from any folder uses the same ~/.Arffornia_V.5.2 as
-  # a desktop launch.
+  # Data lives in ~/.local/share/arffornia. Older launchers kept it in the working directory;
+  # starting from $HOME lets the launcher find ~/.Arffornia_V.5.2 and move it there once.
   extraBwrapArgs = [ "--chdir" "\"$HOME\"" ];
 
   extraInstallCommands = ''

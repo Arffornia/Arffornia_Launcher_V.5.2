@@ -24,7 +24,7 @@ const modName = ref('')
 const modIndex = ref(0)
 const totalMods = ref(0)
 
-const handler = (_event, data) => {
+const handler = (data) => {
   progress.value = data.value
   stepName.value = data.stepName || ''
   modName.value = data.modName || ''
@@ -32,12 +32,14 @@ const handler = (_event, data) => {
   totalMods.value = data.totalMods || 0
 }
 
+let unsubscribe = null
+
 onMounted(() => {
-  window.electron.ipcRenderer.on('globalProgress', handler)
+  unsubscribe = window.api.onGlobalProgress(handler)
 })
 
 onBeforeUnmount(() => {
-  window.electron.ipcRenderer.removeListener('globalProgress', handler)
+  unsubscribe?.()
 })
 
 const overallStatusText = computed(() => {

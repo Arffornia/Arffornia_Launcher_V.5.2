@@ -10,6 +10,7 @@ import {
   buildChannel,
   buildVersion,
   dataDirs,
+  legacyDataDirs,
   isBeta,
   updaterOptions
 } from '../../src/shared/channel'
@@ -29,7 +30,8 @@ describe('prod build (no ARFFORNIA_CHANNEL)', () => {
   })
 
   it('keeps the historical data folders and app user model id', () => {
-    expect(dataDirs('')).toEqual({ gameDir: './.Arffornia_V.5.2', javaDir: './java' })
+    expect(dataDirs('')).toEqual({ gameDir: 'game', javaDir: 'java' })
+    expect(legacyDataDirs('')).toEqual({ gameDir: '.Arffornia_V.5.2', javaDir: null })
     expect(appUserModelId('')).toBe('com.electron')
   })
 
@@ -56,11 +58,12 @@ describe('beta build (ARFFORNIA_CHANNEL=beta)', () => {
   })
 
   it('keeps its data under .Arffornia_beta/<env>, apart from the prod launcher', () => {
-    expect(dataDirs('beta')).toEqual({
-      gameDir: './.Arffornia_beta/production',
-      javaDir: './.Arffornia_beta/java'
+    expect(dataDirs('beta')).toEqual({ gameDir: 'beta/production', javaDir: 'beta/java' })
+    expect(dataDirs('beta', 'staging').gameDir).toBe('beta/staging')
+    expect(legacyDataDirs('beta')).toEqual({
+      gameDir: '.Arffornia_beta/production',
+      javaDir: '.Arffornia_beta/java'
     })
-    expect(dataDirs('beta', 'staging').gameDir).toBe('./.Arffornia_beta/staging')
     expect(appUserModelId('beta')).toBe(BETA_APP_ID)
   })
 
