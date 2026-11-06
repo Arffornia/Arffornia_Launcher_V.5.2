@@ -8,7 +8,8 @@ const { mockRemoteEndpoints } = require('./fixtures.cjs')
 const APP_DIR = path.resolve(__dirname, '../..')
 
 /**
- * Start the launcher in a throwaway working directory (game data is CWD-relative).
+ * Start the launcher with its data root in a throwaway directory (XDG_DATA_HOME on Linux,
+ * LOCALAPPDATA on Windows), so a run never touches the real install.
  * --no-sandbox: CI runners and containers cannot use Chromium's SUID / user-namespace sandbox.
  * The renderer isolation checked below (contextIsolation, no Node in the page) does not depend on it.
  */
@@ -16,7 +17,13 @@ async function launchApp(workDir) {
   const app = await electron.launch({
     args: ['--no-sandbox', APP_DIR],
     cwd: workDir,
-    env: { ...process.env, NODE_ENV: 'production', ELECTRON_ENABLE_LOGGING: '1' }
+    env: {
+      ...process.env,
+      XDG_DATA_HOME: workDir,
+      LOCALAPPDATA: workDir,
+      NODE_ENV: 'production',
+      ELECTRON_ENABLE_LOGGING: '1'
+    }
   })
   const window = await app.firstWindow()
   // Requests from the Electron renderer are only intercepted at page level. Install the mocks,
@@ -59,13 +66,13 @@ test('boots and renders Home from mocked endpoints', async () => {
 test('navigates across the main routes', async () => {
   const { app, window, errors } = await launchApp(workDir)
   try {
-    await window.locator('nav a[href="/settings"]').click()
+    await window.locator('nav a[href="#/settings"]').click()
     await expect(window.locator('#page-title')).toBeVisible()
     await expect(window.locator('#lang-select')).toBeVisible()
 
     for (const href of ['/highlight', '/notification', '/shaders', '/']) {
-      await window.locator(`nav a[href="${href}"]`).click()
-      await expect(window).toHaveURL(new RegExp(`${href.replace('/', '\\/')}$`))
+      await window.locator(`nav a[href="#${href}"]`).click()
+      await expect(window).toHaveURL(new RegExp(`#${href.replace('/', '\\/')}$`))
     }
     await expect(window.locator('.mediumPlayBtn')).toBeVisible()
     expect(errors).toEqual([])
@@ -77,7 +84,7 @@ test('navigates across the main routes', async () => {
 test('language choice persists across restarts', async () => {
   let run = await launchApp(workDir)
   try {
-    await run.window.locator('nav a[href="/settings"]').click()
+    await run.window.locator('nav a[href="#/settings"]').click()
     await run.window.locator('#lang-select').selectOption('fr')
     await expect(run.window.locator('#page-title')).toHaveText(/Paramètres/)
   } finally {
@@ -86,7 +93,7 @@ test('language choice persists across restarts', async () => {
 
   run = await launchApp(workDir)
   try {
-    await run.window.locator('nav a[href="/settings"]').click()
+    await run.window.locator('nav a[href="#/settings"]').click()
     await expect(run.window.locator('#page-title')).toHaveText(/Paramètres/)
     await expect(run.window.locator('#lang-select')).toHaveValue('fr')
   } finally {
