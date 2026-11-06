@@ -12,10 +12,20 @@ export const ENCRYPTED_PREFIX = 'enc:v1:'
 export function createSecretStore({ saver, safeStorage, logger }) {
   // Used when the OS offers no encryption: the secret is kept for this session only.
   const memory = new Map()
+  let backendChecked = false
 
   const available = () => {
     try {
-      return safeStorage.isEncryptionAvailable()
+      const ok = safeStorage.isEncryptionAvailable()
+      if (ok && !backendChecked && typeof safeStorage.getSelectedStorageBackend === 'function') {
+        backendChecked = true
+        // Linux without a keyring: Chromium falls back to a fixed key, so the session is only
+        // obfuscated. Still saved (players without a keyring would log in at every start), but logged.
+        if (safeStorage.getSelectedStorageBackend() === 'basic_text') {
+          logger.warn('No OS keyring found (basic_text): the saved session is only protected by file permissions')
+        }
+      }
+      return ok
     } catch {
       return false
     }
