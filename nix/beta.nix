@@ -9,7 +9,7 @@
 #   2. downloads the AppImage into ~/.cache/arffornia-beta when that version is not cached yet,
 #      and checks its sha512 before keeping it (a mismatch is deleted, never run);
 #   3. runs it with appimage-run, with the same game libraries as the stable package, from
-#      $HOME, so the beta's data lands in ~/.Arffornia_beta (never ~/.Arffornia_V.5.2).
+#      $HOME. Its data lives in ~/.local/share/arffornia/beta (never the prod game folder).
 # Offline, it runs the newest cached beta. `--fetch-only` downloads and checks without running
 # (used by CI). ARFFORNIA_BETA_URL overrides the release URL (tests).
 {
@@ -88,7 +88,8 @@ let
         exit 0
       fi
 
-      # The launcher keeps its data relative to the working directory (issue #42).
+      # From $HOME, so the launcher finds an older ~/.Arffornia_beta and moves it to
+      # ~/.local/share/arffornia/beta once.
       cd "$HOME"
       exec appimage-run "$cache/$file" "$@"
     '';

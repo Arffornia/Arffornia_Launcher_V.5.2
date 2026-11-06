@@ -24,7 +24,7 @@ Electron desktop launcher for the Arffornia Minecraft server: Microsoft login (m
 | `src/renderer/src/` | Vue 3 app: `pages/`, `components/`, `stores/` (Pinia), `js/` (HTTP clients), `i18n/` |
 | `resources/` | Icons bundled with the app |
 | `package.json#build` | electron-builder config, the live one (electron-builder ignores a config file when this key exists) |
-| `electron-builder.beta.cjs`, `src/shared/channel.js` | "Arffornia Launcher Beta" (spec 016): beta app id, data folder `.Arffornia_beta/`, `beta` update channel; built by `beta.yml` |
+| `electron-builder.beta.cjs`, `src/shared/channel.js` | "Arffornia Launcher Beta" (spec 016): beta app id, data folder `beta/`, `beta` update channel; built by `beta.yml` |
 | `.github/workflows/` | `ci.yml` (PR checks), `release.yml` (tag -> installers), `beta.yml` (rolling `beta` pre-release + PR artifacts), `security.yml` (Trivy) |
 
 ## Commands
@@ -72,14 +72,19 @@ Whether to adopt `// @ts-check` + JSDoc or migrate to TypeScript is an open deci
   stores and components with `happy-dom`. Tests must run offline (mock HTTP).
 - E2E: Playwright for Electron (`test/e2e/`, `playwright.config.cjs`) on the built app under
   `xvfb-run`. Every remote endpoint is mocked with page-level routes (`test/e2e/fixtures.cjs`);
-  an unmocked remote request fails the boot test. The app runs in a temp working directory.
+  an unmocked remote request fails the boot test. The app runs with `XDG_DATA_HOME` and
+  `LOCALAPPDATA` set to a temp directory.
   Never real Microsoft credentials in CI.
 - The game launch itself (Java, NeoForge, MCLC) is verified manually by the maintainer.
 
 ## Gotchas
 
-- Game and Java directories (`./.Arffornia_V.5.2`, `./java`) are relative to the **process working
-  directory**, not the install dir. `open-local-game-file` resolves against the exe dir instead.
+- Game and Java directories are absolute, under a per-user data root (`src/main/dataDir.js`):
+  `%LOCALAPPDATA%\Arffornia`, `~/Library/Application Support/Arffornia`, `~/.local/share/arffornia`.
+  `src/main/migrateDataDirs.js` must stay the first import of `src/main/index.js`: it moves an older
+  working-directory install before the logger and Nexus_Saver open files.
+- Main modules that run at import must not read `logger` eagerly: `src/main/index.js` defines it
+  after its imports are evaluated (circular import). Read it inside functions.
 - Several main modules have side effects at import (`shaderManager` creates directories, Nexus_Saver
   creates its file, `minecraftManager` registers `is-game-running`). Modules import `'.'`
   (`src/main/index.js`) back, which creates circular imports: mock `'.'` in unit tests.

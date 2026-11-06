@@ -56,7 +56,7 @@ jobs:
           codesign --display --entitlements - "$app"
           spctl --assess --type execute --verbose "$app" \
             || echo "Gatekeeper rejects it, as expected without a Developer ID"
-          data="$HOME/Library/Application Support/Arffornia/.Arffornia_V.5.2"
+          data="$HOME/Library/Application Support/Arffornia/game"
           (cd / && "$exe" > "$RUNNER_TEMP/launcher.log" 2>&1 &)
           for _ in $(seq 1 30); do
             if [ -d "$data/shaderpacks" ]; then break; fi

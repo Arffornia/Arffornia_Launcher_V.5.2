@@ -44,10 +44,12 @@ There are no environment variables or secrets needed for development.
 
 - `src/main/launcherSettings.js`: game and loader versions, API endpoint (`https://arffornia.com/api/`),
   mod list and external-files manifest URLs, game and Java directories.
-- Game data lives in `./.Arffornia_V.5.2` and the Java runtime in `./java`, **relative to the working
-  directory the launcher was started from** (Windows, Linux). On macOS both live in
-  `~/Library/Application Support/Arffornia/`, because apps opened from Finder start in `/`, which is
-  read-only. The game directory holds `launcherOptions.json` (settings and
+- Game data lives in `game/` and the Java runtime in `java/` under a per-user data folder:
+  `%LOCALAPPDATA%\Arffornia` on Windows, `~/Library/Application Support/Arffornia` on macOS and
+  `$XDG_DATA_HOME/arffornia` (default `~/.local/share/arffornia`) on Linux. The beta uses
+  `beta/<environment>/` and `beta/java/` in the same folder. Older launchers kept the game folder
+  (`.Arffornia_V.5.2`, `.Arffornia_beta/`) in the working directory; it is moved once at start-up.
+  The game directory holds `launcherOptions.json` (settings and
   login session, via Nexus_Saver), `launcher_log.txt`, the game files, `shaderpacks/` and
   `config/iris.properties`.
 - Packaging is configured by the `build` field of `package.json`. `electron-builder.yml` is not used
@@ -68,7 +70,7 @@ it to the rolling [`beta` pre-release](https://github.com/Arffornia/Arffornia_La
 It is not for players:
 
 - it installs next to the normal launcher (app id `fr.arffornia.launcher.beta`, its own install
-  folder, shortcut and badged icon) and keeps its data in `.Arffornia_beta/` instead of `.Arffornia_V.5.2`;
+  folder, shortcut and badged icon) and keeps its data in `beta/` instead of `game/` in the same data folder;
 - it updates only from the `beta` pre-release (`beta.yml`, `beta-linux.yml`). The normal launcher
   updates from `releases/latest`, which never returns a pre-release; a guard job checks it after
   every publish;
@@ -127,7 +129,7 @@ environment.systemPackages = [ inputs.arffornia.packages.x86_64-linux.default ];
 ```
 
 Testers: the **beta** (newest build of `main`, side by side with the stable launcher, data in
-`~/.Arffornia_beta`):
+`~/.local/share/arffornia/beta`):
 
 ```bash
 nix run github:Arffornia/Arffornia_Launcher_V.5.2#beta

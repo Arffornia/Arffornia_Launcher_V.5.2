@@ -49,15 +49,27 @@ export const ENVIRONMENTS = [
 export const DEFAULT_ENVIRONMENT = 'production'
 
 /**
- * Data folders, relative like the historical ones (resolveDataDir makes them absolute on macOS).
- * The beta keeps everything under .Arffornia_beta/, one game folder per environment, so it never
- * touches the prod launcher's .Arffornia_V.5.2 and java folders.
+ * Data folders, relative to the per-user data root (src/main/dataDir.js).
+ * The beta keeps everything under beta/, one game folder per environment, so it never touches
+ * the prod launcher's game and java folders.
  */
 export function dataDirs(channel = buildChannel(), environment = DEFAULT_ENVIRONMENT) {
   if (!isBeta(channel)) {
-    return { gameDir: './.Arffornia_V.5.2', javaDir: './java' }
+    return { gameDir: 'game', javaDir: 'java' }
   }
-  return { gameDir: `./.Arffornia_beta/${environment}`, javaDir: './.Arffornia_beta/java' }
+  return { gameDir: `beta/${environment}`, javaDir: 'beta/java' }
+}
+
+/**
+ * The same folders as older launchers named them, relative to their working directory.
+ * The prod Java folder was a bare `java` (on Linux often ~/java): too generic to move safely, so
+ * it is null and Java is downloaded again.
+ */
+export function legacyDataDirs(channel = buildChannel(), environment = DEFAULT_ENVIRONMENT) {
+  if (!isBeta(channel)) {
+    return { gameDir: '.Arffornia_V.5.2', javaDir: null }
+  }
+  return { gameDir: `.Arffornia_beta/${environment}`, javaDir: '.Arffornia_beta/java' }
 }
 
 /**
