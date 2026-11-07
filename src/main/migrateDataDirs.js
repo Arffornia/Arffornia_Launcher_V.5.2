@@ -7,7 +7,7 @@ import { launcherSettings } from './launcherSettings'
 
 export const dataDirMigrations = []
 
-const legacy = legacyDataDirs()
+const legacy = legacyDataDirs(undefined, launcherSettings.ENVIRONMENT.id)
 const exeDir = path.dirname(app.getPath('exe'))
 const pairs = [
   [launcherSettings.GAME_DIR, legacy.gameDir],

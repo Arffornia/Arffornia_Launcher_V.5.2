@@ -121,7 +121,7 @@
     "environment": {
       "title": "Environnement : ",
       "label": "Environnement de jeu :",
-      "hint": "Staging et Serveur de test arrivent avec le serveur de staging.",
+      "hint": "Le changer redémarre le launcher. Staging et Serveur de test jouent sur le site de staging et le serveur de test.",
       "production": "Production",
       "staging": "Staging",
       "slot": "Serveur de test"

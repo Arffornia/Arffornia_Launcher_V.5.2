@@ -68,6 +68,7 @@ import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
 import Podium from '../components/Podium.vue';
 import { useUserStore } from '../stores/userStore';
 import { fetchBestSellers, fetchNewestItems, fetchSaleItems } from '../js/arfforniaApi.js';
+import { currentEnvironment } from '../js/environment';
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
@@ -119,7 +120,7 @@ const handleGameRunningState = (data) => {
 
 function redirect_item_shop(item) {
   if (item && item.id) {
-    const shopUrl = `https://arffornia.com/shop/${item.id}`;
+    const shopUrl = `${currentEnvironment().website}/shop/${item.id}`;
     window.api.openWebsite(shopUrl);
   }
 }

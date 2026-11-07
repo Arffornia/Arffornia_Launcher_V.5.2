@@ -34,6 +34,8 @@ const api = {
   getTotalRAM: () => ipcRenderer.invoke('get-total-ram'),
   getMaxAllocatableRAM: () => ipcRenderer.invoke('get-max-allocatable-ram'),
   openLocalGameFile: () => ipcRenderer.invoke('open-local-game-file'),
+  getEnvironment: () => ipcRenderer.invoke('get-environment'),
+  setEnvironment: (id) => ipcRenderer.invoke('set-environment', id),
 
   // Nexus Savers
   saverSave: (key, value) => ipcRenderer.invoke('saver-save', key, value),

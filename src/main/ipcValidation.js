@@ -4,6 +4,7 @@
 export const EXTERNAL_HOST_ALLOW_LIST = Object.freeze([
   'arffornia.com',
   'www.arffornia.com',
+  'staging.arffornia.com',
   'discord.gg',
   'discord.com',
   'modrinth.com',

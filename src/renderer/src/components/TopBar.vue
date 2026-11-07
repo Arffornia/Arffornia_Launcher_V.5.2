@@ -8,6 +8,7 @@
 
 <script setup>
 import ServerStatue from '../components/ServerStatue.vue';
+import { currentEnvironment } from '../js/environment';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
@@ -17,7 +18,7 @@ function openDiscord() {
 }
 
 function openWebsite() {
-  window.api.openWebsite("https://arffornia.com");
+  window.api.openWebsite(currentEnvironment().website);
 }
 
 </script>

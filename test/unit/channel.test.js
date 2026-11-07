@@ -10,8 +10,10 @@ import {
   buildChannel,
   buildVersion,
   dataDirs,
+  environmentConfig,
   legacyDataDirs,
   isBeta,
+  resolveEnvironment,
   updaterOptions
 } from '../../src/shared/channel'
 
@@ -67,8 +69,34 @@ describe('beta build (ARFFORNIA_CHANNEL=beta)', () => {
     expect(appUserModelId('beta')).toBe(BETA_APP_ID)
   })
 
-  it('offers Production only until phase 2', () => {
-    expect(ENVIRONMENTS.filter((e) => e.enabled).map((e) => e.id)).toEqual(['production'])
+  it('offers Production, Staging and Test slot', () => {
+    expect(ENVIRONMENTS.filter((e) => e.enabled).map((e) => e.id)).toEqual([
+      'production',
+      'staging',
+      'slot'
+    ])
+  })
+
+  it('points Staging at the staging website, its pack and the test server', () => {
+    const staging = environmentConfig('staging')
+    expect(staging.api).toBe('https://staging.arffornia.com/api/')
+    expect(staging.modList).toBe('https://staging.arffornia.com/pack/config/launcher/modList.json')
+    expect(staging.server).toBe('test.arffornia.com:25566')
+    expect(staging.joinOnPlay).toBe(true)
+  })
+
+  it('keeps production on the prod endpoints, without joining on Play', () => {
+    const prod = environmentConfig('production')
+    expect(prod.api).toBe('https://arffornia.com/api/')
+    expect(prod.joinOnPlay).toBe(false)
+  })
+
+  it('keeps the prod launcher on production whatever is asked', () => {
+    expect(resolveEnvironment('staging', '')).toBe('production')
+  })
+
+  it('falls back to production for an unknown environment', () => {
+    expect(resolveEnvironment('nope', 'beta')).toBe('production')
   })
 })
 

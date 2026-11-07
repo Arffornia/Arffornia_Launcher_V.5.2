@@ -8,6 +8,8 @@
 //                     `beta` pre-release, environment picker.
 // Pure module: imported by main and by the renderer, so no Node built-ins here.
 
+import { ARFFORNIA_API_ENDPOINT, JSON_EXTERNAL_FILES_URL, JSON_MOD_LIST_URL } from './endpoints'
+
 export const BETA = 'beta'
 
 /** Where the beta updater reads beta.yml / beta-linux.yml and the installers. */
@@ -36,17 +38,57 @@ export function isBeta(channel = buildChannel()) {
   return channel === BETA
 }
 
+const STAGING_PACK_URL = 'https://staging.arffornia.com/pack/config/launcher/'
+
 /**
- * Game environments the beta can target. Production is the only one until phase 2 brings
- * staging.arffornia.com and the test slot; the others are listed, disabled, so the picker
- * shows what is coming.
+ * Game environments the beta can target (spec 016). Staging and Test slot share the staging website
+ * and pack, and the test server; in phase 3 a PR can take the test slot over. `joinOnPlay` starts
+ * the game straight on the environment's server: the in-game server list only knows prod.
  */
 export const ENVIRONMENTS = [
-  { id: 'production', enabled: true },
-  { id: 'staging', enabled: false },
-  { id: 'slot', enabled: false }
+  {
+    id: 'production',
+    enabled: true,
+    website: 'https://arffornia.com',
+    api: ARFFORNIA_API_ENDPOINT,
+    modList: JSON_MOD_LIST_URL,
+    externalFiles: JSON_EXTERNAL_FILES_URL,
+    server: 'arffornia.com:25565',
+    joinOnPlay: false
+  },
+  {
+    id: 'staging',
+    enabled: true,
+    website: 'https://staging.arffornia.com',
+    api: 'https://staging.arffornia.com/api/',
+    modList: `${STAGING_PACK_URL}modList.json`,
+    externalFiles: STAGING_PACK_URL,
+    server: 'test.arffornia.com:25566',
+    joinOnPlay: true
+  },
+  {
+    id: 'slot',
+    enabled: true,
+    website: 'https://staging.arffornia.com',
+    api: 'https://staging.arffornia.com/api/',
+    modList: `${STAGING_PACK_URL}modList.json`,
+    externalFiles: STAGING_PACK_URL,
+    server: 'test.arffornia.com:25566',
+    joinOnPlay: true
+  }
 ]
 export const DEFAULT_ENVIRONMENT = 'production'
+
+/** The prod launcher always plays on production; the beta on any enabled environment. */
+export function resolveEnvironment(id, channel = buildChannel()) {
+  if (!isBeta(channel)) return DEFAULT_ENVIRONMENT
+  const env = ENVIRONMENTS.find((e) => e.id === id && e.enabled)
+  return env ? env.id : DEFAULT_ENVIRONMENT
+}
+
+export function environmentConfig(id) {
+  return ENVIRONMENTS.find((e) => e.id === id) || ENVIRONMENTS[0]
+}
 
 /**
  * Data folders, relative to the per-user data root (src/main/dataDir.js).

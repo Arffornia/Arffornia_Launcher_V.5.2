@@ -30,6 +30,10 @@ function updateGameState(isRunning) {
   }
 }
 
+export function gameIsRunning() {
+  return isGameRunning;
+}
+
 export function registerGameStateHandlers() {
   handle('is-game-running', () => {
     return isGameRunning;
@@ -88,6 +92,9 @@ export async function launchMC() {
         type: launcherSettings.GAME_VERSION_TYPE,
       },
       forge: neoforgeInstallerPath,
+      ...(launcherSettings.ENVIRONMENT.joinOnPlay
+        ? { quickPlay: { type: 'multiplayer', identifier: launcherSettings.ENVIRONMENT.server } }
+        : {}),
       memory: computeMemoryOptions(
         await saver.load('allocatedRam'),
         os.totalmem() / 1024 / 1024 / 1024
