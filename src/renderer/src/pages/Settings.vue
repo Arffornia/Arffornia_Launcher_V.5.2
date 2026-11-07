@@ -67,7 +67,7 @@
             <div class="content">
               {{ t('settings.environment.label') }}
               <div class="select">
-                <select id="env-select" v-model="selectedEnvironment">
+                <select id="env-select" v-model="selectedEnvironment" @change="onEnvironmentChangeEvent">
                   <option v-for="env in ENVIRONMENTS" :key="env.id" :value="env.id" :disabled="!env.enabled">
                     {{ t(`settings.environment.${env.id}`) }}
                   </option>
@@ -87,13 +87,14 @@ import { ref, onMounted } from 'vue';
 import { useUserStore } from '../stores/userStore';
 
 import { useI18n } from 'vue-i18n';
-import { ENVIRONMENTS, DEFAULT_ENVIRONMENT, buildVersion, isBeta } from '../../../shared/channel';
+import { ENVIRONMENTS, buildVersion, isBeta } from '../../../shared/channel';
+import { currentEnvironment } from '../js/environment';
 
 const { t, locale } = useI18n();
 
 const launcherVersion = buildVersion();
 const beta = isBeta();
-const selectedEnvironment = ref(DEFAULT_ENVIRONMENT);
+const selectedEnvironment = ref(currentEnvironment().id);
 
 const totalRAM = ref(0);
 const ramOptions = ref([]);
@@ -120,6 +121,14 @@ async function initRam() {
 const onLangChangeEvent = () => {
   userStore.setLang(locale, userStore.selectedLang);
 };
+
+async function onEnvironmentChangeEvent() {
+  try {
+    await window.api.setEnvironment(selectedEnvironment.value);
+  } catch {
+    selectedEnvironment.value = currentEnvironment().id;
+  }
+}
 
 const onRamChangeEvent = () => {
   window.api.saverSave("allocatedRam", selectedRAM.value);

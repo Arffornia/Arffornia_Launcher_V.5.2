@@ -121,7 +121,7 @@
     "environment": {
       "title": "Environment: ",
       "label": "Game environment:",
-      "hint": "Staging and Test slot arrive with the staging server.",
+      "hint": "Changing it restarts the launcher. Staging and Test slot play on the staging website and the test server.",
       "production": "Production",
       "staging": "Staging",
       "slot": "Test slot"

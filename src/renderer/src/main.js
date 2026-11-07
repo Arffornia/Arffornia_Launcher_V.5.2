@@ -5,6 +5,7 @@ import { createPinia } from 'pinia';
 import App from './App.vue';
 import router from './router';
 import i18n from './i18n/translator';
+import { loadEnvironment } from './js/environment';
 
 import './assets/global.css'
 
@@ -15,4 +16,4 @@ app.use(pinia);
 app.use(router);
 app.use(i18n);
 
-app.mount('#app');
+loadEnvironment().finally(() => app.mount('#app'));
