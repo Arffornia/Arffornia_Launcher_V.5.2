@@ -153,7 +153,7 @@ jobs:
           if (Get-ChildItem -Force $home_.FullName) { throw 'the beta wrote in its working directory' }
           Stop-Process -Id $p.Id -Force
 
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v7
         with:
           name: ${{ github.event_name == 'pull_request' && format('launcher-pr-{0}-{1}', github.event.number, matrix.name) || format('launcher-beta-{0}', matrix.name) }}
           path: |
