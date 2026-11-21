@@ -10,7 +10,7 @@
           </div>
           <span class="v-separator"></span>
           <div class="player-grade">
-            {{ playerProfile ? playerProfile.grade : t('common.loading') }}
+            {{ playerProfile ? playerProfile.grade : profileFailed ? '-' : t('common.loading') }}
           </div>
         </div>
       </div>
@@ -37,6 +37,7 @@ const { t } = useI18n();
 const props = defineProps(['username']);
 
 const playerProfile = ref(null);
+const profileFailed = ref(false);
 
 const streakImgSrc = computed(() => {
   return playerProfile.value && playerProfile.value.day_streak !== 0 ? firesImg : noFiresImg;
@@ -47,6 +48,7 @@ onMounted(async () => {
   try {
     playerProfile.value = await fetchPlayerProfile(props.username);
   } catch (err) {
+    profileFailed.value = true;
     window.api.logger("error", `Failed to fetch player profile: ${err}`);
   }
 });
