@@ -46,6 +46,7 @@ vi.mock('@arffornia/nexus_java', () => ({
   JavaType: { JRE: 'jre' },
   JavaVersionInfo: class {}
 }))
+vi.mock('../../src/main/modLock', () => ({ loadModsWithLock: vi.fn() }))
 vi.mock('@arffornia/nexus_mods', () => ({
   NexusMods: class {
     loadModsFromJsonUrl() {}
