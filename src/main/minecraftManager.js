@@ -10,6 +10,7 @@ import { addNotification, logger, getMainWindow } from '.';
 import { handle } from "./ipc";
 import { createRedactor, authorizationSecrets } from './redact';
 import { computeMemoryOptions } from './memory';
+import { loadModsWithLock } from './modLock';
 import { saver } from './ipcHandlers/nexusSaverHandler';
 import os from 'os';
 
@@ -107,7 +108,7 @@ export async function launchMC() {
     const nexusMods = new NexusMods(launcherSettings.GAME_DIR, handleNexusModsCallback);
 
     progressManager.updateStep(StepName.FETCHING_MODS, 0.1);
-    await nexusMods.loadModsFromJsonUrl(launcherSettings.JSON_MOD_LIST_URL);
+    await loadModsWithLock(nexusMods, launcherSettings.JSON_MOD_LIST_URL, logger);
     await nexusMods.loadExternalFilesFromJsonUrl(launcherSettings.JSON_EXTERNAL_FILES_URL);
     progressManager.updateStep(StepName.FETCHING_MODS, 1);
 
