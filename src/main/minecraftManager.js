@@ -11,6 +11,7 @@ import { handle } from "./ipc";
 import { createRedactor, authorizationSecrets } from './redact';
 import { computeMemoryOptions } from './memory';
 import { loadModsWithLock } from './modLock';
+import { applyEnvironmentServerList } from './serverList';
 import { saver } from './ipcHandlers/nexusSaverHandler';
 import os from 'os';
 
@@ -120,6 +121,12 @@ export async function launchMC() {
       addNotification('notifications.mod_sync_failed', "error", { count: failures.length });
       updateGameState(false);
       return;
+    }
+
+    try {
+      applyEnvironmentServerList(launcherSettings.GAME_DIR, launcherSettings.ENVIRONMENT, logger);
+    } catch (error) {
+      logger.warn(`Could not set the server list: ${error.message}`);
     }
 
     logger.info(
