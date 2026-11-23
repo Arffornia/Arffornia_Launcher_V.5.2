@@ -13,7 +13,8 @@ const m = vi.hoisted(() => ({
   allocatedRam: '',
   totalGb: 16,
   splash: { watch: vi.fn(), hide: vi.fn() },
-  openLaunchSplash: vi.fn()
+  openLaunchSplash: vi.fn(),
+  splashOpenedBeforeSpawn: null
 }))
 
 vi.mock('../../src/main/index.js', () => ({
@@ -70,6 +71,9 @@ vi.mock('minecraft-launcher-core', async () => {
       }
       async launch(opts) {
         this.opts = opts
+        if (!m.launchResult) return null
+        m.splashOpenedBeforeSpawn = m.openLaunchSplash.mock.calls.length > 0
+        this.emit('arguments', ['-Xmx4G'])
         return m.launchResult
       }
     }
@@ -85,6 +89,7 @@ beforeEach(async () => {
   m.sent.length = 0
   m.notifications.length = 0
   m.launchResult = null
+  m.splashOpenedBeforeSpawn = null
   m.allocatedRam = ''
   m.totalGb = 16
   m.launchMSAuth.mockReset()
@@ -131,7 +136,7 @@ describe('launchMC', () => {
     expect(m.notifications.some((n) => n.type === 'error')).toBe(true)
   })
 
-  it('opens the splash in the launcher language and hands it the MCLC events before launching', async () => {
+  it('opens the splash in the launcher language when MCLC spawns Java', async () => {
     // Arrange
     m.launchMSAuth.mockResolvedValue(auth)
     m.launchResult = { pid: 42 }
@@ -145,7 +150,19 @@ describe('launchMC', () => {
     expect(m.splash.hide).not.toHaveBeenCalled()
   })
 
-  it('hides the splash when MCLC cannot start the game', async () => {
+  it('keeps the splash closed during the MCLC asset check', async () => {
+    // Arrange
+    m.launchMSAuth.mockResolvedValue(auth)
+    m.launchResult = { pid: 42 }
+
+    // Act
+    await launchMC()
+
+    // Assert
+    expect(m.splashOpenedBeforeSpawn).toBe(false)
+  })
+
+  it('does not open the splash when MCLC cannot start the game', async () => {
     // Arrange
     m.launchMSAuth.mockResolvedValue(auth)
     m.launchResult = null
@@ -154,7 +171,7 @@ describe('launchMC', () => {
     await launchMC()
 
     // Assert
-    expect(m.splash.hide).toHaveBeenCalledWith('launch error')
+    expect(m.openLaunchSplash).not.toHaveBeenCalled()
   })
 
   it('does not open the splash when login fails', async () => {

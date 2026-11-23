@@ -150,17 +150,21 @@ export async function launchMC() {
       logger.info("Game closed.");
     });
 
-    splash = openLaunchSplash({
-      locale: currentUser.getLang(),
-      gameVersion: launcherSettings.GAME_VERSION,
-      loaderVersion: launcherSettings.MOD_LOADER_VERSION
+    // MCLC emits 'arguments' right before it spawns Java, after its own asset check, which can take
+    // minutes on a first install and would otherwise eat the splash timeout.
+    launcher.once('arguments', () => {
+      splash = openLaunchSplash({
+        locale: currentUser.getLang(),
+        gameVersion: launcherSettings.GAME_VERSION,
+        loaderVersion: launcherSettings.MOD_LOADER_VERSION
+      });
+      splash.watch(launcher);
     });
-    splash.watch(launcher);
 
     // MCLC resolves null (often without a 'close' event) when it cannot start the game.
     const gameProcess = await launcher.launch(opts);
     if (!gameProcess) {
-      splash.hide('launch error');
+      splash?.hide('launch error');
       logger.error("LaunchMC error: Minecraft could not be started (see the [MCLC] lines above).");
       addNotification('notifications.launch_failed', "error");
       resetLaunchState();
