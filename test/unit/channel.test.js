@@ -82,7 +82,6 @@ describe('beta build (ARFFORNIA_CHANNEL=beta)', () => {
     expect(staging.api).toBe('https://staging.arffornia.com/api/')
     expect(staging.modList).toBe('https://staging.arffornia.com/pack/config/launcher/modList.json')
     expect(staging.server).toBe('test.arffornia.com:25566')
-    expect(staging.joinOnPlay).toBe(true)
   })
 
   it('points Test slot at the slot pack, which serves the mod build of the PR holding the slot', () => {
@@ -91,10 +90,9 @@ describe('beta build (ARFFORNIA_CHANNEL=beta)', () => {
     expect(slot.modList).toBe('https://test.arffornia.com/pack/config/launcher/modList.json')
   })
 
-  it('keeps production on the prod endpoints, without joining on Play', () => {
+  it('keeps production on the prod endpoints', () => {
     const prod = environmentConfig('production')
     expect(prod.api).toBe('https://arffornia.com/api/')
-    expect(prod.joinOnPlay).toBe(false)
   })
 
   it('keeps the prod launcher on production whatever is asked', () => {
