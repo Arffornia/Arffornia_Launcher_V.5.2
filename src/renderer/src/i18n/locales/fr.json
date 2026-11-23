@@ -177,5 +177,39 @@
       "previous_image": "Image précédente",
       "next_image": "Image suivante"
     }
+  },
+  "gui": {
+    "arffornia": {
+      "brand": {
+        "tagline": "Minecraft moddé · NeoForge 1.21.1"
+      },
+      "loading": {
+        "stage": {
+          "boot": "Démarrage de Java et NeoForge"
+        },
+        "pip": {
+          "java": "Java",
+          "mods": "Mods",
+          "content": "Contenu",
+          "resources": "Ressources",
+          "ready": "Prêt"
+        },
+        "dyk": {
+          "label": "Le saviez-vous ?",
+          "miner": "Une foreuse sur un filon ne s’épuise jamais. Construisez la ligne autour d’elle.",
+          "smelter": "Une fonderie s’arrête quand sa sortie est pleine. Un convoyeur vaut mieux qu’une fonderie plus rapide.",
+          "constructor": "Le constructeur presse les lingots en plaques et en tiges, les pièces de chaque palier.",
+          "foundry": "La Fonderie est votre premier multibloc : acier, invar et bronze, dès le palier 3.",
+          "elevator": "Chaque livraison à l’ascenseur spatial débloque le palier suivant. Appuyez sur G pour voir ce qu’il faut."
+        }
+      },
+      "machine": {
+        "miner": "Foreuse",
+        "smelter": "Fonderie simple",
+        "constructor": "Constructeur",
+        "foundry": "Fonderie",
+        "elevator": "Ascenseur spatial"
+      }
+    }
   }
 }

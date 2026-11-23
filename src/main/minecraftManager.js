@@ -13,6 +13,8 @@ import { computeMemoryOptions } from './memory';
 import { loadModsWithLock } from './modLock';
 import { applyEnvironmentServerList } from './serverList';
 import { saver } from './ipcHandlers/nexusSaverHandler';
+import { openLaunchSplash } from './launchSplash';
+import currentUser from './user';
 import os from 'os';
 
 import { handleJavaCallback, handleNexusModLoaderCallback, handleNexusModsCallback, handleMCLCEvent, progressManager, StepName } from './progressManager';
@@ -51,6 +53,7 @@ export async function launchMC() {
   progressManager.reset();
   updateGameState(true);
 
+  let splash = null;
   try {
     const authToken = await launchMSAuth(true);
     if (!authToken) {
@@ -147,14 +150,23 @@ export async function launchMC() {
       logger.info("Game closed.");
     });
 
+    splash = openLaunchSplash({
+      locale: currentUser.getLang(),
+      gameVersion: launcherSettings.GAME_VERSION,
+      loaderVersion: launcherSettings.MOD_LOADER_VERSION
+    });
+    splash.watch(launcher);
+
     // MCLC resolves null (often without a 'close' event) when it cannot start the game.
     const gameProcess = await launcher.launch(opts);
     if (!gameProcess) {
+      splash.hide('launch error');
       logger.error("LaunchMC error: Minecraft could not be started (see the [MCLC] lines above).");
       addNotification('notifications.launch_failed', "error");
       resetLaunchState();
     }
   } catch (err) {
+    splash?.hide('launch error');
     logger.error("LaunchMC error: " + err);
     addNotification('notifications.launch_failed', "error");
     resetLaunchState();

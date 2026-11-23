@@ -11,7 +11,9 @@ const m = vi.hoisted(() => ({
   sent: [],
   notifications: [],
   allocatedRam: '',
-  totalGb: 16
+  totalGb: 16,
+  splash: { watch: vi.fn(), hide: vi.fn() },
+  openLaunchSplash: vi.fn()
 }))
 
 vi.mock('../../src/main/index.js', () => ({
@@ -20,6 +22,8 @@ vi.mock('../../src/main/index.js', () => ({
   getMainWindow: () => ({ webContents: { send: (channel, data) => m.sent.push({ channel, data }) } })
 }))
 vi.mock('../../src/main/ipc', () => ({ handle: vi.fn() }))
+vi.mock('../../src/main/launchSplash', () => ({ openLaunchSplash: m.openLaunchSplash }))
+vi.mock('../../src/main/user', () => ({ default: { getLang: () => 'fr' } }))
 vi.mock('../../src/main/ipcHandlers/nexusSaverHandler', () => ({
   saver: { load: vi.fn(async (key) => (key === 'allocatedRam' ? m.allocatedRam : '')) }
 }))
@@ -86,6 +90,9 @@ beforeEach(async () => {
   m.launchMSAuth.mockReset()
   m.downloadNeoforge.mockClear()
   m.updateMods.mockClear()
+  m.splash.watch.mockClear()
+  m.splash.hide.mockClear()
+  m.openLaunchSplash.mockReset().mockReturnValue(m.splash)
   ;({ launchMC } = await import('../../src/main/minecraftManager'))
 })
 
@@ -122,6 +129,43 @@ describe('launchMC', () => {
     await launchMC()
     expect(runningStates()).toEqual([true, false])
     expect(m.notifications.some((n) => n.type === 'error')).toBe(true)
+  })
+
+  it('opens the splash in the launcher language and hands it the MCLC events before launching', async () => {
+    // Arrange
+    m.launchMSAuth.mockResolvedValue(auth)
+    m.launchResult = { pid: 42 }
+
+    // Act
+    await launchMC()
+
+    // Assert
+    expect(m.openLaunchSplash).toHaveBeenCalledWith(expect.objectContaining({ locale: 'fr' }))
+    expect(m.splash.watch).toHaveBeenCalledWith(m.clients[0])
+    expect(m.splash.hide).not.toHaveBeenCalled()
+  })
+
+  it('hides the splash when MCLC cannot start the game', async () => {
+    // Arrange
+    m.launchMSAuth.mockResolvedValue(auth)
+    m.launchResult = null
+
+    // Act
+    await launchMC()
+
+    // Assert
+    expect(m.splash.hide).toHaveBeenCalledWith('launch error')
+  })
+
+  it('does not open the splash when login fails', async () => {
+    // Arrange
+    m.launchMSAuth.mockResolvedValue(null)
+
+    // Act
+    await launchMC()
+
+    // Assert
+    expect(m.openLaunchSplash).not.toHaveBeenCalled()
   })
 
   it('allows a new launch after a failed one', async () => {
