@@ -1,30 +1,40 @@
 <template>
   <div class="info-bar">
-    <img class="info-btn" @click="openWebsite" src="@res/img/icon/internet/internet.png" :alt="t('nav.website')" :title="t('nav.website')">
-    <img class="info-btn" @click="openDiscord" src="@res/img/icon/discord/discord.png" :alt="t('nav.discord')" :title="t('nav.discord')">
-    <ServerStatue/>
+    <img
+      class="info-btn"
+      src="@res/img/icon/internet/internet.png"
+      :alt="t('nav.website')"
+      :title="t('nav.website')"
+      @click="openWebsite"
+    />
+    <img
+      class="info-btn"
+      src="@res/img/icon/discord/discord.png"
+      :alt="t('nav.discord')"
+      :title="t('nav.discord')"
+      @click="openDiscord"
+    />
+    <ServerStatue />
   </div>
 </template>
 
 <script setup>
-import ServerStatue from '../components/ServerStatue.vue';
-import { currentEnvironment } from '../js/environment';
-import { useI18n } from 'vue-i18n';
+import ServerStatue from '../components/ServerStatue.vue'
+import { currentEnvironment } from '../js/environment'
+import { useI18n } from 'vue-i18n'
 
-const { t } = useI18n();
+const { t } = useI18n()
 
 function openDiscord() {
-  window.api.openDiscord();
+  window.api.openDiscord()
 }
 
 function openWebsite() {
-  window.api.openWebsite(currentEnvironment().website);
+  window.api.openWebsite(currentEnvironment().website)
 }
-
 </script>
 
 <style scoped>
-
 .info-bar {
   transform: scale(0.73);
   transform-origin: top right;
@@ -51,5 +61,4 @@ function openWebsite() {
 .info-btn:hover {
   cursor: pointer;
 }
-
 </style>

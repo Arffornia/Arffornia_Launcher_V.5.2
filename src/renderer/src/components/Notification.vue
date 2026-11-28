@@ -1,65 +1,65 @@
 <template>
-  <div @click="clickEvent" class="notification-content">
-    <a @click.stop="closeEvent" class="close-btn" :title="t('common.close')">×</a>
-    <img class="image" :src="imageSrc" :alt="t('notification.icon_alt')"/>
+  <div class="notification-content" @click="clickEvent">
+    <a class="close-btn" :title="t('common.close')" @click.stop="closeEvent">×</a>
+    <img class="image" :src="imageSrc" :alt="t('notification.icon_alt')" />
     <p class="title">{{ t(props.messageKey, props.params) }}</p>
     <p class="time">{{ notifTime }}</p>
   </div>
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { computed, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
-const { t } = useI18n();
+const { t } = useI18n()
 
-const notifTime = ref(getCurrentTime());
+const notifTime = ref(getCurrentTime())
 
 const props = defineProps({
   messageKey: {
     type: String,
-    required: true,
+    required: true
   },
   params: {
     type: Object,
-    default: () => ({}),
+    default: () => ({})
   },
   type: {
     type: String,
-    required: true,
+    required: true
   },
   id: {
     type: [String, Number],
-    required: true,
-  },
-});
+    required: true
+  }
+})
 
 const imageMap = {
-  "msg": new URL('../../../../resources/img/icon/mail/email_icon.png', import.meta.url).href,
-  "update": new URL('../../../../resources/img/icon/update/update_white.png', import.meta.url).href,
-  "error": new URL('../../../../resources/img/icon/error/circle.png', import.meta.url).href,
-};
+  msg: new URL('../../../../resources/img/icon/mail/email_icon.png', import.meta.url).href,
+  update: new URL('../../../../resources/img/icon/update/update_white.png', import.meta.url).href,
+  error: new URL('../../../../resources/img/icon/error/circle.png', import.meta.url).href
+}
 
 const imageSrc = computed(() => {
-  return imageMap[props.type] || imageMap["msg"];
-});
+  return imageMap[props.type] || imageMap['msg']
+})
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close'])
 
 function clickEvent() {
-  window.api.logger("info", `Click on the notif !`);
+  window.api.logger('info', `Click on the notif !`)
 }
 
 function closeEvent() {
-  window.api.logger("info", `Close the notif !`);
-  emit('close', props.id);
+  window.api.logger('info', `Close the notif !`)
+  emit('close', props.id)
 }
 
 function getCurrentTime() {
-  const now = new Date();
-  const hours = String(now.getHours()).padStart(2, '0');
-  const minutes = String(now.getMinutes()).padStart(2, '0');
-  return `${hours}:${minutes}`;
+  const now = new Date()
+  const hours = String(now.getHours()).padStart(2, '0')
+  const minutes = String(now.getMinutes()).padStart(2, '0')
+  return `${hours}:${minutes}`
 }
 </script>
 

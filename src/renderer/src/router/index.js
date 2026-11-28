@@ -1,11 +1,11 @@
-import { createRouter, createWebHashHistory } from 'vue-router';
-import MainLayout from '../components/MainLayout.vue';
-import Home from '../pages/Home.vue';
-import Settings from '../pages/Settings.vue';
-import Profile from '../pages/Profile.vue';
-import Highlight from '../pages/Highlight.vue';
-import Notification from '../pages/Notification.vue';
-import Shaders from '../pages/Shaders.vue';
+import { createRouter, createWebHashHistory } from 'vue-router'
+import MainLayout from '../components/MainLayout.vue'
+import Home from '../pages/Home.vue'
+import Settings from '../pages/Settings.vue'
+import Profile from '../pages/Profile.vue'
+import Highlight from '../pages/Highlight.vue'
+import Notification from '../pages/Notification.vue'
+import Shaders from '../pages/Shaders.vue'
 
 const routes = [
   {
@@ -20,12 +20,12 @@ const routes = [
       { path: 'shaders', component: Shaders }
     ]
   }
-];
+]
 
 const router = createRouter({
   // Hash history: the app is loaded from file://, where a path-based URL breaks on reload.
   history: createWebHashHistory(),
   routes
-});
+})
 
-export default router;
+export default router

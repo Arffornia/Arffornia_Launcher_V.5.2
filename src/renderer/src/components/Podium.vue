@@ -2,58 +2,106 @@
   <div class="podium">
     <div class="content">
       <div class="p2">
-        <p class="playerName">{{ podiumStore.bestPlayers ? podiumStore.bestPlayers[ 1 ]?.name : t('common.loading') }}
+        <p class="playerName">
+          {{ podiumStore.bestPlayers ? podiumStore.bestPlayers[1]?.name : t('common.loading') }}
         </p>
         <div class="player-skin">
-          <router-link class="nav-link"
-            :to="podiumStore.bestPlayers ? `/profile/${podiumStore.bestPlayers[ 1 ]?.name}` : '#'"
-            exact :title="t('home.podium.show_profile')">
-            <canvas class="skin_viewer" :data-width="skinWidth" :data-height="skinHeight"
-              :data-username="podiumStore.bestPlayers ? podiumStore.bestPlayers[ 1 ]?.name : 'MHF_Steve'"></canvas>
+          <router-link
+            class="nav-link"
+            :to="podiumStore.bestPlayers ? `/profile/${podiumStore.bestPlayers[1]?.name}` : '#'"
+            exact
+            :title="t('home.podium.show_profile')"
+          >
+            <canvas
+              class="skin_viewer"
+              :data-width="skinWidth"
+              :data-height="skinHeight"
+              :data-username="
+                podiumStore.bestPlayers ? podiumStore.bestPlayers[1]?.name : 'MHF_Steve'
+              "
+            ></canvas>
           </router-link>
         </div>
         <div class="shape">
           <div class="textContainer">
             <div class="rank">{{ t('home.podium.rank', { rank: 2 }) }}</div>
-            <div class="score">{{ podiumStore.bestPlayers ? t('home.podium.score', { value: scoreAt(1), unit: podiumUnit }) : '...' }}</div>
+            <div class="score">
+              {{
+                podiumStore.bestPlayers
+                  ? t('home.podium.score', { value: scoreAt(1), unit: podiumUnit })
+                  : '...'
+              }}
+            </div>
           </div>
         </div>
       </div>
 
       <div class="p1">
-        <p class="playerName">{{ podiumStore.bestPlayers ? podiumStore.bestPlayers[ 0 ]?.name : t('common.loading') }}
+        <p class="playerName">
+          {{ podiumStore.bestPlayers ? podiumStore.bestPlayers[0]?.name : t('common.loading') }}
         </p>
         <div class="player-skin">
-          <router-link class="nav-link"
-            :to="podiumStore.bestPlayers ? `/profile/${podiumStore.bestPlayers[ 0 ]?.name}` : '#'"
-            exact :title="t('home.podium.show_profile')">
-            <canvas class="skin_viewer" :data-width="skinWidth" :data-height="skinHeight"
-              :data-username="podiumStore.bestPlayers ? podiumStore.bestPlayers[ 0 ]?.name : 'MHF_Steve'"></canvas>
+          <router-link
+            class="nav-link"
+            :to="podiumStore.bestPlayers ? `/profile/${podiumStore.bestPlayers[0]?.name}` : '#'"
+            exact
+            :title="t('home.podium.show_profile')"
+          >
+            <canvas
+              class="skin_viewer"
+              :data-width="skinWidth"
+              :data-height="skinHeight"
+              :data-username="
+                podiumStore.bestPlayers ? podiumStore.bestPlayers[0]?.name : 'MHF_Steve'
+              "
+            ></canvas>
           </router-link>
         </div>
         <div class="shape">
           <div class="textContainer">
             <div class="rank">{{ t('home.podium.rank', { rank: 1 }) }}</div>
-            <div class="score">{{ podiumStore.bestPlayers ? t('home.podium.score', { value: scoreAt(0), unit: podiumUnit }) : '...' }}</div>
+            <div class="score">
+              {{
+                podiumStore.bestPlayers
+                  ? t('home.podium.score', { value: scoreAt(0), unit: podiumUnit })
+                  : '...'
+              }}
+            </div>
           </div>
         </div>
       </div>
 
       <div class="p3">
-        <p class="playerName">{{ podiumStore.bestPlayers ? podiumStore.bestPlayers[ 2 ]?.name : t('common.loading') }}
+        <p class="playerName">
+          {{ podiumStore.bestPlayers ? podiumStore.bestPlayers[2]?.name : t('common.loading') }}
         </p>
         <div class="player-skin">
-          <router-link class="nav-link"
-            :to="podiumStore.bestPlayers ? `/profile/${podiumStore.bestPlayers[ 2 ]?.name}` : '#'"
-            exact :title="t('home.podium.show_profile')">
-            <canvas class="skin_viewer" :data-width="skinWidth" :data-height="skinHeight"
-              :data-username="podiumStore.bestPlayers ? podiumStore.bestPlayers[ 2 ]?.name : 'MHF_Steve'"></canvas>
+          <router-link
+            class="nav-link"
+            :to="podiumStore.bestPlayers ? `/profile/${podiumStore.bestPlayers[2]?.name}` : '#'"
+            exact
+            :title="t('home.podium.show_profile')"
+          >
+            <canvas
+              class="skin_viewer"
+              :data-width="skinWidth"
+              :data-height="skinHeight"
+              :data-username="
+                podiumStore.bestPlayers ? podiumStore.bestPlayers[2]?.name : 'MHF_Steve'
+              "
+            ></canvas>
           </router-link>
         </div>
         <div class="shape">
           <div class="textContainer">
             <div class="rank">{{ t('home.podium.rank', { rank: 3 }) }}</div>
-            <div class="score">{{ podiumStore.bestPlayers ? t('home.podium.score', { value: scoreAt(2), unit: podiumUnit }) : '...' }}</div>
+            <div class="score">
+              {{
+                podiumStore.bestPlayers
+                  ? t('home.podium.score', { value: scoreAt(2), unit: podiumUnit })
+                  : '...'
+              }}
+            </div>
           </div>
         </div>
       </div>
@@ -67,62 +115,60 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
-import { useI18n } from 'vue-i18n';
-import { usePodiumStore } from '../stores/podiumStore.js';
-import { initializeSkinViewers } from '../js/skinviewer.js';
+import { ref, onMounted, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { usePodiumStore } from '../stores/podiumStore.js'
+import { initializeSkinViewers } from '../js/skinviewer.js'
 
-const { t } = useI18n();
-const podiumStore = usePodiumStore();
+const { t } = useI18n()
+const podiumStore = usePodiumStore()
 
-const skinWidth = ref(66);
-const skinHeight = ref(100);
+const skinWidth = ref(66)
+const skinHeight = ref(100)
 
 const podiumTitle = computed(() => {
   return podiumStore.activeScoreboard === 'votes'
     ? t('home.podium.best_voters')
-    : t('home.podium.best_players');
-});
+    : t('home.podium.best_players')
+})
 
 function scoreAt(index) {
-  return podiumStore.bestPlayers?.[index]?.value ?? 0;
+  return podiumStore.bestPlayers?.[index]?.value ?? 0
 }
 
 const podiumUnit = computed(() => {
   return podiumStore.activeScoreboard === 'votes'
     ? t('home.podium.votes_unit')
-    : t('home.podium.points_unit');
-});
+    : t('home.podium.points_unit')
+})
 
 const switchTitle = computed(() => {
   return podiumStore.activeScoreboard === 'votes'
     ? t('home.podium.switch_to_players')
-    : t('home.podium.switch_to_voters');
-});
-
+    : t('home.podium.switch_to_voters')
+})
 
 onMounted(() => {
-  refreshSkinViewers();
-});
+  refreshSkinViewers()
+})
 
 function scoreboardTitleSwitcher() {
   if (podiumStore.activeScoreboard === 'votes') {
-    podiumStore.activeScoreboard = 'points';
-    podiumStore.bestPlayers = podiumStore.bestPlayersByPoint;
+    podiumStore.activeScoreboard = 'points'
+    podiumStore.bestPlayers = podiumStore.bestPlayersByPoint
   } else {
-    podiumStore.activeScoreboard = 'votes';
-    podiumStore.bestPlayers = podiumStore.bestPlayersByVote;
+    podiumStore.activeScoreboard = 'votes'
+    podiumStore.bestPlayers = podiumStore.bestPlayersByVote
   }
 
-  refreshSkinViewers();
+  refreshSkinViewers()
 }
 
 function refreshSkinViewers() {
   setTimeout(() => {
-    initializeSkinViewers();
-  }, 100);
+    initializeSkinViewers()
+  }, 100)
 }
-
 </script>
 
 <style scoped>
@@ -154,7 +200,6 @@ function refreshSkinViewers() {
 .podium .titleBtn:hover {
   cursor: pointer;
 }
-
 
 .podium .titleBtn {
   background-color: #00000000;
@@ -220,7 +265,6 @@ function refreshSkinViewers() {
   color: #d4af37;
   text-align: center;
   transform: scale(2);
-
 }
 
 .podium .p2 .rank {

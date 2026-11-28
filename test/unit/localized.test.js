@@ -6,7 +6,6 @@ import { acceptLanguage, localized } from '../../src/renderer/src/i18n/localized
 import i18n from '../../src/renderer/src/i18n/translator.js'
 import { withUiLocale } from '../../src/renderer/src/js/arfforniaApi.js'
 
-
 describe('localized()', () => {
   const field = { fr: 'Recommandé', en: 'Recommended' }
 

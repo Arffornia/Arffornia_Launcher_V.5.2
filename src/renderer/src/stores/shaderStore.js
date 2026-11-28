@@ -106,7 +106,10 @@ export const useShaderStore = defineStore('shader', {
           }
         })
       } catch (error) {
-        window.api.logger('error', `[ShaderStore] Failed to load featured shaders: ${error.message}`)
+        window.api.logger(
+          'error',
+          `[ShaderStore] Failed to load featured shaders: ${error.message}`
+        )
       } finally {
         this.isLoadingFeatured = false
       }
@@ -119,7 +122,12 @@ export const useShaderStore = defineStore('shader', {
       const offset = (page - 1) * this.catalogPageSize
 
       try {
-        const results = await modrinthApi.searchShaders(query, offset, this.catalogPageSize, sortIndex)
+        const results = await modrinthApi.searchShaders(
+          query,
+          offset,
+          this.catalogPageSize,
+          sortIndex
+        )
         this.catalogShaders = results.hits || []
         this.catalogTotalHits = results.total_hits || 0
       } catch (error) {
@@ -174,7 +182,8 @@ export const useShaderStore = defineStore('shader', {
 
     async installShader(project) {
       const notificationStore = useNotificationStore()
-      const projectId = typeof project === 'string' ? project : project.project_id || project.id || project.slug
+      const projectId =
+        typeof project === 'string' ? project : project.project_id || project.id || project.slug
 
       if (this.downloadingProjectIds.includes(projectId)) return
       this.downloadingProjectIds.push(projectId)
@@ -196,8 +205,13 @@ export const useShaderStore = defineStore('shader', {
 
         notificationStore.addNotification('notifications.shader_installed', 'update')
       } catch (error) {
-        notificationStore.addNotification('notifications.shader_install_failed', 'error', { error: error.message })
-        window.api.logger('error', `[ShaderStore] Installation failed for ${projectId}: ${error.message}`)
+        notificationStore.addNotification('notifications.shader_install_failed', 'error', {
+          error: error.message
+        })
+        window.api.logger(
+          'error',
+          `[ShaderStore] Installation failed for ${projectId}: ${error.message}`
+        )
       } finally {
         this.downloadingProjectIds = this.downloadingProjectIds.filter((id) => id !== projectId)
       }
@@ -232,9 +246,13 @@ export const useShaderStore = defineStore('shader', {
         }
 
         await this.refreshLocalState()
-        notificationStore.addNotification('notifications.shader_updated', 'update', { file: update.newFileName })
+        notificationStore.addNotification('notifications.shader_updated', 'update', {
+          file: update.newFileName
+        })
       } catch (err) {
-        notificationStore.addNotification('notifications.shader_update_failed', 'error', { error: err.message })
+        notificationStore.addNotification('notifications.shader_update_failed', 'error', {
+          error: err.message
+        })
       }
     },
 

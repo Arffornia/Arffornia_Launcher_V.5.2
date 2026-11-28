@@ -22,7 +22,9 @@ export function createSecretStore({ saver, safeStorage, logger }) {
         // Linux without a keyring: Chromium falls back to a fixed key, so the session is only
         // obfuscated. Still saved (players without a keyring would log in at every start), but logged.
         if (safeStorage.getSelectedStorageBackend() === 'basic_text') {
-          logger.warn('No OS keyring found (basic_text): the saved session is only protected by file permissions')
+          logger.warn(
+            'No OS keyring found (basic_text): the saved session is only protected by file permissions'
+          )
         }
       }
       return ok

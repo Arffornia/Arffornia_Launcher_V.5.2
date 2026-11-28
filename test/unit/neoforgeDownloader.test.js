@@ -29,12 +29,12 @@ vi.mock('axios', () => ({
   })
 }))
 
-const { downloadNeoforge, getInstallerUrl, isBeforeVersion, parseSha256File } = await import(
-  '../../src/main/neoforgeDownloader'
-)
+const { downloadNeoforge, getInstallerUrl, isBeforeVersion, parseSha256File } =
+  await import('../../src/main/neoforgeDownloader')
 
 const VERSION = '21.1.172'
-const URL = 'https://maven.neoforged.net/releases/net/neoforged/neoforge/21.1.172/neoforge-21.1.172-installer.jar'
+const URL =
+  'https://maven.neoforged.net/releases/net/neoforged/neoforge/21.1.172/neoforge-21.1.172-installer.jar'
 const JAR = Buffer.from('PK\u0003\u0004 fake neoforge installer')
 const SHA = crypto.createHash('sha256').update(JAR).digest('hex')
 
@@ -58,11 +58,15 @@ describe('helpers', () => {
     ['21.1.172', '1.20.2', false],
     ['1.19', '1.20.2', true],
     ['1.20.2.1', '1.20.2', false]
-  ])('isBeforeVersion(%s, %s) = %s', (a, b, expected) => expect(isBeforeVersion(a, b)).toBe(expected))
+  ])('isBeforeVersion(%s, %s) = %s', (a, b, expected) =>
+    expect(isBeforeVersion(a, b)).toBe(expected)
+  )
 
   it('builds forge and neoforge URLs', () => {
     expect(getInstallerUrl(VERSION)).toBe(URL)
-    expect(getInstallerUrl('1.20.1-47.1.0')).toContain('/net/neoforged/forge/1.20.1-47.1.0/forge-1.20.1-47.1.0-installer.jar')
+    expect(getInstallerUrl('1.20.1-47.1.0')).toContain(
+      '/net/neoforged/forge/1.20.1-47.1.0/forge-1.20.1-47.1.0-installer.jar'
+    )
   })
 
   it('parses .sha256 files', () => {

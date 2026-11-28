@@ -47,7 +47,9 @@ describe('assertShaderFileName', () => {
   })
 
   it('throws on traversal', () => {
-    expect(() => assertShaderFileName('../../launcherOptions.json')).toThrow('Invalid shader file name')
+    expect(() => assertShaderFileName('../../launcherOptions.json')).toThrow(
+      'Invalid shader file name'
+    )
   })
 })
 
@@ -117,7 +119,9 @@ describe('assertShaderMetadata', () => {
     expect(assertShaderMetadata({ title: 'BSL' })).toEqual({ title: 'BSL' })
   })
 
-  it.each([null, 'x', 1, ['a']])('rejects %j', (m) => expect(() => assertShaderMetadata(m)).toThrow())
+  it.each([null, 'x', 1, ['a']])('rejects %j', (m) =>
+    expect(() => assertShaderMetadata(m)).toThrow()
+  )
 
   it('rejects oversized metadata', () => {
     expect(() => assertShaderMetadata({ blob: 'x'.repeat(300 * 1024) })).toThrow('too large')
@@ -126,18 +130,25 @@ describe('assertShaderMetadata', () => {
 
 describe('isTrustedSenderUrl', () => {
   it('trusts the packaged renderer (file://)', () => {
-    expect(isTrustedSenderUrl('file:///opt/Arffornia/resources/app.asar/out/renderer/index.html')).toBe(true)
+    expect(
+      isTrustedSenderUrl('file:///opt/Arffornia/resources/app.asar/out/renderer/index.html')
+    ).toBe(true)
   })
 
   it('trusts the dev server only in dev', () => {
     const opts = { isDev: true, devServerUrl: 'http://localhost:5173' }
     expect(isTrustedSenderUrl('http://localhost:5173/#/settings', opts)).toBe(true)
     expect(isTrustedSenderUrl('http://localhost:5174/', opts)).toBe(false)
-    expect(isTrustedSenderUrl('http://localhost:5173/', { devServerUrl: 'http://localhost:5173' })).toBe(false)
+    expect(
+      isTrustedSenderUrl('http://localhost:5173/', { devServerUrl: 'http://localhost:5173' })
+    ).toBe(false)
   })
 
-  it.each(['https://evil.example', 'https://login.live.com/oauth20_authorize.srf', '', null, undefined])(
-    'rejects %j',
-    (url) => expect(isTrustedSenderUrl(url)).toBe(false)
-  )
+  it.each([
+    'https://evil.example',
+    'https://login.live.com/oauth20_authorize.srf',
+    '',
+    null,
+    undefined
+  ])('rejects %j', (url) => expect(isTrustedSenderUrl(url)).toBe(false))
 })

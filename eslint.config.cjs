@@ -5,7 +5,15 @@ const skipFormatting = require('@vue/eslint-config-prettier/skip-formatting')
 
 module.exports = [
   {
-    ignores: ['node_modules/**', 'dist/**', 'out/**', 'build/**', 'coverage/**', 'test-results/**', 'playwright-report/**']
+    ignores: [
+      'node_modules/**',
+      'dist/**',
+      'out/**',
+      'build/**',
+      'coverage/**',
+      'test-results/**',
+      'playwright-report/**'
+    ]
   },
   electronToolkit,
   ...pluginVue.configs['flat/recommended'],
@@ -31,12 +39,53 @@ module.exports = [
         {
           // Punctuation, symbols and emoji-only glyphs used as icons; never words.
           allowlist: [
-            '(', ')', ',', '.', '&', '+', '-', '=', '*', '/', '#', '%', '!', '?', ':', ';',
-            '[', ']', '{', '}', '<', '>', '·', '•', '‐', '–', '—', '−', '|', '×', '✕', '✓',
-            '‹', '›', '❮', '❯', '…', '🔍'
+            '(',
+            ')',
+            ',',
+            '.',
+            '&',
+            '+',
+            '-',
+            '=',
+            '*',
+            '/',
+            '#',
+            '%',
+            '!',
+            '?',
+            ':',
+            ';',
+            '[',
+            ']',
+            '{',
+            '}',
+            '<',
+            '>',
+            '·',
+            '•',
+            '‐',
+            '–',
+            '—',
+            '−',
+            '|',
+            '×',
+            '✕',
+            '✓',
+            '‹',
+            '›',
+            '❮',
+            '❯',
+            '…',
+            '🔍'
           ],
           attributes: {
-            '/.+/': ['title', 'aria-label', 'aria-placeholder', 'aria-roledescription', 'aria-valuetext'],
+            '/.+/': [
+              'title',
+              'aria-label',
+              'aria-placeholder',
+              'aria-roledescription',
+              'aria-valuetext'
+            ],
             // <input type="button" value="..."> renders its value as the button label.
             input: ['placeholder', 'value'],
             img: ['alt']

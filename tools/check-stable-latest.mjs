@@ -71,7 +71,8 @@ async function api(path) {
 }
 
 async function main() {
-  const repo = process.argv[2] || process.env.GITHUB_REPOSITORY || 'Arffornia/Arffornia_Launcher_V.5.2'
+  const repo =
+    process.argv[2] || process.env.GITHUB_REPOSITORY || 'Arffornia/Arffornia_Launcher_V.5.2'
   const latest = await api(`/repos/${repo}/releases/latest`)
   const releases = []
   for (let page = 1; page <= 10; page++) {

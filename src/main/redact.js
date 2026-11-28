@@ -25,9 +25,7 @@ export function createRedactor(secrets = []) {
   const values = [...new Set(secrets.filter((s) => typeof s === 'string' && s.length >= 6))]
     // Longest first so a value containing another one is replaced whole.
     .sort((a, b) => b.length - a.length)
-  const secretPattern = values.length
-    ? new RegExp(values.map(escapeRegExp).join('|'), 'g')
-    : null
+  const secretPattern = values.length ? new RegExp(values.map(escapeRegExp).join('|'), 'g') : null
 
   return (message) => {
     let text = typeof message === 'string' ? message : String(message)

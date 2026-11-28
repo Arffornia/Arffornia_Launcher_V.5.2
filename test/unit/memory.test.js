@@ -31,7 +31,10 @@ describe('computeMemoryOptions', () => {
     expect(computeMemoryOptions(4, 3)).toEqual({ max: '1G', min: '1G' })
   })
 
-  it.each(['', null, undefined, 'abc', 0, -2, 2.5, {}])('falls back to the default for %j', (value) => {
-    expect(computeMemoryOptions(value, 32)).toEqual({ max: `${DEFAULT_RAM_GB}G`, min: '2G' })
-  })
+  it.each(['', null, undefined, 'abc', 0, -2, 2.5, {}])(
+    'falls back to the default for %j',
+    (value) => {
+      expect(computeMemoryOptions(value, 32)).toEqual({ max: `${DEFAULT_RAM_GB}G`, min: '2G' })
+    }
+  )
 })

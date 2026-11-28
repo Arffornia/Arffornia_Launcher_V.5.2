@@ -1,10 +1,8 @@
 <template>
   <div class="home-content">
-
     <!-- <Notification message="Update available !!"/> -->
 
     <!-- <img class="isoimg" src="@res/img/iso/testiso1ps.png" alt=""> -->
-
 
     <div class="play-container">
       <div class="playBox">
@@ -13,7 +11,13 @@
           <p class="description-content">{{ t('home.playbox.description1') }}</p>
           <p class="description-content">{{ t('home.playbox.description2') }}</p>
         </div>
-        <input @click="playBtnEvent" :disabled="gameRunning" class="mediumPlayBtn" type="button" :value="playLabel">
+        <input
+          :disabled="gameRunning"
+          class="mediumPlayBtn"
+          type="button"
+          :value="playLabel"
+          @click="playBtnEvent"
+        />
       </div>
 
       <Podium class="podium" />
@@ -22,8 +26,13 @@
       <div class="shop-section">
         <p class="section-title">{{ t('home.shop.arrivals') }}</p>
         <div class="items-container">
-          <a v-for="item in newestItems" :key="item.id" @click.prevent="redirect_item_shop(item)"
-            class="shop-item" :title="t('home.shop.see_on_website')">
+          <a
+            v-for="item in newestItems"
+            :key="item.id"
+            class="shop-item"
+            :title="t('home.shop.see_on_website')"
+            @click.prevent="redirect_item_shop(item)"
+          >
             <div class="item-container">
               <img class="item-icon" :src="item.img_url" :alt="item.name" />
               <p class="item-title">{{ item.name }}</p>
@@ -33,8 +42,13 @@
         </div>
         <p class="section-title">{{ t('home.shop.weeks_deals') }}</p>
         <div class="items-container">
-          <a v-for="item in saleItems" :key="item.id" @click.prevent="redirect_item_shop(item)"
-            class="shop-item" :title="t('home.shop.see_on_website')">
+          <a
+            v-for="item in saleItems"
+            :key="item.id"
+            class="shop-item"
+            :title="t('home.shop.see_on_website')"
+            @click.prevent="redirect_item_shop(item)"
+          >
             <div class="item-container">
               <img class="item-icon" :src="item.img_url" :alt="item.name" />
               <p class="item-title">{{ item.name }}</p>
@@ -49,8 +63,13 @@
         </div>
         <p class="section-title">{{ t('home.shop.best_sellers') }}</p>
         <div class="items-container">
-          <a v-for="item in bestSellerItems" :key="item.id" @click.prevent="redirect_item_shop(item)"
-            class="shop-item" :title="t('home.shop.see_on_website')">
+          <a
+            v-for="item in bestSellerItems"
+            :key="item.id"
+            class="shop-item"
+            :title="t('home.shop.see_on_website')"
+            @click.prevent="redirect_item_shop(item)"
+          >
             <div class="item-container">
               <img class="item-icon" :src="item.img_url" :alt="item.name" />
               <p class="item-title">{{ item.name }}</p>
@@ -65,82 +84,84 @@
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
-import Podium from '../components/Podium.vue';
-import { useUserStore } from '../stores/userStore';
-import { fetchBestSellers, fetchNewestItems, fetchSaleItems } from '../js/arfforniaApi.js';
-import { currentEnvironment } from '../js/environment';
+import Podium from '../components/Podium.vue'
+import { useUserStore } from '../stores/userStore'
+import { fetchBestSellers, fetchNewestItems, fetchSaleItems } from '../js/arfforniaApi.js'
+import { currentEnvironment } from '../js/environment'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
-const userStore = useUserStore();
-const bestSellerItems = ref([]);
-const newestItems = ref([]);
-const saleItems = ref([]);
+const userStore = useUserStore()
+const bestSellerItems = ref([])
+const newestItems = ref([])
+const saleItems = ref([])
 
-const showPodium = ref(false);
-const gameRunning = ref(false);
+const showPodium = ref(false)
+const gameRunning = ref(false)
 
-let unsubscribeGameRunningState = null;
+let unsubscribeGameRunningState = null
 
 onMounted(async () => {
-  unsubscribeGameRunningState = window.api.onGameRunningState(handleGameRunningState);
+  unsubscribeGameRunningState = window.api.onGameRunningState(handleGameRunningState)
 
   try {
-    const isRunning = await window.api.getIsGameRunning();
-    gameRunning.value = isRunning;
+    const isRunning = await window.api.getIsGameRunning()
+    gameRunning.value = isRunning
 
-    const bestSellerData = await fetchBestSellers(3);
-    bestSellerItems.value = bestSellerData;
+    const bestSellerData = await fetchBestSellers(3)
+    bestSellerItems.value = bestSellerData
 
-    const newestData = await fetchNewestItems(3);
-    newestItems.value = newestData;
+    const newestData = await fetchNewestItems(3)
+    newestItems.value = newestData
 
-    const saleData = await fetchSaleItems(3);
-    saleItems.value = saleData;
+    const saleData = await fetchSaleItems(3)
+    saleItems.value = saleData
 
     setTimeout(() => {
       showPodium.value = true
     }, 150)
   } catch (error) {
-    window.api.logger("error", `Error fetching items: ${error}`);
+    window.api.logger('error', `Error fetching items: ${error}`)
   }
-});
+})
 
 const playLabel = computed(() =>
   gameRunning.value ? t('home.playbox.running') : t('home.playbox.play')
-);
+)
 
 onBeforeUnmount(() => {
-  unsubscribeGameRunningState?.();
-});
+  unsubscribeGameRunningState?.()
+})
 
 const handleGameRunningState = (data) => {
-  gameRunning.value = data.isRunning;
-};
+  gameRunning.value = data.isRunning
+}
 
 function redirect_item_shop(item) {
   if (item && item.id) {
-    const shopUrl = `${currentEnvironment().website}/shop/${item.id}`;
-    window.api.openWebsite(shopUrl);
+    const shopUrl = `${currentEnvironment().website}/shop/${item.id}`
+    window.api.openWebsite(shopUrl)
   }
 }
 
 async function playBtnEvent() {
   if (!userStore.isAuth) {
-    await userStore.login();
+    await userStore.login()
     if (!userStore.isAuth) {
-      return;
+      return
     }
   }
 
-  window.api.launchMC().then(() => {
-    window.api.logger("info", `Minecraft launch command sent.`);
-  }).catch(err => {
-    window.api.logger("error", `Failed to launch Minecraft: ${err}`);
-  });
+  window.api
+    .launchMC()
+    .then(() => {
+      window.api.logger('info', `Minecraft launch command sent.`)
+    })
+    .catch((err) => {
+      window.api.logger('error', `Failed to launch Minecraft: ${err}`)
+    })
 }
 </script>
-
 
 <style scoped>
 .play-container {
@@ -153,7 +174,8 @@ async function playBtnEvent() {
   padding-left: 5%;
 }
 
-.podium {}
+.podium {
+}
 
 .isoimg {
   top: 20%;
@@ -171,7 +193,9 @@ async function playBtnEvent() {
 
 .playBox {
   background: linear-gradient(135deg, rgba(33, 33, 33, 0.737) 0%, rgba(29, 29, 29, 0.236) 100%);
-  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+  box-shadow:
+    rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
+    rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
   backdrop-filter: blur(4px);
   border-radius: 15px;
   max-width: fit-content;
@@ -197,8 +221,6 @@ async function playBtnEvent() {
   font-size: 110%;
   font-weight: 400;
 }
-
-
 
 .mediumPlayBtn {
   height: 50px;
@@ -253,7 +275,6 @@ async function playBtnEvent() {
   padding-left: 10px;
   margin-bottom: 15px;
 
-
   border-left: 4px solid #ff7300;
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
@@ -272,7 +293,7 @@ async function playBtnEvent() {
   overflow: hidden;
 }
 
-.section-title:nth-of-type(n+2) {
+.section-title:nth-of-type(n + 2) {
   margin-top: 75px;
 }
 
@@ -292,7 +313,9 @@ async function playBtnEvent() {
 
 .item-icon {
   max-width: 90px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .item-container:hover .item-icon {
@@ -308,7 +331,9 @@ async function playBtnEvent() {
   display: flex;
   flex-direction: column;
   background: linear-gradient(135deg, rgba(33, 33, 33, 0.737) 0%, rgba(29, 29, 29, 0.236) 100%);
-  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+  box-shadow:
+    rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
+    rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
   backdrop-filter: blur(4px);
   border-radius: 15px;
   border: 2px solid #ff7300;

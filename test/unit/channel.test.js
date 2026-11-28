@@ -39,7 +39,12 @@ describe('prod build (no ARFFORNIA_CHANNEL)', () => {
 
   it('publishes stable GitHub releases only (package.json build is the live config)', () => {
     expect(pkg.build.publish).toEqual([
-      { provider: 'github', owner: 'Arffornia', repo: 'Arffornia_Launcher_V.5.2', releaseType: 'release' }
+      {
+        provider: 'github',
+        owner: 'Arffornia',
+        repo: 'Arffornia_Launcher_V.5.2',
+        releaseType: 'release'
+      }
     ])
     for (const p of pkg.build.publish) {
       expect(p).not.toHaveProperty('channel')
@@ -116,7 +121,9 @@ describe('electron-builder.beta.cjs', () => {
   })
 
   it('never points at the GitHub provider and matches the runtime feed', () => {
-    expect(betaConfig.publish).toEqual([{ provider: 'generic', url: BETA_FEED_URL, channel: 'beta' }])
+    expect(betaConfig.publish).toEqual([
+      { provider: 'generic', url: BETA_FEED_URL, channel: 'beta' }
+    ])
   })
 
   it('names artifacts without spaces, so the beta*.yml paths match the release assets', () => {

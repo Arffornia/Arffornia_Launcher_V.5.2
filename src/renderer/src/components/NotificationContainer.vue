@@ -3,8 +3,8 @@
     <div ref="notificationsContainer" class="notification-container">
       <Notification
         v-for="notif in notifications"
-        :key="notif.id"
         :id="notif.id"
+        :key="notif.id"
         :message-key="notif.messageKey"
         :params="notif.params"
         :type="notif.type"
@@ -15,14 +15,14 @@
 </template>
 
 <script setup>
-import { useNotificationStore } from '../stores/notificationStore';
-import Notification from '../components/Notification.vue';
+import { useNotificationStore } from '../stores/notificationStore'
+import Notification from '../components/Notification.vue'
 
-const notificationStore = useNotificationStore();
-const notifications = notificationStore.notifications;
+const notificationStore = useNotificationStore()
+const notifications = notificationStore.notifications
 
 function removeNotification(id) {
-  notificationStore.removeNotification(id);
+  notificationStore.removeNotification(id)
 }
 </script>
 

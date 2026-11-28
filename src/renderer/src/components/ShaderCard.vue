@@ -10,10 +10,14 @@
       </span>
 
       <!-- Top-Right Status Badge -->
-      <span v-if="hasUpdate" class="badge-tag update-tag">{{ t('shaders.badge.update_available') }}</span>
+      <span v-if="hasUpdate" class="badge-tag update-tag">{{
+        t('shaders.badge.update_available')
+      }}</span>
       <span v-else-if="badge" class="badge-tag featured">{{ badge }}</span>
       <span v-else-if="isActive" class="badge-tag active-tag">{{ t('shaders.badge.active') }}</span>
-      <span v-else-if="isInstalled" class="badge-tag installed">{{ t('shaders.badge.installed') }}</span>
+      <span v-else-if="isInstalled" class="badge-tag installed">{{
+        t('shaders.badge.installed')
+      }}</span>
     </div>
 
     <div class="card-content">
@@ -77,7 +81,8 @@ const iconUrl = computed(() => {
  * Analyzes categories, title, and description to categorize GPU intensity.
  */
 const performanceTag = computed(() => {
-  const text = `${props.title} ${props.description} ${(props.categories || []).join(' ')}`.toLowerCase()
+  const text =
+    `${props.title} ${props.description} ${(props.categories || []).join(' ')}`.toLowerCase()
 
   if (
     text.includes('rtx') ||
@@ -105,7 +110,9 @@ const performanceTag = computed(() => {
   return { labelKey: 'shaders.perf.balanced', type: 'medium' }
 })
 
-const onImageError = () => { imageFailed.value = true }
+const onImageError = () => {
+  imageFailed.value = true
+}
 </script>
 
 <style scoped>
@@ -147,12 +154,14 @@ const onImageError = () => { imageFailed.value = true }
   transition: transform 0.4s ease;
 }
 
-.shader-card:hover .cover-image { transform: scale(1.05); }
+.shader-card:hover .cover-image {
+  transform: scale(1.05);
+}
 
 .gradient-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(38, 29, 49, 0.95) 100%);
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 40%, rgba(38, 29, 49, 0.95) 100%);
 }
 
 .badge-tag {
@@ -167,10 +176,28 @@ const onImageError = () => { imageFailed.value = true }
 }
 
 /* Top Right Badges */
-.badge-tag.featured { top: 10px; right: 10px; background: #ff7300; }
-.badge-tag.active-tag { top: 10px; right: 10px; background: #27ae60; }
-.badge-tag.installed { top: 10px; right: 10px; background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.4); }
-.badge-tag.update-tag { top: 10px; right: 10px; background: #e67e22; animation: pulse 1.5s infinite; }
+.badge-tag.featured {
+  top: 10px;
+  right: 10px;
+  background: #ff7300;
+}
+.badge-tag.active-tag {
+  top: 10px;
+  right: 10px;
+  background: #27ae60;
+}
+.badge-tag.installed {
+  top: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+.badge-tag.update-tag {
+  top: 10px;
+  right: 10px;
+  background: #e67e22;
+  animation: pulse 1.5s infinite;
+}
 
 /* Top Left Performance Tag */
 .badge-tag.perf-tag {
@@ -196,9 +223,15 @@ const onImageError = () => { imageFailed.value = true }
 }
 
 @keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 .card-content {
@@ -241,13 +274,31 @@ const onImageError = () => { imageFailed.value = true }
   transition: all 0.2s;
 }
 
-.btn-action.install { background: #ff7300; color: #fff; }
-.btn-action.install:hover { background: #e06500; }
-.btn-action.activate { background: #3d2f4e; color: #fff; }
-.btn-action.activate:hover { background: #ff7300; }
-.btn-action.active-btn { background: #27ae60; color: #fff; }
-.btn-action.update-btn { background: #e67e22; color: #fff; }
-.btn-action.update-btn:hover { background: #d35400; }
+.btn-action.install {
+  background: #ff7300;
+  color: #fff;
+}
+.btn-action.install:hover {
+  background: #e06500;
+}
+.btn-action.activate {
+  background: #3d2f4e;
+  color: #fff;
+}
+.btn-action.activate:hover {
+  background: #ff7300;
+}
+.btn-action.active-btn {
+  background: #27ae60;
+  color: #fff;
+}
+.btn-action.update-btn {
+  background: #e67e22;
+  color: #fff;
+}
+.btn-action.update-btn:hover {
+  background: #d35400;
+}
 
 .progress-container {
   position: relative;

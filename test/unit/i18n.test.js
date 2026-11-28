@@ -32,7 +32,9 @@ function sourceFiles(dir) {
   })
 }
 
-const flat = Object.fromEntries(Object.entries(LOCALES).map(([l, m]) => [l, Object.fromEntries(flatten(m))]))
+const flat = Object.fromEntries(
+  Object.entries(LOCALES).map(([l, m]) => [l, Object.fromEntries(flatten(m))])
+)
 const namespaces = Object.keys(en)
 
 /** Collects quoted strings that look like translation keys ("<namespace>.<a>[.<b>...]"). */
@@ -51,13 +53,21 @@ describe('launcher i18n', () => {
   it('en and fr have exactly the same keys', () => {
     const enKeys = Object.keys(flat.en).sort()
     const frKeys = Object.keys(flat.fr).sort()
-    expect(frKeys.filter((k) => !(k in flat.en)), 'keys only in fr.json').toEqual([])
-    expect(enKeys.filter((k) => !(k in flat.fr)), 'keys only in en.json').toEqual([])
+    expect(
+      frKeys.filter((k) => !(k in flat.en)),
+      'keys only in fr.json'
+    ).toEqual([])
+    expect(
+      enKeys.filter((k) => !(k in flat.fr)),
+      'keys only in en.json'
+    ).toEqual([])
   })
 
   it('has no empty or non-string translations', () => {
     for (const [locale, entries] of Object.entries(flat)) {
-      const bad = Object.entries(entries).filter(([, v]) => typeof v !== 'string' || v.trim() === '')
+      const bad = Object.entries(entries).filter(
+        ([, v]) => typeof v !== 'string' || v.trim() === ''
+      )
       expect(bad.map(([k]) => `${locale}:${k}`)).toEqual([])
     }
   })
@@ -92,7 +102,8 @@ describe('launcher i18n', () => {
       const text = readFileSync(file, 'utf8')
       for (const m of text.matchAll(/\$?\bt\(\s*([^'"\s][^,)]*)/g)) {
         const arg = m[1].replace(/^`/, '')
-        if (!allowedDynamic.some((p) => arg.startsWith(p))) offenders.push(`${relative(SRC, file)}: t(${m[1]})`)
+        if (!allowedDynamic.some((p) => arg.startsWith(p)))
+          offenders.push(`${relative(SRC, file)}: t(${m[1]})`)
       }
     }
     expect(offenders).toEqual([])
@@ -101,7 +112,10 @@ describe('launcher i18n', () => {
   it('has a label for every beta environment', () => {
     for (const { id } of ENVIRONMENTS) {
       for (const locale of Object.keys(LOCALES)) {
-        expect(flat[locale][`settings.environment.${id}`], `${locale}: settings.environment.${id}`).toBeTruthy()
+        expect(
+          flat[locale][`settings.environment.${id}`],
+          `${locale}: settings.environment.${id}`
+        ).toBeTruthy()
       }
     }
   })

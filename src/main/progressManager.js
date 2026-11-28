@@ -1,4 +1,4 @@
-import { getMainWindow, logger } from ".";
+import { getMainWindow, logger } from '.'
 
 export const StepName = Object.freeze({
   IDLE: 'IDLE',
@@ -12,7 +12,7 @@ export const StepName = Object.freeze({
   DOWNLOAD_MC: 'DOWNLOAD_MC',
   DOWNLOAD_ASSETS: 'DOWNLOAD_ASSETS',
   LAUNCHING: 'LAUNCHING'
-});
+})
 
 // Display labels for each step live in the renderer locale files under `progress.steps.<StepName>`
 // (src/renderer/src/i18n/locales/{en,fr}.json). Only the step name is sent to the renderer.
@@ -28,179 +28,199 @@ const stepsConfig = [
   { name: StepName.UPDATING_MODS, weight: 27 },
   { name: StepName.DOWNLOAD_MC, weight: 3 },
   { name: StepName.DOWNLOAD_ASSETS, weight: 27 },
-  { name: StepName.LAUNCHING, weight: 3 },
-];
+  { name: StepName.LAUNCHING, weight: 3 }
+]
 
 class ProgressManager {
   constructor(steps, emitCallback) {
-    this.originalSteps = steps;
-    this.steps = steps.map(step => ({ ...step, progress: 0 }));
-    this.emitCallback = emitCallback;
-    this.lastEmittedPercent = -1;
-    this.lastEmittedModName = '';
-    this.currentModName = '';
-    this.currentModIndex = 0;
-    this.totalMods = 0;
+    this.originalSteps = steps
+    this.steps = steps.map((step) => ({ ...step, progress: 0 }))
+    this.emitCallback = emitCallback
+    this.lastEmittedPercent = -1
+    this.lastEmittedModName = ''
+    this.currentModName = ''
+    this.currentModIndex = 0
+    this.totalMods = 0
   }
 
   clearModInfo() {
-    this.currentModName = '';
-    this.currentModIndex = 0;
-    this.totalMods = 0;
-    this.lastEmittedModName = '';
+    this.currentModName = ''
+    this.currentModIndex = 0
+    this.totalMods = 0
+    this.lastEmittedModName = ''
   }
 
   updateStep(name, progress) {
-    progress = Math.max(0, Math.min(1, progress));
+    progress = Math.max(0, Math.min(1, progress))
 
-    const index = this.steps.findIndex(s => s.name === name);
-    if (index === -1) return;
+    const index = this.steps.findIndex((s) => s.name === name)
+    if (index === -1) return
 
-    const step = this.steps[index];
+    const step = this.steps[index]
 
-    if (progress < step.progress && name === this.steps.find((s, i) => i === index)?.name) return;
+    if (progress < step.progress && name === this.steps.find((s, i) => i === index)?.name) return
 
     for (let i = 0; i < index; i++) {
       if (this.steps[i].progress < 1) {
-        this.steps[i].progress = 1;
+        this.steps[i].progress = 1
       }
     }
 
-    step.progress = progress;
+    step.progress = progress
 
-    const current = this.getGlobalProgress();
-    const currentPercent = Math.floor(current * 100);
+    const current = this.getGlobalProgress()
+    const currentPercent = Math.floor(current * 100)
 
-    if (currentPercent !== this.lastEmittedPercent || this.currentModName !== this.lastEmittedModName) {
-      this.lastEmittedPercent = currentPercent;
-      this.lastEmittedModName = this.currentModName;
+    if (
+      currentPercent !== this.lastEmittedPercent ||
+      this.currentModName !== this.lastEmittedModName
+    ) {
+      this.lastEmittedPercent = currentPercent
+      this.lastEmittedModName = this.currentModName
 
       this.emitCallback(current, name, {
         modName: this.currentModName,
         modIndex: this.currentModIndex,
-        totalMods: this.totalMods,
-      });
+        totalMods: this.totalMods
+      })
     }
   }
 
   setCurrentModInfo(name, index, total) {
-    this.currentModName = name;
-    this.currentModIndex = index;
-    this.totalMods = total;
+    this.currentModName = name
+    this.currentModIndex = index
+    this.totalMods = total
   }
 
   getGlobalProgress() {
-    const totalWeight = this.steps.reduce((sum, step) => sum + step.weight, 0);
-    const current = this.steps.reduce((sum, step) => sum + (step.progress * step.weight), 0);
-    return current / totalWeight;
+    const totalWeight = this.steps.reduce((sum, step) => sum + step.weight, 0)
+    const current = this.steps.reduce((sum, step) => sum + step.progress * step.weight, 0)
+    return current / totalWeight
   }
 
   reset() {
-    this.steps = this.originalSteps.map(step => ({ ...step, progress: 0 }));
-    this.lastEmittedPercent = -1;
-    this.clearModInfo();
-    this.updateStep(StepName.IDLE, 0);
+    this.steps = this.originalSteps.map((step) => ({ ...step, progress: 0 }))
+    this.lastEmittedPercent = -1
+    this.clearModInfo()
+    this.updateStep(StepName.IDLE, 0)
   }
 }
 
 export const progressManager = new ProgressManager(stepsConfig, (value, stepName, extra) => {
-  logger.info(`Global Progress [${stepName}] (${extra.modName || ''}): ${value}`);
+  logger.info(`Global Progress [${stepName}] (${extra.modName || ''}): ${value}`)
 
-  const mainWindow = getMainWindow();
+  const mainWindow = getMainWindow()
   if (mainWindow && mainWindow.webContents) {
     mainWindow.webContents.send('globalProgress', {
       value,
       stepName,
       modName: extra.modName,
       modIndex: extra.modIndex,
-      totalMods: extra.totalMods,
-    });
+      totalMods: extra.totalMods
+    })
   }
-});
+})
 
 export const handleJavaCallback = {
   onStep(step) {
-    progressManager.clearModInfo();
-    let progress;
-    let stepName = StepName.INSTALL_JAVA;
+    progressManager.clearModInfo()
+    let progress
+    let stepName = StepName.INSTALL_JAVA
 
     switch (step) {
-      case 'FETCHING': progress = 0.0; break;
-      case 'DOWNLOADING': progress = 0.1; break;
-      case 'EXTRACTING': progress = 0.5; break;
-      case 'CLEANING': progress = 0.8; break;
-      default: return;
+      case 'FETCHING':
+        progress = 0.0
+        break
+      case 'DOWNLOADING':
+        progress = 0.1
+        break
+      case 'EXTRACTING':
+        progress = 0.5
+        break
+      case 'CLEANING':
+        progress = 0.8
+        break
+      default:
+        return
     }
 
-    progressManager.updateStep(stepName, progress);
+    progressManager.updateStep(stepName, progress)
   }
 }
 
 export function handleNexusModLoaderCallback(step) {
-  progressManager.clearModInfo();
-  let progress;
-  let stepName = StepName.DOWNLOAD_MODLOADER;
+  progressManager.clearModInfo()
+  let progress
+  let stepName = StepName.DOWNLOAD_MODLOADER
 
   switch (step) {
     case 'CHECKING':
-      stepName = StepName.CHECK_MODLOADER;
-      progress = 0.1;
-      break;
+      stepName = StepName.CHECK_MODLOADER
+      progress = 0.1
+      break
     case 'DOWNLOADING':
-      progress = 0.5;
-      break;
-    default: return;
+      progress = 0.5
+      break
+    default:
+      return
   }
 
-  progressManager.updateStep(stepName, progress);
+  progressManager.updateStep(stepName, progress)
 }
 
 export const handleNexusModsCallback = {
   onStep(step) {
-    let stepName;
-    let progress;
+    let stepName
+    let progress
 
     switch (step) {
       case 'UPDATING':
-        stepName = StepName.UPDATING_MODS;
-        progress = 0;
-        break;
-      default: return;
+        stepName = StepName.UPDATING_MODS
+        progress = 0
+        break
+      default:
+        return
     }
 
-    progressManager.updateStep(stepName, progress);
+    progressManager.updateStep(stepName, progress)
   },
 
   onProgress(downloaded, total, name) {
-    progressManager.setCurrentModInfo(name, downloaded, total);
-    const percent = total === 0 ? 0 : downloaded / total;
-    progressManager.updateStep(StepName.UPDATING_MODS, percent);
+    progressManager.setCurrentModInfo(name, downloaded, total)
+    const percent = total === 0 ? 0 : downloaded / total
+    progressManager.updateStep(StepName.UPDATING_MODS, percent)
   }
-};
+}
 
 export function handleMCLCEvent(e) {
-  progressManager.clearModInfo();
-  let percent = 0;
-  let stepName = StepName.DOWNLOAD_MC;
+  progressManager.clearModInfo()
+  let percent = 0
+  let stepName = StepName.DOWNLOAD_MC
 
   switch (e.type) {
-    case 'classes-maven-custom': percent = 0.1; break;
-    case 'classes-custom': percent = 0.3; break;
-    case 'classes': percent = 0.6; break;
+    case 'classes-maven-custom':
+      percent = 0.1
+      break
+    case 'classes-custom':
+      percent = 0.3
+      break
+    case 'classes':
+      percent = 0.6
+      break
     case 'assets': {
-      stepName = StepName.DOWNLOAD_ASSETS;
-      percent = e.total === 0 ? 0 : e.task / e.total;
-      break;
+      stepName = StepName.DOWNLOAD_ASSETS
+      percent = e.total === 0 ? 0 : e.task / e.total
+      break
     }
   }
 
   if (percent === 1) {
-    progressManager.updateStep(StepName.LAUNCHING, 1);
+    progressManager.updateStep(StepName.LAUNCHING, 1)
     setTimeout(() => {
-      progressManager.reset();
-    }, 5 * 1000);
-    return;
+      progressManager.reset()
+    }, 5 * 1000)
+    return
   }
 
-  progressManager.updateStep(stepName, percent);
+  progressManager.updateStep(stepName, percent)
 }
