@@ -67,7 +67,7 @@ const props = defineProps({
 defineEmits(['install', 'activate', 'deactivate', 'delete', 'update', 'open-modal'])
 
 const imageFailed = ref(false)
-const fallbackImage = new URL('../../../../resources/img/bg/mainBG.png', import.meta.url).href
+const fallbackImage = new URL('../../../../resources/img/bg/mainBG.webp', import.meta.url).href
 
 const iconUrl = computed(() => {
   return imageFailed.value || !props.imageUrl ? fallbackImage : props.imageUrl

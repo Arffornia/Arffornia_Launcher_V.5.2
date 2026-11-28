@@ -27,7 +27,7 @@
         </router-link>
 
         <router-link class="nav-link" to="/shaders" exact :title="t('nav.shaders')">
-          <img src="@res/img/icon/shader/shader-icon.png" :alt="t('nav.shaders')" />
+          <img src="@res/img/icon/shader/shader-icon.webp" :alt="t('nav.shaders')" />
         </router-link>
       </div>
 
@@ -97,7 +97,7 @@ onUnmounted(() => {
 .main-layout {
   display: flex;
   height: 100vh;
-  background-image: url("@res/img/bg/mainBG.png");
+  background-image: url("@res/img/bg/mainBG.webp");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
