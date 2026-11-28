@@ -121,7 +121,7 @@ export const progressManager = new ProgressManager(stepsConfig, (value, stepName
 export const handleJavaCallback = {
   onStep(step) {
     progressManager.clearModInfo();
-    let progress = 0;
+    let progress;
     let stepName = StepName.INSTALL_JAVA;
 
     switch (step) {
@@ -138,7 +138,7 @@ export const handleJavaCallback = {
 
 export function handleNexusModLoaderCallback(step) {
   progressManager.clearModInfo();
-  let progress = 0;
+  let progress;
   let stepName = StepName.DOWNLOAD_MODLOADER;
 
   switch (step) {
@@ -158,7 +158,7 @@ export function handleNexusModLoaderCallback(step) {
 export const handleNexusModsCallback = {
   onStep(step) {
     let stepName;
-    let progress = 0;
+    let progress;
 
     switch (step) {
       case 'UPDATING':

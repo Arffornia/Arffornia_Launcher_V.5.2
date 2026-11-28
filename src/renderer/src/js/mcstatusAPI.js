@@ -9,9 +9,9 @@ export async function fetchServerStatus() {
     return response.data;
   } catch (err) {
     if (err.response && err.response.data) {
-      throw new Error(err.response.data.error || 'An error occurred while fetching the server status.');
+      throw new Error(err.response.data.error || 'An error occurred while fetching the server status.', { cause: err });
     } else {
-      throw new Error('An error occurred while fetching the server status.');
+      throw new Error('An error occurred while fetching the server status.', { cause: err });
     }
   }
 };

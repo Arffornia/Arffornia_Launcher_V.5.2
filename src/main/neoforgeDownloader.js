@@ -93,7 +93,7 @@ export async function downloadNeoforge(outputPath, loadVersion, forceDownload = 
         logger.warn(`[NeoForge] Could not fetch the installer checksum (${err.message}), using the existing file`);
         return filePath;
       }
-      throw new Error(`Could not fetch the NeoForge installer checksum: ${err.message}`);
+      throw new Error(`Could not fetch the NeoForge installer checksum: ${err.message}`, { cause: err });
     }
 
     if (!forceDownload && fs.existsSync(filePath)) {
