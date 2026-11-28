@@ -6,7 +6,13 @@ module.exports = defineConfig({
   test: {
     include: ['test/unit/**/*.test.js'],
     environment: 'node',
-    restoreMocks: true
+    restoreMocks: true,
+    coverage: {
+      provider: 'v8',
+      include: ['src/main/**/*.js'],
+      reporter: ['text-summary'],
+      thresholds: { lines: 60 }
+    }
   },
   resolve: {
     alias: {
