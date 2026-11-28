@@ -15,7 +15,7 @@
         <div class="shape">
           <div class="textContainer">
             <div class="rank">{{ t('home.podium.rank', { rank: 2 }) }}</div>
-            <div class="score">{{ podiumStore.bestPlayers ? t('home.podium.score', { value: podiumStore.bestPlayers[ 1 ]?.value, unit: podiumUnit }) : '...' }}</div>
+            <div class="score">{{ podiumStore.bestPlayers ? t('home.podium.score', { value: scoreAt(1), unit: podiumUnit }) : '...' }}</div>
           </div>
         </div>
       </div>
@@ -34,7 +34,7 @@
         <div class="shape">
           <div class="textContainer">
             <div class="rank">{{ t('home.podium.rank', { rank: 1 }) }}</div>
-            <div class="score">{{ podiumStore.bestPlayers ? t('home.podium.score', { value: podiumStore.bestPlayers[ 0 ]?.value, unit: podiumUnit }) : '...' }}</div>
+            <div class="score">{{ podiumStore.bestPlayers ? t('home.podium.score', { value: scoreAt(0), unit: podiumUnit }) : '...' }}</div>
           </div>
         </div>
       </div>
@@ -53,7 +53,7 @@
         <div class="shape">
           <div class="textContainer">
             <div class="rank">{{ t('home.podium.rank', { rank: 3 }) }}</div>
-            <div class="score">{{ podiumStore.bestPlayers ? t('home.podium.score', { value: podiumStore.bestPlayers[ 2 ]?.value, unit: podiumUnit }) : '...' }}</div>
+            <div class="score">{{ podiumStore.bestPlayers ? t('home.podium.score', { value: scoreAt(2), unit: podiumUnit }) : '...' }}</div>
           </div>
         </div>
       </div>
@@ -83,6 +83,10 @@ const podiumTitle = computed(() => {
     ? t('home.podium.best_voters')
     : t('home.podium.best_players');
 });
+
+function scoreAt(index) {
+  return podiumStore.bestPlayers?.[index]?.value ?? 0;
+}
 
 const podiumUnit = computed(() => {
   return podiumStore.activeScoreboard === 'votes'
