@@ -43,6 +43,8 @@ describe('beta environment file', () => {
   })
 
   it('refuses any environment but production in the prod launcher', () => {
-    expect(() => writeEnvironment('staging', { file: environmentFile(root), channel: '' })).toThrow()
+    expect(() =>
+      writeEnvironment('staging', { file: environmentFile(root), channel: '' })
+    ).toThrow()
   })
 })

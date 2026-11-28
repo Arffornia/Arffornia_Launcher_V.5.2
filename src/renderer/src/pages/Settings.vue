@@ -10,7 +10,12 @@
               {{ t('settings.game.ram') }}
               <div class="container">
                 <div class="select">
-                  <select id="ram-select" v-if="ramOptions.length" v-model="selectedRAM" @change="onRamChangeEvent">
+                  <select
+                    v-if="ramOptions.length"
+                    id="ram-select"
+                    v-model="selectedRAM"
+                    @change="onRamChangeEvent"
+                  >
                     <option v-for="ram in ramOptions" :key="ram" :value="ram">
                       {{ t('settings.game.ram_value', { amount: ram }) }}
                     </option>
@@ -22,7 +27,11 @@
             <div class="content">
               {{ t('settings.game.language') }}
               <div class="select">
-                <select id="lang-select" v-model="userStore.selectedLang" @change="onLangChangeEvent">
+                <select
+                  id="lang-select"
+                  v-model="userStore.selectedLang"
+                  @change="onLangChangeEvent"
+                >
                   <option v-for="lang in userStore.availableLangs" :key="lang" :value="lang">
                     {{ t(`languages.${lang}`) }}
                   </option>
@@ -32,9 +41,13 @@
 
             <div class="content">
               {{ t('settings.game.logout') }}
-              <input @click="logoutMSEvent" class="mediumBtn" type="button" :value="t('settings.game.logout_btn')">
+              <input
+                class="mediumBtn"
+                type="button"
+                :value="t('settings.game.logout_btn')"
+                @click="logoutMSEvent"
+              />
             </div>
-
           </div>
         </div>
       </div>
@@ -43,16 +56,24 @@
         <p class="title">{{ t('settings.launcher.title') }}</p>
         <div class="info">
           <div class="info-list">
-
             <div class="content">
               {{ t('settings.launcher.game_file') }}
-              <input @click="openLocalGameFileEvent" class="mediumBtn" type="button" :value="t('settings.launcher.game_file_btn')">
+              <input
+                class="mediumBtn"
+                type="button"
+                :value="t('settings.launcher.game_file_btn')"
+                @click="openLocalGameFileEvent"
+              />
             </div>
 
             <div class="content">
               {{ t('settings.launcher.launcher_version') }}
-              <p v-if="beta" id="launcherVersion">{{ t('settings.launcher.version_value_beta', { version: launcherVersion }) }}</p>
-              <p v-else id="launcherVersion">{{ t('settings.launcher.version_value', { version: launcherVersion }) }}</p>
+              <p v-if="beta" id="launcherVersion">
+                {{ t('settings.launcher.version_value_beta', { version: launcherVersion }) }}
+              </p>
+              <p v-else id="launcherVersion">
+                {{ t('settings.launcher.version_value', { version: launcherVersion }) }}
+              </p>
             </div>
           </div>
           <p id="minecraftDisclaimer">{{ t('settings.launcher.disclaimer') }}</p>
@@ -67,8 +88,17 @@
             <div class="content">
               {{ t('settings.environment.label') }}
               <div class="select">
-                <select id="env-select" v-model="selectedEnvironment" @change="onEnvironmentChangeEvent">
-                  <option v-for="env in ENVIRONMENTS" :key="env.id" :value="env.id" :disabled="!env.enabled">
+                <select
+                  id="env-select"
+                  v-model="selectedEnvironment"
+                  @change="onEnvironmentChangeEvent"
+                >
+                  <option
+                    v-for="env in ENVIRONMENTS"
+                    :key="env.id"
+                    :value="env.id"
+                    :disabled="!env.enabled"
+                  >
                     {{ t(`settings.environment.${env.id}`) }}
                   </option>
                 </select>
@@ -83,64 +113,67 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useUserStore } from '../stores/userStore';
+import { ref, onMounted } from 'vue'
+import { useUserStore } from '../stores/userStore'
 
-import { useI18n } from 'vue-i18n';
-import { ENVIRONMENTS, buildVersion, isBeta } from '../../../shared/channel';
-import { currentEnvironment } from '../js/environment';
+import { useI18n } from 'vue-i18n'
+import { ENVIRONMENTS, buildVersion, isBeta } from '../../../shared/channel'
+import { currentEnvironment } from '../js/environment'
 
-const { t, locale } = useI18n();
+const { t, locale } = useI18n()
 
-const launcherVersion = buildVersion();
-const beta = isBeta();
-const selectedEnvironment = ref(currentEnvironment().id);
+const launcherVersion = buildVersion()
+const beta = isBeta()
+const selectedEnvironment = ref(currentEnvironment().id)
 
-const totalRAM = ref(0);
-const ramOptions = ref([]);
-const selectedRAM = ref(5);
+const totalRAM = ref(0)
+const ramOptions = ref([])
+const selectedRAM = ref(5)
 
-const userStore = useUserStore();
+const userStore = useUserStore()
 
 onMounted(async () => {
-  await initRam();
-});
+  await initRam()
+})
 
 async function initRam() {
-  const savedSelectedRam = Number(await window.api.saverLoad("allocatedRam"));
+  const savedSelectedRam = Number(await window.api.saverLoad('allocatedRam'))
 
-  totalRAM.value = await window.api.getTotalRAM();
-  const maxRAM = await window.api.getMaxAllocatableRAM();
-  ramOptions.value = Array.from({ length: maxRAM }, (_, i) => i + 1);
+  totalRAM.value = await window.api.getTotalRAM()
+  const maxRAM = await window.api.getMaxAllocatableRAM()
+  ramOptions.value = Array.from({ length: maxRAM }, (_, i) => i + 1)
 
   // Same rule as the main process: saved value (or default), capped by what the system allows.
-  const wanted = Number.isInteger(savedSelectedRam) && savedSelectedRam >= 1 ? savedSelectedRam : selectedRAM.value;
-  selectedRAM.value = Math.min(wanted, maxRAM);
+  const wanted =
+    Number.isInteger(savedSelectedRam) && savedSelectedRam >= 1
+      ? savedSelectedRam
+      : selectedRAM.value
+  selectedRAM.value = Math.min(wanted, maxRAM)
 }
 
 const onLangChangeEvent = () => {
-  userStore.setLang(locale, userStore.selectedLang);
-};
+  userStore.setLang(locale, userStore.selectedLang)
+}
 
 async function onEnvironmentChangeEvent() {
   try {
-    await window.api.setEnvironment(selectedEnvironment.value);
+    await window.api.setEnvironment(selectedEnvironment.value)
   } catch {
-    selectedEnvironment.value = currentEnvironment().id;
+    selectedEnvironment.value = currentEnvironment().id
   }
 }
 
 const onRamChangeEvent = () => {
-  window.api.saverSave("allocatedRam", selectedRAM.value);
-};
+  window.api.saverSave('allocatedRam', selectedRAM.value)
+}
 
 function openLocalGameFileEvent() {
-  window.api.openLocalGameFile();
+  window.api.openLocalGameFile()
 }
 
 function logoutMSEvent() {
-  window.api.logoutMS();
-  userStore.logout();
+  window.api.logoutMS()
+  userStore.logout()
 }
 </script>
 
@@ -174,7 +207,7 @@ select {
 }
 
 .select:hover {
-  transition: .25s all ease;
+  transition: 0.25s all ease;
   border: 2px solid #f39c12;
 }
 
@@ -186,7 +219,7 @@ select {
   right: 0;
   padding: 1em;
   background-color: #34495e;
-  transition: .25s all ease;
+  transition: 0.25s all ease;
   pointer-events: none;
 }
 
@@ -225,7 +258,6 @@ select {
   display: flex;
   flex-direction: column;
   gap: 25px;
-
 }
 
 .info-list .content {

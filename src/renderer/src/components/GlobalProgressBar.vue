@@ -44,18 +44,17 @@ onBeforeUnmount(() => {
 
 const overallStatusText = computed(() => {
   // Step labels live in the locale files (progress.steps.<STEP_NAME>); main only sends the step name.
-  const stepKey = `progress.steps.${stepName.value}`;
-  const label = te(stepKey) ? t(stepKey) : stepName.value;
-  return t('progress.status', { label, percent: Math.floor(progress.value * 100) });
-});
+  const stepKey = `progress.steps.${stepName.value}`
+  const label = te(stepKey) ? t(stepKey) : stepName.value
+  return t('progress.status', { label, percent: Math.floor(progress.value * 100) })
+})
 
 const modStatusText = computed(() => {
   if (modName.value && totalMods.value > 0) {
-    return t('progress.mod', { name: modName.value, index: modIndex.value, total: totalMods.value });
+    return t('progress.mod', { name: modName.value, index: modIndex.value, total: totalMods.value })
   }
-  return '';
-});
-
+  return ''
+})
 </script>
 
 <style scoped>

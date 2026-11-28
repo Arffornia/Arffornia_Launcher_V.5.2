@@ -5,3 +5,8 @@ LICENSE.md
 tsconfig.json
 tsconfig.*.json
 .dependency-cruiser-known-violations.json
+.claude
+.github
+*.md
+risk.yml
+package.json

@@ -1,10 +1,10 @@
-import { defineStore } from 'pinia';
+import { defineStore } from 'pinia'
 
-let nextId = 0;
+let nextId = 0
 
 export const useNotificationStore = defineStore('notification', {
   state: () => ({
-    notifications: [],
+    notifications: []
   }),
   actions: {
     /**
@@ -13,15 +13,15 @@ export const useNotificationStore = defineStore('notification', {
      * @param {'msg' | 'update' | 'error'} type
      * @param {Record<string, unknown>} [params] named interpolation values
      */
-    addNotification(messageKey, type = "msg", params = {}) {
-      const id = `${Date.now()}-${nextId++}`;
-      this.notifications.push({ id, messageKey, params, type });
+    addNotification(messageKey, type = 'msg', params = {}) {
+      const id = `${Date.now()}-${nextId++}`
+      this.notifications.push({ id, messageKey, params, type })
     },
     removeNotification(id) {
-      const index = this.notifications.findIndex((notif) => notif.id === id);
+      const index = this.notifications.findIndex((notif) => notif.id === id)
       if (index !== -1) {
-        this.notifications.splice(index, 1);
+        this.notifications.splice(index, 1)
       }
-    },
-  },
-});
+    }
+  }
+})

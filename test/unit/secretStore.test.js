@@ -38,7 +38,10 @@ beforeEach(() => {
 describe('secretStore', () => {
   it('warns once when Linux has no keyring and Chromium falls back to basic_text', async () => {
     const warn = vi.fn()
-    const safeStorage = { ...fakeSafeStorage(), getSelectedStorageBackend: vi.fn(() => 'basic_text') }
+    const safeStorage = {
+      ...fakeSafeStorage(),
+      getSelectedStorageBackend: vi.fn(() => 'basic_text')
+    }
     const store = createSecretStore({ saver, safeStorage, logger: { warn, error: vi.fn() } })
 
     await store.set('refresh-token', TOKEN)

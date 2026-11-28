@@ -47,12 +47,15 @@
 
         <!-- Search Input -->
         <div class="search-box">
-          <input
-            v-model="searchQuery"
-            type="text"
-            :placeholder="t('shaders.search_placeholder')"
-          />
-          <button class="btn-search" :title="t('shaders.search_btn')" :aria-label="t('shaders.search_btn')" @click="performSearch(1)">🔍</button>
+          <input v-model="searchQuery" type="text" :placeholder="t('shaders.search_placeholder')" />
+          <button
+            class="btn-search"
+            :title="t('shaders.search_btn')"
+            :aria-label="t('shaders.search_btn')"
+            @click="performSearch(1)"
+          >
+            🔍
+          </button>
         </div>
       </div>
 
@@ -118,7 +121,12 @@
           </button>
 
           <span class="page-indicator">
-            {{ t('shaders.page_indicator', { current: shaderStore.catalogPage, total: shaderStore.totalPages }) }}
+            {{
+              t('shaders.page_indicator', {
+                current: shaderStore.catalogPage,
+                total: shaderStore.totalPages
+              })
+            }}
           </span>
 
           <button
@@ -206,9 +214,12 @@ watch(searchQuery, () => {
   }, 400)
 })
 
-watch(() => userStore.selectedLang, async () => {
-  await shaderStore.loadFeaturedShaders()
-})
+watch(
+  () => userStore.selectedLang,
+  async () => {
+    await shaderStore.loadFeaturedShaders()
+  }
+)
 
 const switchTab = (tab) => {
   activeTab.value = tab
@@ -217,7 +228,8 @@ const switchTab = (tab) => {
   }
 }
 
-const performSearch = (page = 1) => shaderStore.searchCatalog(searchQuery.value, page, selectedSort.value)
+const performSearch = (page = 1) =>
+  shaderStore.searchCatalog(searchQuery.value, page, selectedSort.value)
 
 const onSortChange = () => performSearch(1)
 
@@ -275,7 +287,9 @@ const isActive = (shader) => {
   const titleNorm = normalize(shader.title)
   const activeNorm = normalize(shaderStore.activeShader)
 
-  return (slugNorm && activeNorm.includes(slugNorm)) || (titleNorm && activeNorm.includes(titleNorm))
+  return (
+    (slugNorm && activeNorm.includes(slugNorm)) || (titleNorm && activeNorm.includes(titleNorm))
+  )
 }
 
 const getDownloadProgress = (shader) => {

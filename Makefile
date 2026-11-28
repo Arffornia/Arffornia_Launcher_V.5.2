@@ -7,7 +7,7 @@ help: ## Show this help
 install: ## Install dependencies from the lockfile
 	npm ci
 
-check: lint arch test build ## Lint + architecture guards + tests + build (typecheck is N/A: plain JavaScript)
+check: lint fmt-check arch test build ## Lint + format check + architecture guards + tests + build (typecheck is N/A: plain JavaScript)
 
 lint: ## ESLint (read-only); FILE=<path> lints one file (used by the agent-kit post-edit hook)
 	$(if $(FILE),npx --no-install eslint --no-warn-ignored $(FILE),npm run lint)
@@ -30,7 +30,7 @@ build: ## Bundle main, preload and renderer into out/ (no packaging)
 fmt: ## Format with Prettier; FILE=<path> formats one file
 	$(if $(FILE),npx --no-install prettier --write --ignore-unknown $(FILE),npm run format)
 
-fmt-check: ## Check formatting with Prettier (not yet part of check, see #43)
+fmt-check: ## Check formatting with Prettier
 	npm run format:check
 
 dev: ## Run the launcher in dev mode (needs a display)

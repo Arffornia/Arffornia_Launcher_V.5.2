@@ -60,8 +60,14 @@ const routes = [
   [/arffornia\.com\/api\/shop\/bestSallers\//, { json: [shopItem(3, 'Best Seller Item')] }],
   [/arffornia\.com\/api\/best_player_vote\//, { json: players }],
   [/arffornia\.com\/api\/best_player_point\//, { json: players }],
-  [/arffornia\.com\/api\/launcherImages/, { json: [{ path: 'https://arffornia.com/images/launcher/1.png' }] }],
-  [/arffornia\.com\/api\/profile\//, { json: { name: 'PlayerOne', progress_point: 0, day_streak: 0 } }],
+  [
+    /arffornia\.com\/api\/launcherImages/,
+    { json: [{ path: 'https://arffornia.com/images/launcher/1.png' }] }
+  ],
+  [
+    /arffornia\.com\/api\/profile\//,
+    { json: { name: 'PlayerOne', progress_point: 0, day_streak: 0 } }
+  ],
   [
     /api\.mcstatus\.io\//,
     { json: { online: true, players: { online: 3, max: 100 }, version: { name_clean: '1.21.1' } } }
@@ -91,7 +97,12 @@ async function mockRemoteEndpoints(target) {
     if (res.png) {
       return route.fulfill({ status: 200, contentType: 'image/png', body: PNG, headers: cors })
     }
-    return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(res.json), headers: cors })
+    return route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify(res.json),
+      headers: cors
+    })
   })
   return unexpected
 }

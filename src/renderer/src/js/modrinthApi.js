@@ -17,7 +17,10 @@ export const modrinthApi = {
       const response = await axios.get(FEATURED_SHADERS_URL)
       return response.data?.featured || []
     } catch (error) {
-      console.warn('[ModrinthAPI] Failed to load featuredShaders.json, falling back to empty list:', error.message)
+      console.warn(
+        '[ModrinthAPI] Failed to load featuredShaders.json, falling back to empty list:',
+        error.message
+      )
       return []
     }
   },
@@ -52,7 +55,10 @@ export const modrinthApi = {
       const response = await axios.get(`${MODRINTH_BASE_URL}/project/${projectIdOrSlug}`)
       return response.data
     } catch (error) {
-      console.error(`[ModrinthAPI] Failed to fetch project details for ${projectIdOrSlug}:`, error.message)
+      console.error(
+        `[ModrinthAPI] Failed to fetch project details for ${projectIdOrSlug}:`,
+        error.message
+      )
       throw error
     }
   },
@@ -66,10 +72,7 @@ export const modrinthApi = {
    */
   async searchShaders(query = '', offset = 0, limit = 20, sortIndex = 'downloads') {
     try {
-      const facets = JSON.stringify([
-        ['project_type:shader'],
-        ['versions:1.21.1']
-      ])
+      const facets = JSON.stringify([['project_type:shader'], ['versions:1.21.1']])
 
       const response = await axios.get(`${MODRINTH_BASE_URL}/search`, {
         params: {
@@ -113,7 +116,10 @@ export const modrinthApi = {
         fileName: primaryFile.filename
       }
     } catch (error) {
-      console.error(`[ModrinthAPI] Failed to fetch version file for ${projectIdOrSlug}:`, error.message)
+      console.error(
+        `[ModrinthAPI] Failed to fetch version file for ${projectIdOrSlug}:`,
+        error.message
+      )
       throw error
     }
   }

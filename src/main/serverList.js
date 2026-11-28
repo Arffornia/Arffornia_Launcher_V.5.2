@@ -15,7 +15,9 @@ const FIXED_SIZE = { 1: 1, 2: 2, 3: 4, 4: 8, 5: 4, 6: 8 }
 function readTag(buf, type, at) {
   if (FIXED_SIZE[type]) return { value: buf.subarray(at.pos, (at.pos += FIXED_SIZE[type])), type }
   switch (type) {
-    case 7: case 11: case 12: {
+    case 7:
+    case 11:
+    case 12: {
       const len = buf.readInt32BE(at.pos)
       const width = type === 7 ? 1 : type === 11 ? 4 : 8
       const start = at.pos
@@ -129,9 +131,13 @@ export function applyEnvironmentServerList(gameDir, environment, logger = consol
   try {
     root = parseNbt(fs.readFileSync(file))
   } catch (error) {
-    if (error.code !== 'ENOENT') logger.warn(`servers.dat unreadable (${error.message}); writing a new one.`)
+    if (error.code !== 'ENOENT')
+      logger.warn(`servers.dat unreadable (${error.message}); writing a new one.`)
   }
-  retargetServerList(root, { name: NAMES[environment.id] ?? `Arffornia · ${environment.id}`, address: environment.server })
+  retargetServerList(root, {
+    name: NAMES[environment.id] ?? `Arffornia · ${environment.id}`,
+    address: environment.server
+  })
   fs.writeFileSync(file, serializeNbt(root))
   logger.info(`Server list set to ${environment.server} for the ${environment.id} environment.`)
   return true

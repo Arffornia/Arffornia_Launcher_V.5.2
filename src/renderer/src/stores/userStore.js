@@ -1,5 +1,5 @@
-import { defineStore } from 'pinia';
-import { SUPPORTED_LOCALES, resolveLocale } from '../i18n/translator';
+import { defineStore } from 'pinia'
+import { SUPPORTED_LOCALES, resolveLocale } from '../i18n/translator'
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -7,86 +7,85 @@ export const useUserStore = defineStore('user', {
     username: null,
     profileImg: new URL('../../../../resources/img/steve_head.png', import.meta.url).href,
     selectedLang: 'en',
-    availableLangs: [...SUPPORTED_LOCALES],
+    availableLangs: [...SUPPORTED_LOCALES]
   }),
 
   actions: {
     async login() {
       if (!this.isAuth) {
         try {
-          const authSuccess = await window.api.loginMS();
+          const authSuccess = await window.api.loginMS()
 
           if (authSuccess) {
-            this.isAuth = true;
-            await this.updateProfileImage();
-            window.api.logger("info", 'Success to auth.');
+            this.isAuth = true
+            await this.updateProfileImage()
+            window.api.logger('info', 'Success to auth.')
           } else {
-            window.api.logger("error", `Failed to auth.`);
+            window.api.logger('error', `Failed to auth.`)
           }
         } catch (error) {
-          window.api.logger("error", `Error during MS auth: ${error}`);
+          window.api.logger('error', `Error during MS auth: ${error}`)
         }
       }
     },
 
     logout() {
-      this.isAuth = false;
-      this.username = null;
-      this.profileImg = new URL('../../../../resources/img/steve_head.png', import.meta.url).href;
+      this.isAuth = false
+      this.username = null
+      this.profileImg = new URL('../../../../resources/img/steve_head.png', import.meta.url).href
     },
 
     async loginNoReAsk() {
       if (!this.isAuth) {
-        const authSuccess = await window.api.loginMSNoReAsk();
+        const authSuccess = await window.api.loginMSNoReAsk()
 
         if (authSuccess) {
-          this.isAuth = true;
-          await this.updateProfileImage();
-          window.api.logger("info", "Success to re auth.");
+          this.isAuth = true
+          await this.updateProfileImage()
+          window.api.logger('info', 'Success to re auth.')
         }
       }
     },
 
     async updateProfileImage() {
       try {
-        this.username = await window.api.getUserName();
-        this.profileImg = `https://minotar.net/avatar/${this.username}/50`;
+        this.username = await window.api.getUserName()
+        this.profileImg = `https://minotar.net/avatar/${this.username}/50`
       } catch (error) {
-        window.api.logger("error", `Error fetching profile image: ${error}`);
-        this.profileImg = '/src/assets/img/steve_head.png';
+        window.api.logger('error', `Error fetching profile image: ${error}`)
+        this.profileImg = '/src/assets/img/steve_head.png'
       }
     },
 
     async initLang(locale) {
-      const savedLang = await window.api.saverLoad("lang");
+      const savedLang = await window.api.saverLoad('lang')
 
       if (savedLang && this.availableLangs.includes(savedLang)) {
-        this.selectedLang = savedLang;
-        locale.value = savedLang;
+        this.selectedLang = savedLang
+        locale.value = savedLang
         // the main process picks the launch splash language from this
-        window.api.setLang(savedLang);
-        return;
+        window.api.setLang(savedLang)
+        return
       }
 
       // No saved choice: follow the OS locale (app.getLocale() in the main process).
-      let systemLangRaw = '';
+      let systemLangRaw = ''
       try {
-        systemLangRaw = await window.api.getSystemLang();
+        systemLangRaw = await window.api.getSystemLang()
       } catch (error) {
-        window.api.logger("error", `Failed to read the system locale: ${error}`);
+        window.api.logger('error', `Failed to read the system locale: ${error}`)
       }
 
-      this.setLang(locale, resolveLocale(systemLangRaw));
+      this.setLang(locale, resolveLocale(systemLangRaw))
     },
-
 
     setLang(locale, lang) {
       if (this.availableLangs.includes(lang)) {
-        this.selectedLang = lang;
-        locale.value = lang;
-        window.api.saverSave("lang", lang);
-        window.api.setLang(lang);
+        this.selectedLang = lang
+        locale.value = lang
+        window.api.saverSave('lang', lang)
+        window.api.setLang(lang)
       }
-    },
-  },
-});
+    }
+  }
+})

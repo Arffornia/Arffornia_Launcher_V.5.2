@@ -3,12 +3,17 @@
     <nav>
       <!-- Profile btn management section -->
       <div class="top-nav-link">
-        <router-link v-if="userStore.isAuth && userStore.username" class="nav-link" :to="`/profile/${userStore.username}`" exact>
-          <img :src="userStore.profileImg" :alt="t('nav.profile')" :title="t('nav.profile')">
+        <router-link
+          v-if="userStore.isAuth && userStore.username"
+          class="nav-link"
+          :to="`/profile/${userStore.username}`"
+          exact
+        >
+          <img :src="userStore.profileImg" :alt="t('nav.profile')" :title="t('nav.profile')" />
         </router-link>
 
         <a v-else class="nav-link" @click.prevent="userStore.login">
-          <img :src="userStore.profileImg" :alt="t('nav.login')" :title="t('nav.login')">
+          <img :src="userStore.profileImg" :alt="t('nav.login')" :title="t('nav.login')" />
         </a>
       </div>
       <!-- End profile btn management section -->
@@ -53,51 +58,50 @@
 </template>
 
 <script setup>
-import { useUserStore } from '../stores/userStore';
-import { onMounted, onUnmounted } from 'vue';
-import { useRouter } from 'vue-router';
-import NotificationContainer from './NotificationContainer.vue';
-import { useNotificationStore } from '../stores/notificationStore';
-import TopBar from './TopBar.vue';
-import GlobalProgressBar from './GlobalProgressBar.vue';
-import { useI18n } from 'vue-i18n';
+import { useUserStore } from '../stores/userStore'
+import { onMounted, onUnmounted } from 'vue'
+import { useRouter } from 'vue-router'
+import NotificationContainer from './NotificationContainer.vue'
+import { useNotificationStore } from '../stores/notificationStore'
+import TopBar from './TopBar.vue'
+import GlobalProgressBar from './GlobalProgressBar.vue'
+import { useI18n } from 'vue-i18n'
 
-const { t } = useI18n();
+const { t } = useI18n()
 
-const userStore = useUserStore();
-const notificationStore = useNotificationStore();
+const userStore = useUserStore()
+const notificationStore = useNotificationStore()
 
-const router = useRouter();
+const router = useRouter()
 
 const handleKeydown = (event) => {
   if (event.key === 'Escape') {
-    console.info("Escape btn pressed.");
-    router.back();
+    console.info('Escape btn pressed.')
+    router.back()
   }
-};
+}
 
 onMounted(() => {
-  userStore.loginNoReAsk();
+  userStore.loginNoReAsk()
 
   // The main process sends translation keys + params, never display strings.
   window.api.addNotification((messageKey, type, params) => {
     notificationStore.addNotification(messageKey, type, params)
-  });
+  })
 
-  window.addEventListener('keydown', handleKeydown);
-});
+  window.addEventListener('keydown', handleKeydown)
+})
 
 onUnmounted(() => {
-  window.removeEventListener('keydown', handleKeydown);
-});
-
+  window.removeEventListener('keydown', handleKeydown)
+})
 </script>
 
 <style scoped>
 .main-layout {
   display: flex;
   height: 100vh;
-  background-image: url("@res/img/bg/mainBG.webp");
+  background-image: url('@res/img/bg/mainBG.webp');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
@@ -132,7 +136,6 @@ nav a {
   position: relative;
 }
 
-
 .top-nav-link {
   margin-top: 10%;
 }
@@ -151,7 +154,6 @@ nav a {
   flex-direction: column;
   gap: 10px;
 }
-
 
 .nav-link {
   background-color: #261d31;

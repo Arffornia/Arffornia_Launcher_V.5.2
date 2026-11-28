@@ -74,8 +74,7 @@ export class ShaderManager {
       const files = fs.readdirSync(this.shaderpacksDir)
       return files.filter(
         (file) =>
-          file.endsWith('.zip') ||
-          fs.statSync(path.join(this.shaderpacksDir, file)).isDirectory()
+          file.endsWith('.zip') || fs.statSync(path.join(this.shaderpacksDir, file)).isDirectory()
       )
     } catch (error) {
       logger.error(`[ShaderManager] Failed to list installed shaders: ${error.message}`)
@@ -156,7 +155,9 @@ export class ShaderManager {
       if (!hasPack) newLines.push(`shaderPack=${targetPack}`)
 
       fs.writeFileSync(this.irisConfigPath, newLines.join('\n').trim() + '\n', 'utf-8')
-      logger.info(`[ShaderManager] Updated iris.properties -> enableShaders=${enableVal}, shaderPack=${targetPack}`)
+      logger.info(
+        `[ShaderManager] Updated iris.properties -> enableShaders=${enableVal}, shaderPack=${targetPack}`
+      )
     } catch (error) {
       logger.error(`[ShaderManager] Failed to write iris.properties: ${error.message}`)
     }

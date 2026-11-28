@@ -12,8 +12,10 @@ vi.mock('@electron-toolkit/utils', () => ({ is: { dev: false } }))
 vi.mock('../../src/main/index.js', () => ({ logger }))
 vi.mock('../../src/main/user', () => ({ default: currentUser }))
 
-const { registerLoggerHandlers, logFromRenderer } = await import('../../src/main/ipcHandlers/logHandler')
-const { registerUserManagerHandlers } = await import('../../src/main/ipcHandlers/userManagerHandler')
+const { registerLoggerHandlers, logFromRenderer } =
+  await import('../../src/main/ipcHandlers/logHandler')
+const { registerUserManagerHandlers } =
+  await import('../../src/main/ipcHandlers/userManagerHandler')
 
 const appEvent = { senderFrame: { url: 'file:///app/out/renderer/index.html', parent: null } }
 
@@ -25,10 +27,13 @@ beforeEach(() => {
 })
 
 describe('logger handler', () => {
-  it.each(['info', 'debug', 'warn', 'error'])('writes %s lines from the renderer', async (level) => {
-    expect(await handlers.get('logger')(appEvent, level, 'hello')).toBe(true)
-    expect(logger[level]).toHaveBeenCalledWith('[renderer] hello')
-  })
+  it.each(['info', 'debug', 'warn', 'error'])(
+    'writes %s lines from the renderer',
+    async (level) => {
+      expect(await handlers.get('logger')(appEvent, level, 'hello')).toBe(true)
+      expect(logger[level]).toHaveBeenCalledWith('[renderer] hello')
+    }
+  )
 
   it('ignores unknown levels', () => {
     expect(logFromRenderer('trace', 'x')).toBe(false)

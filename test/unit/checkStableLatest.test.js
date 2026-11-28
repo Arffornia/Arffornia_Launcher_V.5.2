@@ -2,7 +2,13 @@ import { describe, expect, it } from 'vitest'
 import { checkLatestIsStable, parseStableTag } from '../../tools/check-stable-latest.mjs'
 
 const assets = [{ name: 'latest.yml' }, { name: 'latest-linux.yml' }, { name: 'latest-mac.yml' }]
-const stable = (tag, extra = {}) => ({ tag_name: tag, draft: false, prerelease: false, assets, ...extra })
+const stable = (tag, extra = {}) => ({
+  tag_name: tag,
+  draft: false,
+  prerelease: false,
+  assets,
+  ...extra
+})
 
 describe('parseStableTag', () => {
   it('accepts vX.Y.Z only', () => {
@@ -17,13 +23,22 @@ describe('checkLatestIsStable', () => {
   const beta = { tag_name: 'beta', draft: false, prerelease: true }
 
   it('passes when latest is the newest stable release, whatever the pre-releases', () => {
-    const releases = [beta, stable('v0.1.15'), stable('v0.1.9'), { tag_name: 'v0.2.0-beta.1', prerelease: true }]
+    const releases = [
+      beta,
+      stable('v0.1.15'),
+      stable('v0.1.9'),
+      { tag_name: 'v0.2.0-beta.1', prerelease: true }
+    ]
     expect(checkLatestIsStable(stable('v0.1.15'), releases)).toEqual({ ok: true, tag: 'v0.1.15' })
   })
 
   it('compares versions numerically, not as strings', () => {
-    expect(checkLatestIsStable(stable('v0.1.15'), [stable('v0.1.9'), stable('v0.1.15')]).ok).toBe(true)
-    expect(checkLatestIsStable(stable('v0.1.9'), [stable('v0.1.9'), stable('v0.1.15')]).ok).toBe(false)
+    expect(checkLatestIsStable(stable('v0.1.15'), [stable('v0.1.9'), stable('v0.1.15')]).ok).toBe(
+      true
+    )
+    expect(checkLatestIsStable(stable('v0.1.9'), [stable('v0.1.9'), stable('v0.1.15')]).ok).toBe(
+      false
+    )
   })
 
   it('fails when latest is a pre-release or has a pre-release tag', () => {

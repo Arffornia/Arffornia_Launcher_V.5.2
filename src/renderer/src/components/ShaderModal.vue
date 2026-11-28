@@ -3,18 +3,32 @@
     <transition name="fade">
       <div v-if="isOpen" class="modal-backdrop" @click.self="close">
         <div class="modal-window">
-          <button class="btn-close" :title="t('common.close')" :aria-label="t('common.close')" @click="close">✕</button>
+          <button
+            class="btn-close"
+            :title="t('common.close')"
+            :aria-label="t('common.close')"
+            @click="close"
+          >
+            ✕
+          </button>
 
           <!-- Header Section -->
           <div class="modal-header">
             <img :src="iconUrl" class="shader-icon" @error="onIconError" />
             <div class="header-info">
               <h2 class="shader-title">{{ displayShader.title }}</h2>
-              <p class="shader-author">{{ t('shaders.modal.by') }} <span>{{ displayShader.author || t('shaders.modal.unknown_author') }}</span></p>
+              <p class="shader-author">
+                {{ t('shaders.modal.by') }}
+                <span>{{ displayShader.author || t('shaders.modal.unknown_author') }}</span>
+              </p>
 
               <div class="stats-row">
-                <span v-if="displayShader.downloads" class="stat-item">{{ t('shaders.modal.downloads', { count: formatNumber(displayShader.downloads) }) }}</span>
-                <span v-if="displayShader.followers" class="stat-item">{{ t('shaders.modal.likes', { count: formatNumber(displayShader.followers) }) }}</span>
+                <span v-if="displayShader.downloads" class="stat-item">{{
+                  t('shaders.modal.downloads', { count: formatNumber(displayShader.downloads) })
+                }}</span>
+                <span v-if="displayShader.followers" class="stat-item">{{
+                  t('shaders.modal.likes', { count: formatNumber(displayShader.followers) })
+                }}</span>
               </div>
             </div>
           </div>
@@ -35,7 +49,11 @@
                 ‹
               </button>
 
-              <img :src="galleryImages[activeImageIndex]" class="preview-img" @error="onPreviewError" />
+              <img
+                :src="galleryImages[activeImageIndex]"
+                class="preview-img"
+                @error="onPreviewError"
+              />
 
               <button
                 v-if="galleryImages.length > 1"
@@ -62,24 +80,18 @@
           <!-- Description -->
           <div class="description-section">
             <h3>{{ t('shaders.modal.about') }}</h3>
-            <p class="description-text">{{ displayShader.description || displayShader.customDescription }}</p>
+            <p class="description-text">
+              {{ displayShader.description || displayShader.customDescription }}
+            </p>
           </div>
 
           <!-- Footer Actions -->
           <div class="modal-footer">
             <template v-if="isInstalled">
-              <button
-                v-if="isActive"
-                class="btn btn-secondary"
-                @click="$emit('deactivate')"
-              >
+              <button v-if="isActive" class="btn btn-secondary" @click="$emit('deactivate')">
                 {{ t('shaders.deactivate') }}
               </button>
-              <button
-                v-else
-                class="btn btn-primary"
-                @click="$emit('activate')"
-              >
+              <button v-else class="btn btn-primary" @click="$emit('activate')">
                 {{ t('shaders.activate') }}
               </button>
               <button class="btn btn-danger" @click="$emit('delete')">
@@ -140,26 +152,29 @@ const handleKeydown = (e) => {
 onMounted(() => window.addEventListener('keydown', handleKeydown))
 onUnmounted(() => window.removeEventListener('keydown', handleKeydown))
 
-watch(() => props.isOpen, async (isOpen) => {
-  if (isOpen && props.shader) {
-    activeImageIndex.value = 0
-    iconFailed.value = false
-    fullDetails.value = null
+watch(
+  () => props.isOpen,
+  async (isOpen) => {
+    if (isOpen && props.shader) {
+      activeImageIndex.value = 0
+      iconFailed.value = false
+      fullDetails.value = null
 
-    const projectId = props.shader.id || props.shader.project_id || props.shader.slug
-    if (projectId) {
-      isLoadingDetails.value = true
-      try {
-        const details = await modrinthApi.getProjectDetails(projectId)
-        fullDetails.value = details
-      } catch (err) {
-        console.warn('[ShaderModal] Could not fetch detailed gallery:', err)
-      } finally {
-        isLoadingDetails.value = false
+      const projectId = props.shader.id || props.shader.project_id || props.shader.slug
+      if (projectId) {
+        isLoadingDetails.value = true
+        try {
+          const details = await modrinthApi.getProjectDetails(projectId)
+          fullDetails.value = details
+        } catch (err) {
+          console.warn('[ShaderModal] Could not fetch detailed gallery:', err)
+        } finally {
+          isLoadingDetails.value = false
+        }
       }
     }
   }
-})
+)
 
 const displayShader = computed(() => ({
   ...props.shader,
@@ -208,19 +223,23 @@ const nextImage = () => {
 
 const prevImage = () => {
   if (galleryImages.value.length > 0) {
-    activeImageIndex.value = (activeImageIndex.value - 1 + galleryImages.value.length) % galleryImages.value.length
+    activeImageIndex.value =
+      (activeImageIndex.value - 1 + galleryImages.value.length) % galleryImages.value.length
   }
 }
 
 const close = () => emit('close')
-const onIconError = () => { iconFailed.value = true }
+const onIconError = () => {
+  iconFailed.value = true
+}
 const onPreviewError = () => {
   if (galleryImages.value.length > 0) {
     galleryImages.value[activeImageIndex.value] = fallbackImage
   }
 }
 
-const formatNumber = (num) => !num ? '0' : new Intl.NumberFormat(locale.value, { notation: 'compact' }).format(num)
+const formatNumber = (num) =>
+  !num ? '0' : new Intl.NumberFormat(locale.value, { notation: 'compact' }).format(num)
 </script>
 
 <style scoped>
@@ -248,12 +267,16 @@ const formatNumber = (num) => !num ? '0' : new Intl.NumberFormat(locale.value, {
   overflow-y: auto;
   padding: 28px;
   position: relative;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 115, 0, 0.2);
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.8),
+    0 0 30px rgba(255, 115, 0, 0.2);
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
 
-.modal-window::-webkit-scrollbar { display: none; }
+.modal-window::-webkit-scrollbar {
+  display: none;
+}
 
 .btn-close {
   position: absolute;
@@ -298,7 +321,10 @@ const formatNumber = (num) => !num ? '0' : new Intl.NumberFormat(locale.value, {
   margin: 4px 0 8px 0;
 }
 
-.shader-author span { color: #ff7300; font-weight: 600; }
+.shader-author span {
+  color: #ff7300;
+  font-weight: 600;
+}
 
 .stats-row {
   display: flex;
@@ -314,7 +340,9 @@ const formatNumber = (num) => !num ? '0' : new Intl.NumberFormat(locale.value, {
   font-weight: bold;
 }
 
-.gallery-section { margin-bottom: 20px; }
+.gallery-section {
+  margin-bottom: 20px;
+}
 
 .main-preview {
   position: relative;
@@ -358,8 +386,12 @@ const formatNumber = (num) => !num ? '0' : new Intl.NumberFormat(locale.value, {
   transform: translateY(-50%) scale(1.1);
 }
 
-.nav-arrow.prev { left: 12px; }
-.nav-arrow.next { right: 12px; }
+.nav-arrow.prev {
+  left: 12px;
+}
+.nav-arrow.next {
+  right: 12px;
+}
 
 .thumbnails-row {
   display: flex;
@@ -370,7 +402,9 @@ const formatNumber = (num) => !num ? '0' : new Intl.NumberFormat(locale.value, {
   -ms-overflow-style: none;
 }
 
-.thumbnails-row::-webkit-scrollbar { display: none; }
+.thumbnails-row::-webkit-scrollbar {
+  display: none;
+}
 
 .thumb-img {
   width: 80px;
@@ -383,7 +417,8 @@ const formatNumber = (num) => !num ? '0' : new Intl.NumberFormat(locale.value, {
   flex-shrink: 0;
 }
 
-.thumb-img.active, .thumb-img:hover {
+.thumb-img.active,
+.thumb-img:hover {
   opacity: 1;
   border: 2px solid #ff7300;
 }
@@ -395,9 +430,15 @@ const formatNumber = (num) => !num ? '0' : new Intl.NumberFormat(locale.value, {
   margin-bottom: 24px;
 }
 
-.description-section h3 { color: #fff; margin-bottom: 8px; }
+.description-section h3 {
+  color: #fff;
+  margin-bottom: 8px;
+}
 
-.modal-footer { display: flex; gap: 12px; }
+.modal-footer {
+  display: flex;
+  gap: 12px;
+}
 
 .btn {
   padding: 12px 20px;
@@ -409,11 +450,24 @@ const formatNumber = (num) => !num ? '0' : new Intl.NumberFormat(locale.value, {
   transition: all 0.2s;
 }
 
-.btn-primary { background: #ff7300; color: #fff; }
-.btn-primary:hover { background: #e06500; }
-.btn-secondary { background: #3d2f4e; color: #fff; }
-.btn-danger { background: #c0392b; color: #fff; }
-.full-width { width: 100%; }
+.btn-primary {
+  background: #ff7300;
+  color: #fff;
+}
+.btn-primary:hover {
+  background: #e06500;
+}
+.btn-secondary {
+  background: #3d2f4e;
+  color: #fff;
+}
+.btn-danger {
+  background: #c0392b;
+  color: #fff;
+}
+.full-width {
+  width: 100%;
+}
 
 .progress-bar-container {
   position: relative;

@@ -20,7 +20,9 @@ const m = vi.hoisted(() => ({
 vi.mock('../../src/main/index.js', () => ({
   logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
   addNotification: (message, type) => m.notifications.push({ message, type }),
-  getMainWindow: () => ({ webContents: { send: (channel, data) => m.sent.push({ channel, data }) } })
+  getMainWindow: () => ({
+    webContents: { send: (channel, data) => m.sent.push({ channel, data }) }
+  })
 }))
 vi.mock('../../src/main/ipc', () => ({ handle: vi.fn() }))
 vi.mock('../../src/main/launchSplash', () => ({ openLaunchSplash: m.openLaunchSplash }))
@@ -80,7 +82,12 @@ vi.mock('minecraft-launcher-core', async () => {
   }
 })
 
-const auth = { access_token: 'token-value-123', uuid: 'abcdef0123456789', name: 'Steve', meta: { xuid: '1234567' } }
+const auth = {
+  access_token: 'token-value-123',
+  uuid: 'abcdef0123456789',
+  name: 'Steve',
+  meta: { xuid: '1234567' }
+}
 
 let launchMC
 beforeEach(async () => {
@@ -101,7 +108,8 @@ beforeEach(async () => {
   ;({ launchMC } = await import('../../src/main/minecraftManager'))
 })
 
-const runningStates = () => m.sent.filter((s) => s.channel === 'gameRunningState').map((s) => s.data.isRunning)
+const runningStates = () =>
+  m.sent.filter((s) => s.channel === 'gameRunningState').map((s) => s.data.isRunning)
 
 describe('launchMC', () => {
   it('aborts before any download when login fails', async () => {
@@ -206,7 +214,10 @@ describe('launchMC', () => {
     m.launchMSAuth.mockResolvedValue(auth)
     m.launchResult = { pid: 42 }
     await launchMC()
-    m.clients[0].emit('debug', `[MCLC]: Launching with arguments --accessToken ${auth.access_token} --xuid 1234567`)
+    m.clients[0].emit(
+      'debug',
+      `[MCLC]: Launching with arguments --accessToken ${auth.access_token} --xuid 1234567`
+    )
     const line = logger.debug.mock.calls.at(-1)[0]
     expect(line).not.toContain(auth.access_token)
     expect(line).not.toContain('1234567')

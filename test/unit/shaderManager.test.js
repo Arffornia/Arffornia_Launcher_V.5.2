@@ -29,13 +29,18 @@ describe('ShaderManager path confinement', () => {
     expect(manager.resolveShaderPath('BSL.zip')).toBe(path.join(manager.shaderpacksDir, 'BSL.zip'))
   })
 
-  it.each(['../launcherOptions.json', '../../outside', '..', '.', 'sub/dir.zip', path.join(os.tmpdir(), 'abs.zip'), ''])(
-    'refuses %j',
-    (name) => {
-      const manager = new ShaderManager()
-      expect(() => manager.resolveShaderPath(name)).toThrow()
-    }
-  )
+  it.each([
+    '../launcherOptions.json',
+    '../../outside',
+    '..',
+    '.',
+    'sub/dir.zip',
+    path.join(os.tmpdir(), 'abs.zip'),
+    ''
+  ])('refuses %j', (name) => {
+    const manager = new ShaderManager()
+    expect(() => manager.resolveShaderPath(name)).toThrow()
+  })
 
   it('deleteShader cannot remove files outside shaderpacks', () => {
     const manager = new ShaderManager()

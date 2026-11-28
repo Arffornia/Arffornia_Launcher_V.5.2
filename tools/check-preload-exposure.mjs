@@ -31,27 +31,39 @@ for (const f of files) {
     const at = `${relative(process.cwd(), f)}:${i + 1}`
     for (const m of line.matchAll(/exposeInMainWorld\(\s*(['"`])([^'"`]+)\1/g)) {
       if (m[2] === 'api') continue
-      if (known.includes(m[2])) { seenKnown.add(m[2]); continue }
+      if (known.includes(m[2])) {
+        seenKnown.add(m[2])
+        continue
+      }
       problems.push(`${at}: exposes window.${m[2]}.`)
     }
-    if (/exposeInMainWorld\(\s*[^'"`\s]/.test(line)) problems.push(`${at}: exposeInMainWorld with a computed key; use the literal 'api'.`)
+    if (/exposeInMainWorld\(\s*[^'"`\s]/.test(line))
+      problems.push(`${at}: exposeInMainWorld with a computed key; use the literal 'api'.`)
     for (const m of line.matchAll(/\bwindow\.(\w+)\s*=[^=]/g)) {
       if (m[1] === 'api') continue
-      if (known.includes(m[1])) { seenKnown.add(m[1]); continue }
+      if (known.includes(m[1])) {
+        seenKnown.add(m[1])
+        continue
+      }
       problems.push(`${at}: assigns window.${m[1]}.`)
     }
   })
 }
 for (const k of known) {
-  if (!seenKnown.has(k)) console.log(`preload-exposure: "${k}" is no longer exposed; remove it from tools/preload-exposure-known.json.`)
+  if (!seenKnown.has(k))
+    console.log(
+      `preload-exposure: "${k}" is no longer exposed; remove it from tools/preload-exposure-known.json.`
+    )
 }
 if (problems.length) {
   console.error(problems.join('\n'))
   console.error(
     'fix: the page may only see window.api. Add a method to the api object in src/preload/index.js that calls ' +
       'ipcRenderer.invoke(<one channel>) and validate its arguments in the matching ipcMain.handle. Never expose ipcRenderer, ' +
-      'electronAPI or webFrame. Do not add entries to preload-exposure-known.json: it only lists pre-existing debt.',
+      'electronAPI or webFrame. Do not add entries to preload-exposure-known.json: it only lists pre-existing debt.'
   )
   process.exit(1)
 }
-console.log(`preload-exposure: ok (${files.length} file(s), only window.api${known.length ? `; known debt: ${known.join(', ')}` : ''}).`)
+console.log(
+  `preload-exposure: ok (${files.length} file(s), only window.api${known.length ? `; known debt: ${known.join(', ')}` : ''}).`
+)

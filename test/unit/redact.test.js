@@ -44,7 +44,9 @@ describe('createRedactor', () => {
 
   it('redacts known secrets in game output and dashed uuids', () => {
     const redact = createRedactor(authorizationSecrets(auth))
-    expect(redact('Setting user: Steve, xuid 2535442469792475')).toBe(`Setting user: Steve, xuid ${REDACTED}`)
+    expect(redact('Setting user: Steve, xuid 2535442469792475')).toBe(
+      `Setting user: Steve, xuid ${REDACTED}`
+    )
     expect(redact('UUID of player Steve is 01234567-89ab-cdef-0123-456789abcdef')).toBe(
       `UUID of player Steve is ${REDACTED}`
     )
@@ -52,7 +54,9 @@ describe('createRedactor', () => {
 
   it('accepts non-string input', () => {
     expect(createRedactor()(42)).toBe('42')
-    expect(createRedactor()(new Error('--accessToken xyz'))).toBe(`Error: --accessToken ${REDACTED}`)
+    expect(createRedactor()(new Error('--accessToken xyz'))).toBe(
+      `Error: --accessToken ${REDACTED}`
+    )
   })
 
   it('ignores very short secret values', () => {
