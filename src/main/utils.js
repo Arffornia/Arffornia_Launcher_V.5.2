@@ -39,6 +39,3 @@ export function getOsType() {
           return undefined;
   }
 }
-
-// logger.info("Archi type: ", getArchType());
-// logger.info("Os Type: ", getOsType());
