@@ -25,6 +25,7 @@ import {
   progressManager,
   StepName
 } from './progressManager'
+const MCLC_MAX_SOCKETS = 16
 
 let isGameRunning = false
 
@@ -110,7 +111,8 @@ export async function launchMC() {
         os.totalmem() / 1024 / 1024 / 1024
       ),
       overrides: {
-        detached: true
+        detached: true,
+        maxSockets: MCLC_MAX_SOCKETS
       }
     }
 
@@ -146,7 +148,21 @@ export async function launchMC() {
     launcher.on('debug', (e) => logger.debug(redact(e)))
     launcher.on('data', (e) => logger.info(redact(e)))
 
+    const mclcStartedAt = Date.now()
+    let mclcPhase = null
+    let mclcPhaseStartedAt = mclcStartedAt
+    const endMclcPhase = () => {
+      if (mclcPhase) {
+        logger.info(`MCLC phase ${mclcPhase}: ${Date.now() - mclcPhaseStartedAt} ms`)
+      }
+    }
+
     launcher.on('progress', (e) => {
+      if (e.type !== mclcPhase) {
+        endMclcPhase()
+        mclcPhase = e.type
+        mclcPhaseStartedAt = Date.now()
+      }
       handleMCLCEvent(e)
     })
 
@@ -158,6 +174,8 @@ export async function launchMC() {
     // MCLC emits 'arguments' right before it spawns Java, after its own asset check, which can take
     // minutes on a first install and would otherwise eat the splash timeout.
     launcher.once('arguments', () => {
+      endMclcPhase()
+      logger.info(`MCLC preparation before Java start: ${Date.now() - mclcStartedAt} ms`)
       splash = openLaunchSplash({
         locale: currentUser.getLang(),
         gameVersion: launcherSettings.GAME_VERSION,
