@@ -136,6 +136,13 @@ describe('launchMC', () => {
     expect(runningStates()).toEqual([true])
   })
 
+  it('raises the MCLC download pool above its default of two sockets', async () => {
+    m.launchMSAuth.mockResolvedValue(auth)
+    m.launchResult = { pid: 42 }
+    await launchMC()
+    expect(m.clients[0].opts.overrides.maxSockets).toBeGreaterThan(2)
+  })
+
   it('resets the running state when MCLC returns null', async () => {
     m.launchMSAuth.mockResolvedValue(auth)
     m.launchResult = null

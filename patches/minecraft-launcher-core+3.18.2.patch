@@ -1,0 +1,64 @@
+diff --git a/node_modules/minecraft-launcher-core/components/handler.js b/node_modules/minecraft-launcher-core/components/handler.js
+index 111a797..0fbc43b 100644
+--- a/node_modules/minecraft-launcher-core/components/handler.js
++++ b/node_modules/minecraft-launcher-core/components/handler.js
+@@ -1,3 +1,4 @@
++const crypto = require('crypto')
+ const fs = require('fs')
+ const path = require('path')
+ const request = require('request')
+@@ -172,13 +173,31 @@ class Handler {
+       total: Object.keys(index.objects).length
+     })
+ 
++    // Hashing every asset on every launch is slow. A stamp (index hash + count + total size) written
++    // after a fully verified pass lets later launches only check that each object file exists.
++    // overrides.verifyAssets forces the full pass.
++    const objects = Object.values(index.objects)
++    const stamp = {
++      indexSha1: crypto.createHash('sha1').update(fs.readFileSync(path.join(assetDirectory, 'indexes', `${assetId}.json`))).digest('hex'),
++      count: objects.length,
++      totalSize: objects.reduce((sum, object) => sum + (object.size || 0), 0)
++    }
++    const stampPath = path.join(assetDirectory, 'indexes', `${assetId}.verified.json`)
++    let alreadyVerified = false
++    try {
++      alreadyVerified = JSON.stringify(JSON.parse(fs.readFileSync(stampPath, 'utf8'))) === JSON.stringify(stamp)
++    } catch (e) {}
++    const skipHash = alreadyVerified && !this.options.overrides.verifyAssets
++    let allVerified = true
++
+     await Promise.all(Object.keys(index.objects).map(async asset => {
+       const hash = index.objects[asset].hash
+       const subhash = hash.substring(0, 2)
+       const subAsset = path.join(assetDirectory, 'objects', subhash)
+ 
+-      if (!fs.existsSync(path.join(subAsset, hash)) || !await this.checkSum(hash, path.join(subAsset, hash))) {
+-        await this.downloadAsync(`${this.options.overrides.url.resource}/${subhash}/${hash}`, subAsset, hash, true, 'assets')
++      if (!fs.existsSync(path.join(subAsset, hash)) || (!skipHash && !await this.checkSum(hash, path.join(subAsset, hash)))) {
++        const result = await this.downloadAsync(`${this.options.overrides.url.resource}/${subhash}/${hash}`, subAsset, hash, true, 'assets')
++        if (!result || result.failed || !await this.checkSum(hash, path.join(subAsset, hash))) allVerified = false
+       }
+       counter++
+       this.client.emit('progress', {
+@@ -187,6 +206,11 @@ class Handler {
+         total: Object.keys(index.objects).length
+       })
+     }))
++    if (allVerified) {
++      fs.writeFileSync(stampPath, JSON.stringify(stamp))
++    } else {
++      fs.rmSync(stampPath, { force: true })
++    }
+     counter = 0
+ 
+     // Copy assets to legacy if it's an older Minecraft version.
+@@ -501,7 +525,7 @@ class Handler {
+ 
+       if (!fs.existsSync(path.join(jarPath, name))) await downloadLibrary(library)
+       if (library.downloads && library.downloads.artifact) {
+-        if (!this.checkSum(library.downloads.artifact.sha1, path.join(jarPath, name))) await downloadLibrary(library)
++        if (!await this.checkSum(library.downloads.artifact.sha1, path.join(jarPath, name))) await downloadLibrary(library)
+       }
+ 
+       counter++
