@@ -64,7 +64,7 @@ Whether to adopt `// @ts-check` + JSDoc or migrate to TypeScript is an open deci
 - Never commit secrets, tokens or real account data (also not in test fixtures or logs).
 - Behaviour changes need an issue. Design decisions belong to the owner (label `needs-decision`).
 - Security fixes for unfixed weaknesses: neutral issue/PR wording, no exploit details.
-- Agents never merge, tag, release or push to `main`.
+- Agents may merge their own PRs (squash) after CI is green and an agent review found no blocking issue. Agents never tag, release, push to main directly, or change production.
 
 ## Testing strategy
 
