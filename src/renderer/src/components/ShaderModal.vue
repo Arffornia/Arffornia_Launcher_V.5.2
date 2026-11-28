@@ -128,7 +128,7 @@ const iconFailed = ref(false)
 const fullDetails = ref(null)
 const isLoadingDetails = ref(false)
 
-const fallbackImage = new URL('../../../../resources/img/bg/mainBG.png', import.meta.url).href
+const fallbackImage = new URL('../../../../resources/img/bg/mainBG.webp', import.meta.url).href
 
 const handleKeydown = (e) => {
   if (!props.isOpen) return
