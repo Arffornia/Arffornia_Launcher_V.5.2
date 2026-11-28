@@ -24,9 +24,9 @@ export async function fetchPlayerProfile(pseudo) {
     return response.data;
   } catch (err) {
     if (err.response && err.response.data) {
-      throw new Error(err.response.data.error || 'An error occurred while fetching the profile.');
+      throw new Error(err.response.data.error || 'An error occurred while fetching the profile.', { cause: err });
     } else {
-      throw new Error('An error occurred while fetching the profile.');
+      throw new Error('An error occurred while fetching the profile.', { cause: err });
     }
   }
 };
@@ -37,9 +37,9 @@ export async function fetchBestPlayersByVote(size) {
     return response.data;
   } catch (err) {
     if (err.response && err.response.data) {
-      throw new Error(err.response.data.error || 'An error occurred while fetching best players by vote.');
+      throw new Error(err.response.data.error || 'An error occurred while fetching best players by vote.', { cause: err });
     } else {
-      throw new Error('An error occurred while fetching best players by vote.');
+      throw new Error('An error occurred while fetching best players by vote.', { cause: err });
     }
   }
 };
@@ -50,9 +50,9 @@ export async function fetchBestPlayersByPoint(size) {
     return response.data;
   } catch (err) {
     if (err.response && err.response.data) {
-      throw new Error(err.response.data.error || 'An error occurred while fetching best players by point.');
+      throw new Error(err.response.data.error || 'An error occurred while fetching best players by point.', { cause: err });
     } else {
-      throw new Error('An error occurred while fetching best players by point.');
+      throw new Error('An error occurred while fetching best players by point.', { cause: err });
     }
   }
 };
@@ -63,9 +63,9 @@ export async function fetchBestSellers(size) {
     return response.data;
   } catch (err) {
     if (err.response && err.response.data) {
-      throw new Error(err.response.data.error || 'An error occurred while fetching best seller.');
+      throw new Error(err.response.data.error || 'An error occurred while fetching best seller.', { cause: err });
     } else {
-      throw new Error('An error occurred while fetching best seller.');
+      throw new Error('An error occurred while fetching best seller.', { cause: err });
     }
   }
 };
@@ -76,9 +76,9 @@ export async function fetchNewestItems(size) {
     return response.data;
   } catch (err) {
     if (err.response && err.response.data) {
-      throw new Error(err.response.data.error || 'An error occurred while fetching newest items.');
+      throw new Error(err.response.data.error || 'An error occurred while fetching newest items.', { cause: err });
     } else {
-      throw new Error('An error occurred while fetching newest items.');
+      throw new Error('An error occurred while fetching newest items.', { cause: err });
     }
   }
 };
@@ -89,9 +89,9 @@ export async function fetchSaleItems(size) {
     return response.data;
   } catch (err) {
     if (err.response && err.response.data) {
-      throw new Error(err.response.data.error || 'An error occurred while fetching sale items.');
+      throw new Error(err.response.data.error || 'An error occurred while fetching sale items.', { cause: err });
     } else {
-      throw new Error('An error occurred while fetching sale items.');
+      throw new Error('An error occurred while fetching sale items.', { cause: err });
     }
   }
 };
@@ -102,9 +102,9 @@ export async function fetchLauncherImages() {
     return response.data;
   } catch (err) {
     if (err.response && err.response.data) {
-      throw new Error(err.response.data.error || 'An error occurred while fetching launcher images.');
+      throw new Error(err.response.data.error || 'An error occurred while fetching launcher images.', { cause: err });
     } else {
-      throw new Error('An error occurred while fetching launcher images.');
+      throw new Error('An error occurred while fetching launcher images.', { cause: err });
     }
   }
 };
