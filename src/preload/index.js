@@ -53,7 +53,6 @@ const api = {
   downloadShader: (downloadUrl, fileName) =>
     ipcRenderer.invoke('download-shader', { downloadUrl, fileName }),
   deleteShader: (fileName) => ipcRenderer.invoke('delete-shader', fileName),
-  importLocalShader: (sourcePath) => ipcRenderer.invoke('import-local-shader', sourcePath),
   onShaderDownloadProgress: (callback) => subscribe('shader-download-progress', callback),
   openShaderpacksFolder: () => ipcRenderer.invoke('open-shaderpacks-folder'),
 

@@ -109,13 +109,6 @@ app.whenReady().then(() => {
   app.on('activate', function () {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
-
-  // Simulate update downloaded
-  // setTimeout(() => {
-  //   if (mainWindow) {
-  //     addNotification("This is a test message", "error");
-  //   }
-  // }, 3000);
 })
 
 app.on('window-all-closed', () => {

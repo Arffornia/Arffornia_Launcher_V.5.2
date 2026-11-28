@@ -219,20 +219,6 @@ export class ShaderManager {
     }
     return false
   }
-
-  importLocalShader(sourcePath) {
-    if (!fs.existsSync(sourcePath)) {
-      throw new Error(`Source file does not exist: ${sourcePath}`)
-    }
-
-    this.ensureDirectories()
-    const fileName = path.basename(sourcePath)
-    const targetPath = path.join(this.shaderpacksDir, fileName)
-
-    fs.copyFileSync(sourcePath, targetPath)
-    logger.info(`[ShaderManager] Imported local shader: ${fileName}`)
-    return fileName
-  }
 }
 
 export const shaderManager = new ShaderManager()
