@@ -177,5 +177,39 @@
       "previous_image": "Previous image",
       "next_image": "Next image"
     }
+  },
+  "gui": {
+    "arffornia": {
+      "brand": {
+        "tagline": "Modded Minecraft · NeoForge 1.21.1"
+      },
+      "loading": {
+        "stage": {
+          "boot": "Starting Java & NeoForge"
+        },
+        "pip": {
+          "java": "Java",
+          "mods": "Mods",
+          "content": "Content",
+          "resources": "Resources",
+          "ready": "Ready"
+        },
+        "dyk": {
+          "label": "Did you know?",
+          "miner": "A miner on an ore node never runs dry. Build the line around it, not the other way round.",
+          "smelter": "Smelters stop when their output is full. A belt out is worth more than a faster smelter.",
+          "constructor": "Constructors press ingots into plates and rods, the parts every tier asks for.",
+          "foundry": "The Foundry is your first multiblock: steel, invar and bronze, from tier 3.",
+          "elevator": "Each Space Elevator delivery unlocks the next tier. Press G to see what it needs."
+        }
+      },
+      "machine": {
+        "miner": "Miner",
+        "smelter": "Smelter",
+        "constructor": "Constructor",
+        "foundry": "Foundry",
+        "elevator": "Space Elevator"
+      }
+    }
   }
 }

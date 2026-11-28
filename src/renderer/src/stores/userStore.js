@@ -63,6 +63,8 @@ export const useUserStore = defineStore('user', {
       if (savedLang && this.availableLangs.includes(savedLang)) {
         this.selectedLang = savedLang;
         locale.value = savedLang;
+        // the main process picks the launch splash language from this
+        window.api.setLang(savedLang);
         return;
       }
 

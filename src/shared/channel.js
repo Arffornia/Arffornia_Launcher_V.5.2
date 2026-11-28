@@ -39,11 +39,12 @@ export function isBeta(channel = buildChannel()) {
 }
 
 const STAGING_PACK_URL = 'https://staging.arffornia.com/pack/config/launcher/'
+// The slot has its own pack-files, which swaps in the mod build of the PR holding the slot.
+const SLOT_PACK_URL = 'https://test.arffornia.com/pack/config/launcher/'
 
 /**
  * Game environments the beta can target (spec 016). Staging and Test slot share the staging website
- * and pack, and the test server; in phase 3 a PR can take the test slot over. `joinOnPlay` starts
- * the game straight on the environment's server: the in-game server list only knows prod.
+ * and the test server, each with its own pack; in phase 3 a PR can take the test slot over.
  */
 export const ENVIRONMENTS = [
   {
@@ -53,8 +54,7 @@ export const ENVIRONMENTS = [
     api: ARFFORNIA_API_ENDPOINT,
     modList: JSON_MOD_LIST_URL,
     externalFiles: JSON_EXTERNAL_FILES_URL,
-    server: 'arffornia.com:25565',
-    joinOnPlay: false
+    server: 'arffornia.com:25565'
   },
   {
     id: 'staging',
@@ -63,18 +63,16 @@ export const ENVIRONMENTS = [
     api: 'https://staging.arffornia.com/api/',
     modList: `${STAGING_PACK_URL}modList.json`,
     externalFiles: STAGING_PACK_URL,
-    server: 'test.arffornia.com:25566',
-    joinOnPlay: true
+    server: 'test.arffornia.com:25566'
   },
   {
     id: 'slot',
     enabled: true,
     website: 'https://staging.arffornia.com',
     api: 'https://staging.arffornia.com/api/',
-    modList: `${STAGING_PACK_URL}modList.json`,
-    externalFiles: STAGING_PACK_URL,
-    server: 'test.arffornia.com:25566',
-    joinOnPlay: true
+    modList: `${SLOT_PACK_URL}modList.json`,
+    externalFiles: SLOT_PACK_URL,
+    server: 'test.arffornia.com:25566'
   }
 ]
 export const DEFAULT_ENVIRONMENT = 'production'
